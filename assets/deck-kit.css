@@ -81,7 +81,7 @@
   @media (max-width: 430px) {
     .pf-hud .pf-hud-prog, .pf-hud .pf-print small { display: none; }   /* PDF 쪽 수는 창이 좁아도 보이게(PDF 저장 5단계가 이 숫자를 씀) */
     .pf-hud .pf-hud-count { min-width: 0; margin-right: auto; }
-    .pf-hud button[data-a="help"] { display: none; }
+    .pf-hud button[data-a="help"], .pf-hud button[data-a="pptx"] { display: none; }   /* 휴대폰 폭: PDF 저장만(PPTX는 PC에서) */
   }
   .pf-skiplink { z-index: 1001; }
 

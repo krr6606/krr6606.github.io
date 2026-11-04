@@ -40,7 +40,8 @@
     await PF.loadStrings();                                            // 아래 띠(HUD)도 문구 표로 — 안내 장면으로 끝난 경우에도
     info.strings = PF.stringsReport();
     PF.dropMeasure(); mmdHost?.remove();
-    PFScene.mount({ deck: '#deck', hint: link({ href: id ? PF.docUrl(id) : 'index.html', label: esc(PF.t('deck.mobile-doc')), kind: 'page' }) }); mark('mounted');
+    PFScene.mount({ deck: '#deck', hint: link({ href: id ? PF.docUrl(id) : 'index.html', label: esc(PF.t('deck.mobile-doc')), kind: 'page' }),
+      pptx: window.PFPptx && info.meta ? (b) => PFPptx.save(b) : null }); mark('mounted');   // [PPTX로 저장]은 덱을 그렸을 때만(assets/deck-pptx.js)
   }));
 
   async function start() {
@@ -270,6 +271,7 @@
     info.notes = []; info.overflow = []; info.unresolved = [];
     const name = pf.profile?.name || '';
     const foot = `${name ? name + ' · ' : ''}${p.title}`;
+    info.meta = { title: p.title, name };                               // PPTX 파일 이름·작성자(assets/deck-pptx.js)
     document.title = `${p.title} · ${PF.t('name.deck')}${name ? ' · ' + name : ''}`;
     info.fonts = await PF.loadFonts();
     mark('fonts');

@@ -23,7 +23,7 @@
 ├── index.html               # 🖥 고정 렌더러 — 포트폴리오 문서 (아래로 읽는 한 페이지, A4 인쇄 = 제출 PDF)
 ├── project.html             # 🖥 고정 렌더러 — 발표 덱 (?p=<폴더 이름>, data/의 deck이 가리키는 기술 문서 원문 블록을 그대로 그림)
 ├── doc.html                 # 🖥 고정 렌더러 — 상세 기술문서 (?p=<폴더 이름>, src/의 기술 문서 md를 직접 읽음)
-├── assets/                  # 🖥 렌더러 CSS·JS (포트폴리오 문서·덱 키트·장면 키트·상세 문서·md-blocks.js = 기술 문서 md 해석과 원문 블록 찾기, 발표 덱·상세 문서 공용 · strings.js = UI 문구 기본값과 문구 표 읽기)
+├── assets/                  # 🖥 렌더러 CSS·JS (포트폴리오 문서·덱 키트·장면 키트·상세 문서·md-blocks.js = 기술 문서 md 해석과 원문 블록 찾기, 발표 덱·상세 문서 공용 · strings.js = UI 문구 기본값과 문구 표 읽기 · deck-pptx.js = 발표 덱 [PPTX로 저장], 그린 장면을 재서 PowerPoint 개체로)
 ├── theme/theme.css          # 🎨 /portfolio-theme 결과 — 색·모양·영문 글꼴 손잡이(--t-*). 세 페이지가 마지막에 싣음. 비어 있으면 기본 테마, /portfolio-update가 건드리지 않음
 ├── theme/strings.tsv        # ✍ 문구 표(스트링 테이블) — 절 이름·버튼·라벨 문구. 수강생이 맨 끝 "내 문구" 칸을 직접 고침(빈 칸 = 기본 문구). /portfolio-update는 없을 때만 만듦
 ├── custom/                  # 🎨 /portfolio-custom 결과 (직접 생성 모드)
@@ -53,6 +53,7 @@ flowchart LR
     SR["theme/strings.tsv 문구 표"] -->|"절 이름·버튼·라벨 문구"| I
     S -.->|"기술 문서 md (doc.html 전문 · project.html은 deck이 가리키는 원문 블록)"| I
     D -.->|"직접 입력 시만"| C["/portfolio-custom → custom/index.html"]
+    I -->|"발표 덱 [PPTX로 저장] (브라우저에서)"| PX["프로젝트 제목 - 발표 덱.pptx<br/>PowerPoint에서 고쳐 씀 · 소스로 돌아오지 않음"]
 ```
 
 ## 명령 (스킬)
@@ -115,6 +116,9 @@ flowchart LR
   포트폴리오 문서(`index.html`)는 장면이 없는 흐르는 페이지라 빨간 띠가 없고, `await PFPage.whenReady()` 뒤 `PFPage.report()`
   (깨진 이미지 `images.broken`·가로 넘침 `overflowX`·`errors`)를 봅니다. headless는 `index.html?pf-audit=1`로 같은 방법입니다.
   발표 덱의 빨간 띠(원문 블록을 찾지 못함·여러 곳·바뀜)도 `audit`에 함께 나오고, `info.mode`가 `auto`면 예전 데이터로 자동 구성된 덱이므로 `/portfolio-build`를 다시 실행하도록 안내합니다.
+- 발표 덱의 **[PPTX로 저장]**(`assets/deck-pptx.js`)은 렌더러 기능이라 데이터를 다시 만들지 않습니다. 결과가 이상하다고 하면 그 덱에서 `await PFScene.whenReady()` 뒤
+  `(await PFPptx.build()).report`(내려받지 않음)의 `warnings`(넣지 못한 그림 등)·`slides`(슬라이드별 글상자·도형·그림·표·코드 개수)·`fonts`(들어간 글꼴 이름)를 봅니다.
+  PowerPoint에서 글꼴·줄바꿈이 다르면 대개 그 PC에 Pretendard·D2Coding이 없는 것입니다(설치 또는 [홈 → 바꾸기 → 글꼴 바꾸기]). PPTX에서 고친 것은 소스로 돌아오지 않으므로 내용 문제는 기술 문서로 안내합니다.
 - 문구 표(`theme/strings.tsv`)가 제대로 읽혔는지는 세 페이지 report의 `strings`로 봅니다 — 포트폴리오 문서 `PFPage.report().strings`, 발표 덱 `PFScene.report().info.strings`,
   상세 문서 `PFDoc.report().strings`. `issues`의 `type`: `spaces`(탭 대신 공백 — 그 줄은 기본 문구) · `unknown-key` · `duplicate` · `default-edited`(기본 문구 칸을 고침) ·
   `extra-cols` · `too-long`(권장 글자 수 초과) · `hangul-in-en`(영문 라벨 칸에 한글) · `missing-var`/`unknown-var`/`unknown-ref`/`ref-loop`(자리표시) · `encoding`(CP949·UTF-16) · `no-file`.

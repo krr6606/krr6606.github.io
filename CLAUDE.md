@@ -1,7 +1,7 @@
 # CLAUDE.md — 포트폴리오 자동 작성 템플릿
 
 이 레포는 **수강생의 원천 소스(기술 문서·스크린샷·소스코드)를 조합해 포트폴리오 웹페이지를 만드는 템플릿**입니다.
-기준은 「유니티 개발자 취업·기술 문서 작성 가이드 v2」(https://koohoo-dev.github.io/portfolio-guide/)이며,
+기준은 「유니티 개발자 취업·기술 문서 작성 가이드 v2」(https://koohoo-dev.github.io/edu-lecture-portfolio-guide/)이며,
 그 판정 기준 압축본이 `format/`에 있습니다.
 
 사용자는 **유니티(C#) 개발 지망 수강생**입니다. 정돈된 **경어체**로, 쉬운 말로 설명합니다.

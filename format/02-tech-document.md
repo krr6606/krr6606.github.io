@@ -1,7 +1,7 @@
 # 기준 ② 기술 문서 5단 구조
 
 > 원본: 「유니티 개발자 취업·기술 문서 작성 가이드 v2」 **Part 2 기술 문서 작성 가이드**
-> (https://koohoo-dev.github.io/portfolio-guide/guide.html#2)
+> (https://koohoo-dev.github.io/edu-lecture-portfolio-guide/guide.html#2)
 > 이 파일은 Claude가 `src/*/기술문서.md`를 **읽고 점검**할 때 쓰는 판정 기준 압축본입니다.
 > 비유·예시·저자 조언 전문은 원본을 읽으세요.
 

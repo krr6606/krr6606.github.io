@@ -1,7 +1,7 @@
 # 기준 ① 포트폴리오 (포트폴리오 문서 · 발표 덱 · 상세 기술문서)
 
 > 원본: 「유니티 개발자 취업·기술 문서 작성 가이드 v2」 **Part 1 §3 포트폴리오**
-> (https://koohoo-dev.github.io/portfolio-guide/guide.html#1)
+> (https://koohoo-dev.github.io/edu-lecture-portfolio-guide/guide.html#1)
 > 이 파일은 Claude가 포트폴리오 페이지를 만들고 점검할 때 쓰는 **판정 기준 압축본**입니다.
 
 프로그래머 역량을 **실제 구현물로 증명하는 가장 핵심 문서**입니다.

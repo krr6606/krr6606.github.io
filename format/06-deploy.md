@@ -1,7 +1,7 @@
 # 기준 ⑥ GitHub Pages 배포
 
 > 원본: 「유니티 개발자 취업·기술 문서 작성 가이드 v2」 **Part 7 GitHub Pages 배포**
-> (https://koohoo-dev.github.io/portfolio-guide/guide.html#7)
+> (https://koohoo-dev.github.io/edu-lecture-portfolio-guide/guide.html#7)
 
 이 템플릿은 **빌드 과정이 없는 정적 파일**이라, 가장 쉬운 **브랜치 배포**로 충분합니다.
 

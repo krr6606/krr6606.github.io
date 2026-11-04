@@ -1,7 +1,7 @@
 # 기준 ③ Mermaid 다이어그램 5종
 
 > 원본: 「유니티 개발자 취업·기술 문서 작성 가이드 v2」 **Part 4 Mermaid 다이어그램** · **Part 3 ④ 다이어그램 중심** · **Part 6 §6-3**
-> (https://koohoo-dev.github.io/portfolio-guide/guide.html#4)
+> (https://koohoo-dev.github.io/edu-lecture-portfolio-guide/guide.html#4)
 > 이 파일은 Claude가 다이어그램이 **적절한지 점검**하고, 빠진 다이어그램을 **제안**할 때 씁니다.
 
 ## 무엇을 설명하느냐에 따라 고르기

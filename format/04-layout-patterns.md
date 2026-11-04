@@ -1,7 +1,7 @@
 # 기준 ④ 레이아웃 — 덱 장면 틀 · 포트폴리오 문서 절 · 문서 패턴 13종 → 세 페이지
 
 > 원본: 「유니티 개발자 취업·기술 문서 작성 가이드 v2」 **Part 3 레이아웃**(8유형·3원칙) · **레이아웃 패턴 카탈로그**(13종)
-> (https://koohoo-dev.github.io/portfolio-guide/guide.html#3 · https://koohoo-dev.github.io/portfolio-guide/showcase/)
+> (https://koohoo-dev.github.io/edu-lecture-portfolio-guide/guide.html#3 · https://koohoo-dev.github.io/edu-lecture-portfolio-guide/showcase/)
 > 이 파일은 고정 렌더러의 세 페이지가 **어떤 틀로 무엇을 보여주는지**, 그리고 직접 생성 모드(`/portfolio-custom`)에서
 > Claude가 **어떤 틀·패턴을 써야 하는지** 정리한 표입니다.
 

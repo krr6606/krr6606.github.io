@@ -1,6 +1,6 @@
 # format/ — 가이드 판정 기준
 
-「유니티 개발자 취업·기술 문서 작성 가이드 v2」(https://koohoo-dev.github.io/portfolio-guide/)에서
+「유니티 개발자 취업·기술 문서 작성 가이드 v2」(https://koohoo-dev.github.io/edu-lecture-portfolio-guide/)에서
 **포트폴리오 페이지를 만들고 점검하는 데 필요한 기준만** 골라 압축한 폴더입니다.
 Claude는 `/portfolio-build`·`/portfolio-check`를 실행할 때 이 파일들을 판정 근거로 읽습니다.
 

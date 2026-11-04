@@ -1,7 +1,7 @@
 # 기준 ⑤ 직접 생성 모드 — Claude가 HTML을 처음부터 만들 때
 
 > 원본: 「유니티 개발자 취업·기술 문서 작성 가이드 v2」 **Part 6 트랙 B · 만능 틀 ③④**
-> (https://koohoo-dev.github.io/portfolio-guide/guide.html#6)
+> (https://koohoo-dev.github.io/edu-lecture-portfolio-guide/guide.html#6)
 
 이 템플릿의 **기본은 고정 렌더러**(포트폴리오 문서 `index.html` · 발표 덱 `project.html` · 상세 기술문서 `doc.html`)입니다.
 디자인이 깨지지 않고, 여러분은 **내용 검증**에만 집중하면 됩니다.

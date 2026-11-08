@@ -1,0 +1,942 @@
+{
+  "schemaVersion": 2,
+  "id": "1-nyanko-defense",
+  "doc": "기술문서.md",
+  "title": "냥코 디펜스",
+  "tagline": "스테이지마다 정해진 적이 정해진 방식으로 소환되는 디펜스 게임",
+  "cover": "images/ingame.jpg",
+  "team": {
+    "type": "solo",
+    "size": "1인",
+    "role": "기획 · 구현 전체"
+  },
+  "meta": [
+    {
+      "label": "장르",
+      "value": "2D 횡스크롤 소환 디펜스"
+    },
+    {
+      "label": "기간",
+      "value": "본 개발 2026.06.24 ~ 2026.07.04 (11일) · 보완 2026.07.05 ~ 2026.07.21"
+    },
+    {
+      "label": "인원",
+      "value": "1인 개발 (기획 · 구현 전체)"
+    },
+    {
+      "label": "환경",
+      "value": "Unity 6000.3.15f1"
+    }
+  ],
+  "tags": [
+    "Unity 6.3",
+    "상태 머신",
+    "ScriptableObject",
+    "오브젝트 풀링",
+    "Input System",
+    "DOTween"
+  ],
+  "links": {
+    "github": "https://github.com/KooHoo-Dev/3rd-2D-Project-krr6606",
+    "video": "",
+    "extra": []
+  },
+  "intent": {
+    "text": "정립된 디펜스 장르의 설계를 배워 보려고 만든 학습용 프로젝트입니다.",
+    "verbatim": true
+  },
+  "highlights": [
+    {
+      "title": "AI 자동 공격",
+      "what": "적이 사거리에 들어오고 대기 시간이 끝나면 Idle이 Attack 상태로 전환되어 자동으로 공격합니다.",
+      "how": "실제 데미지는 Update가 아니라, 공격 애니메이션 클립에 심어 둔 애니메이션 이벤트가 `OnAttackTrigger()`를 호출하는 시점에 들어갑니다.",
+      "why": "타격 프레임과 실제 판정 프레임이 어긋나지 않게 맞추기 위해서입니다.",
+      "section": "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지",
+      "image": {
+        "src": "images/ingame.jpg",
+        "w": 760,
+        "h": 428,
+        "caption": "인게임 — 아군 유닛과 적 유닛이 맞붙는 화면"
+      }
+    },
+    {
+      "title": "인게임 머니",
+      "what": "초당 증가하는 골드를 정수로 반영합니다.",
+      "how": "`goldBuffer`에 소수분을 모아 뒀다가 1이 넘는 순간에만 정수로 떼어 `gold`에 반영하고, 최대치(`MaxGold`)도 매 호출마다 확인합니다.",
+      "why": "매 프레임 쌓이는 소수 값을 그대로 정수 골드에 더하면 반올림 오차가 프레임마다 누적되기 때문입니다.",
+      "section": "3.2 인게임 머니 — 초당 증가하는 골드를 정수로 반영",
+      "image": null
+    },
+    {
+      "title": "캐릭터 편성",
+      "what": "드래그 앤 드롭으로 편성 슬롯과 보유 캐릭터 사이를 옮깁니다.",
+      "how": "드래그를 시작하면 원본 슬롯의 고양이를 복제한 임시 '커서 슬롯'만 마우스를 따라다니고, 실제 편성 데이터(`CatSlotArray`)는 손을 뗀 시점(`OnPointerUp`)에 놓인 위치에 따라 반영됩니다.",
+      "why": "놓치거나 취소돼도 원래 편성이 흐트러지지 않습니다.",
+      "section": "3.3 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯",
+      "image": {
+        "src": "images/party.jpg",
+        "w": 760,
+        "h": 429,
+        "caption": "캐릭터 편성 화면 — 위가 편성 슬롯, 아래가 보유 캐릭터"
+      }
+    },
+    {
+      "title": "스테이지 선택",
+      "what": "클리어한 만큼만 지도 위 스테이지가 열리고, 손을 놓으면 가장 가까운 스테이지로 스냅됩니다.",
+      "how": "클리어한 스테이지 인덱스(`maxclearedStage`)까지만 지점을 활성화하고, 드래그를 놓은 순간 가장 가까운 인덱스로 스냅한 뒤 매 프레임 `Lerp`로 보간합니다.",
+      "why": "어중간한 위치에서 손을 떼도 항상 스테이지 하나에 딱 맞춰 멈추게 하기 위해서입니다.",
+      "section": "3.4 스테이지 선택 — 클리어한 만큼만 열리고, 가장 가까운 스테이지로 스냅",
+      "image": {
+        "src": "images/stage_map_1.jpg",
+        "w": 760,
+        "h": 429,
+        "caption": "스테이지 선택 화면 — 동아시아"
+      }
+    }
+  ],
+  "troubleshooting": [
+    {
+      "title": "풀에서 다시 꺼낸 유닛의 콜라이더가 꺼져 있음",
+      "problem": "오브젝트 풀에서 다시 꺼내 쓴(재활용한) 유닛의 콜라이더가 꺼진 채로 나왔습니다.",
+      "cause": "유닛이 죽을 때 `Die` 상태에서 콜라이더를 끄는데, 풀은 오브젝트를 파괴하지 않고 비활성화했다가 다시 켜서 쓰기 때문에 꺼 둔 콜라이더가 그대로 남아 있었습니다.",
+      "solution": "유닛이 다시 켜질 때(`OnEnable`) 콜라이더를 켜도록 했습니다.",
+      "result": "재활용한 유닛도 처음 만든 유닛과 같은 상태로 전투에 나옵니다.",
+      "lesson": "풀링을 쓰면 \"죽을 때 바꾼 값\"을 \"다시 꺼낼 때\" 되돌려야 합니다.",
+      "section": "문제 해결 1 — 풀에서 다시 꺼낸 유닛이 공격받지 않음"
+    },
+    {
+      "title": "씬마다 빠지는 인스펙터 할당",
+      "problem": "스테이지 씬마다 버튼·스포너에 연결해야 할 참조가 빠져 있었습니다.",
+      "cause": "스테이지마다 같은 연결을 인스펙터에서 손으로 반복해야 하는 구조였습니다.",
+      "solution": "아군 풀의 부모(`PoolParnt`)를 인스펙터 대신 코드에서 직접 찾아 연결했습니다.",
+      "result": "씬마다 손으로 연결하지 않아도 스포너가 풀 부모를 찾습니다.",
+      "lesson": "",
+      "section": "문제 해결 2 — 씬마다 빠지는 인스펙터 할당"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/party.jpg",
+      "w": 760,
+      "h": 429,
+      "caption": "캐릭터 편성 화면 — 위가 편성 슬롯, 아래가 보유 캐릭터"
+    },
+    {
+      "src": "images/stage_map_1.jpg",
+      "w": 760,
+      "h": 429,
+      "caption": "스테이지 선택 화면 — 동아시아"
+    },
+    {
+      "src": "images/stage_map_2.jpg",
+      "w": 760,
+      "h": 429,
+      "caption": "스테이지 선택 화면 — 옆으로 스와이프하면 동남아시아"
+    },
+    {
+      "src": "images/user_data_so.jpg",
+      "w": 550,
+      "h": 160,
+      "caption": "UserGameDataSO 인스펙터 — 레벨 데이터 · 최대 클리어 스테이지 · 경험치 · 해금 목록 · 편성 슬롯"
+    },
+    {
+      "src": "images/title.jpg",
+      "w": 760,
+      "h": 430,
+      "caption": "시작 화면"
+    }
+  ],
+  "retro": {
+    "achieved": [
+      "어떤 기능이든 구현하는 방식은 여러 가지가 있다는 것과, 구현한다면 어떤 패턴과 구조가 맞는지 배울 수 있었습니다.",
+      "게임에 어떤 외부 데이터가 필요한지, 설계한 구조에 맞으려면 데이터가 어떤 형태여야 하는지 스스로 판단할 수 있게 됐습니다.",
+      "데이터 구조를 리팩토링해, switch문을 걷어 내고 enum 인덱스로 곧장 불러오는 방식으로 바꿀 수 있었습니다."
+    ],
+    "regrets": [
+      "스폰 데이터가 인스펙터와 SO 데이터로 나뉘어 있습니다.",
+      "enum과 배열 순서로 매칭하고 있습니다.",
+      "고양이별 설명 텍스트 같은 데이터가 아직 코드에 하드코딩되어 있습니다.",
+      "플레이어블 요소가 더 돋보일 수 있는 장치를 충분히 넣지 못했습니다."
+    ],
+    "plans": [
+      "유지보수성과 확장성이 좋은 스폰 데이터 구조로, 데이터의 흐름을 더 일관성 있게 하나로 묶고 싶습니다.",
+      "종속성이 덜하고 순서와 상관없이 데이터가 연동되는 방법을 찾아 적용해 보고 싶습니다.",
+      "각 고양이 데이터에 붙여서 불러오게 만들면 수정이 훨씬 쉬워질 것 같습니다.",
+      "플레이어블 캐릭터에 스킬을 추가하거나, 플레이어블은 타워를 직접 공격하지 못하게 하는 등의 개선을 시도해 볼 생각입니다."
+    ],
+    "section": "아쉬운 점과 개선 계획"
+  },
+  "deck": {
+    "chapters": [
+      {
+        "key": "overview",
+        "title": "개요",
+        "sectionPath": [
+          "1. 개요"
+        ]
+      },
+      {
+        "key": "arch",
+        "title": "시스템 구조",
+        "sectionPath": [
+          "2. 시스템 구조"
+        ]
+      },
+      {
+        "key": "features",
+        "title": "핵심 기능",
+        "sectionPath": [
+          "3. 핵심 기능"
+        ]
+      },
+      {
+        "key": "choices",
+        "title": "고민과 선택",
+        "sectionPath": [
+          "4. 고민과 선택"
+        ]
+      },
+      {
+        "key": "results",
+        "title": "결과와 배운 점",
+        "sectionPath": [
+          "5. 결과와 배운 점"
+        ]
+      }
+    ],
+    "slides": [
+      {
+        "key": "what",
+        "chapter": "overview",
+        "layout": "overview",
+        "tab": "개요",
+        "title": {
+          "text": "무엇을 만들었나",
+          "verbatim": true
+        },
+        "lead": {
+          "text": "스테이지마다 정해진 적이 정해진 방식으로 소환되는 디펜스 게임입니다.",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "1. 개요",
+          "무엇을 만들었나"
+        ],
+        "points": [
+          {
+            "label": "",
+            "text": "조작 가능한 플레이어블 요소 한 가지를 추가해 보았습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "",
+            "text": "적 기지를 파괴하면 스테이지가 클리어되며, 획득한 경험치로 신규 캐릭터가 해금되고 보유 전투 요소를 레벨업·편성해 다음 스테이지에 대비합니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "image",
+            "src": "images/ingame.jpg",
+            "w": 760,
+            "h": 428,
+            "caption": {
+              "text": "인게임 플레이 화면",
+              "verbatim": true
+            },
+            "sectionPath": [
+              "냥코 디펜스 — 2D 횡스크롤 소환 디펜스"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "why",
+        "chapter": "overview",
+        "layout": "overview",
+        "tab": "개요",
+        "title": {
+          "text": "왜 만들었나",
+          "verbatim": true
+        },
+        "lead": {
+          "text": "정립된 디펜스 장르의 설계를 배워 보려고 만든 학습용 프로젝트입니다.",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "1. 개요",
+          "왜 만들었나"
+        ],
+        "points": [
+          {
+            "label": "목표",
+            "text": "적 데이터를 어떻게 정의하고, 그 적을 언제·어떻게 스폰하는지의 구조",
+            "verbatim": true
+          },
+          {
+            "label": "목표",
+            "text": "아군 유닛을 성장시키는 로직",
+            "verbatim": true
+          }
+        ],
+        "visuals": []
+      },
+      {
+        "key": "env",
+        "chapter": "overview",
+        "layout": "full",
+        "tab": "개요",
+        "title": {
+          "text": "개발 환경",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "1. 개요",
+          "개발 환경"
+        ],
+        "points": [],
+        "visuals": [
+          {
+            "kind": "table",
+            "n": 1,
+            "fp": "항목|내용"
+          }
+        ]
+      },
+      {
+        "key": "loop",
+        "chapter": "overview",
+        "layout": "overview",
+        "tab": "개요",
+        "title": {
+          "text": "원작과 다른 점 · 핵심 루프 · 조작법",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "1. 개요",
+          "원작과 다른 점 · 핵심 루프 · 조작법"
+        ],
+        "points": [
+          {
+            "label": "원작과 다른 점",
+            "text": "조작 가능한 플레이어블 냥코 한 명을 더했습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "핵심 루프",
+            "text": "아군 소환 → 적 저지 → 적 기지 파괴(클리어) → 경험치 획득 → 신규 캐릭터 해금 · 레벨업 · 편성 → 다음 스테이지",
+            "verbatim": true
+          },
+          {
+            "label": "조작법",
+            "text": "플레이어블 냥코는 A·D(또는 ←·→)로 이동, Z로 공격합니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "image",
+            "src": "images/title.jpg",
+            "w": 760,
+            "h": 430,
+            "caption": {
+              "text": "시작 화면",
+              "verbatim": true
+            },
+            "sectionPath": [
+              "1. 개요",
+              "이 문서에서 다루는 것"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "class",
+        "chapter": "arch",
+        "layout": "visual",
+        "tab": "구조",
+        "title": {
+          "text": "클래스 구조",
+          "verbatim": true
+        },
+        "lead": {
+          "text": "유닛이 상태 머신으로 움직이는 부분(왼쪽)과, 두 스포너가 같은 오브젝트 풀을 쓰고 데이터는 두 매니저에서만 받아 오는 부분(오른쪽)을 보면 됩니다.",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "2. 시스템 구조",
+          "클래스 구조"
+        ],
+        "points": [],
+        "visuals": [
+          {
+            "kind": "mermaid",
+            "n": 1,
+            "fp": "classDiagram"
+          }
+        ]
+      },
+      {
+        "key": "roles",
+        "chapter": "arch",
+        "layout": "full",
+        "tab": "구조",
+        "title": {
+          "text": "클래스 구조 — 맡은 일",
+          "verbatim": false
+        },
+        "lead": null,
+        "sectionPath": [
+          "2. 시스템 구조",
+          "클래스 구조"
+        ],
+        "points": [],
+        "visuals": [
+          {
+            "kind": "table",
+            "n": 1,
+            "fp": "클래스|맡은 일"
+          }
+        ]
+      },
+      {
+        "key": "why-split",
+        "chapter": "arch",
+        "layout": "visual",
+        "tab": "구조",
+        "title": {
+          "text": "왜 이렇게 나눴나",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "2. 시스템 구조",
+          "왜 이렇게 나눴나"
+        ],
+        "points": [
+          {
+            "label": "플레이어 데이터",
+            "text": "플레이어에 의해 바뀔 수 있는 데이터를 관리하는 매니저 — GameDataManager",
+            "verbatim": false
+          },
+          {
+            "label": "고정 데이터",
+            "text": "개발자가 미리 정해 놓은, 바뀌지 않는 데이터를 관리하는 매니저 — StageDataManager",
+            "verbatim": false
+          },
+          {
+            "label": "이유",
+            "text": "데이터가 오가는 길이 너무 여러 갈래로 나뉘면 일관성이 깨지거나 참조가 꼬일 수 있어서",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "image",
+            "src": "images/user_data_so.jpg",
+            "w": 550,
+            "h": 160,
+            "caption": {
+              "text": "UserGameDataSO 인스펙터 — 레벨 데이터 · 최대 클리어 스테이지 · 경험치 · 해금 목록 · 편성 슬롯",
+              "verbatim": true
+            }
+          }
+        ]
+      },
+      {
+        "key": "flow",
+        "chapter": "arch",
+        "layout": "full",
+        "tab": "흐름",
+        "title": {
+          "text": "전체 흐름",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "2. 시스템 구조",
+          "전체 흐름"
+        ],
+        "points": [],
+        "visuals": [
+          {
+            "kind": "table",
+            "n": 1,
+            "fp": "층|클래스|하는 일"
+          }
+        ]
+      },
+      {
+        "key": "attack-range",
+        "chapter": "features",
+        "layout": "code",
+        "tab": "구현",
+        "title": {
+          "text": "3.1 AI 자동 공격 — 사거리 판정",
+          "verbatim": false
+        },
+        "lead": null,
+        "sectionPath": [
+          "3. 핵심 기능",
+          "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지"
+        ],
+        "points": [
+          {
+            "label": "구현",
+            "text": "적이 사거리에 들어오고 대기 시간(stateTimer)이 끝나면 Idle이 Attack 상태로 전환됩니다.",
+            "verbatim": true
+          },
+          {
+            "label": "구현",
+            "text": "사거리 안에 적이 없으면 바로 Walk로 돌아갑니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 1,
+            "fp": "public override void Update()"
+          }
+        ]
+      },
+      {
+        "key": "attack-hit",
+        "chapter": "features",
+        "layout": "code",
+        "tab": "구현",
+        "title": {
+          "text": "3.1 AI 자동 공격 — 애니메이션 이벤트 타격",
+          "verbatim": false
+        },
+        "lead": null,
+        "sectionPath": [
+          "3. 핵심 기능",
+          "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지"
+        ],
+        "points": [
+          {
+            "label": "구현",
+            "text": "실제 데미지는 Update가 아니라, 공격 애니메이션 클립에 심어 둔 애니메이션 이벤트가 OnAttackTrigger()를 호출하는 시점에 들어갑니다.",
+            "verbatim": true
+          },
+          {
+            "label": "이유",
+            "text": "타격 프레임과 실제 판정 프레임이 어긋나지 않게 맞추기 위해서입니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 2,
+            "lines": [
+              1,
+              5
+            ],
+            "fp": "public void OnAttackTrigger()"
+          }
+        ]
+      },
+      {
+        "key": "gold",
+        "chapter": "features",
+        "layout": "code",
+        "tab": "구현",
+        "title": {
+          "text": "3.2 인게임 머니 — 초당 증가하는 골드를 정수로 반영",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "3. 핵심 기능",
+          "3.2 인게임 머니 — 초당 증가하는 골드를 정수로 반영"
+        ],
+        "points": [
+          {
+            "label": "구현",
+            "text": "goldBuffer에 소수분을 모아 뒀다가 1이 넘는 순간에만 정수로 떼어 gold에 반영합니다.",
+            "verbatim": true
+          },
+          {
+            "label": "이유",
+            "text": "이 값을 그대로 정수 골드에 더하면 반올림 오차가 프레임마다 누적되므로",
+            "verbatim": true
+          },
+          {
+            "label": "회고",
+            "text": "goldBuffer > 1이라서, 버퍼가 정확히 1일 때는 버퍼에만 담기고 실제 골드는 오르지 않을 수 있습니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 1,
+            "lines": [
+              7,
+              23
+            ],
+            "fp": "private void Update()"
+          }
+        ]
+      },
+      {
+        "key": "party",
+        "chapter": "features",
+        "layout": "code",
+        "tab": "구현",
+        "title": {
+          "text": "3.3 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "3. 핵심 기능",
+          "3.3 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯"
+        ],
+        "points": [
+          {
+            "label": "구현",
+            "text": "드래그를 시작하면 원본 슬롯의 고양이를 복제해 '커서 슬롯'이라는 임시 슬롯 하나를 켜고, 이후로는 이 임시 슬롯만 마우스를 따라다니게 합니다.",
+            "verbatim": true
+          },
+          {
+            "label": "결과",
+            "text": "놓치거나 취소돼도 원래 편성이 흐트러지지 않습니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 1,
+            "lines": [
+              4,
+              23
+            ],
+            "fp": "public void OnPointerDown(PointerEventData eventData)"
+          }
+        ]
+      },
+      {
+        "key": "stage",
+        "chapter": "features",
+        "layout": "screens",
+        "tab": "결과",
+        "title": {
+          "text": "3.4 스테이지 선택 — 클리어한 만큼만 열리고, 가장 가까운 스테이지로 스냅",
+          "verbatim": true
+        },
+        "lead": {
+          "text": "클리어한 스테이지 인덱스(maxclearedStage)까지만 지도 위 지점을 활성화해, 아직 깨지 않은 스테이지는 아예 보이지 않게 막습니다.",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "3. 핵심 기능",
+          "3.4 스테이지 선택 — 클리어한 만큼만 열리고, 가장 가까운 스테이지로 스냅"
+        ],
+        "points": [],
+        "visuals": [
+          {
+            "kind": "image",
+            "src": "images/stage_map_1.jpg",
+            "w": 760,
+            "h": 429,
+            "caption": {
+              "text": "스테이지 선택 화면 — 동아시아",
+              "verbatim": true
+            }
+          },
+          {
+            "kind": "image",
+            "src": "images/stage_map_2.jpg",
+            "w": 760,
+            "h": 429,
+            "caption": {
+              "text": "스테이지 선택 화면 — 옆으로 스와이프하면 동남아시아",
+              "verbatim": true
+            }
+          }
+        ]
+      },
+      {
+        "key": "stage-code",
+        "chapter": "features",
+        "layout": "code",
+        "tab": "구현",
+        "title": {
+          "text": "3.4 스테이지 선택 — 스냅",
+          "verbatim": false
+        },
+        "lead": null,
+        "sectionPath": [
+          "3. 핵심 기능",
+          "3.4 스테이지 선택 — 클리어한 만큼만 열리고, 가장 가까운 스테이지로 스냅"
+        ],
+        "points": [
+          {
+            "label": "구현",
+            "text": "드래그를 놓은 순간에는 스크롤 값을 그대로 쓰지 않고 가장 가까운 스테이지 인덱스로 스냅시킵니다.",
+            "verbatim": false
+          },
+          {
+            "label": "이유",
+            "text": "어중간한 위치에서 손을 떼도 항상 스테이지 하나에 딱 맞춰 멈추게 하기 위해서입니다.",
+            "verbatim": true
+          },
+          {
+            "label": "",
+            "text": "이 기능은 파워업, 캐릭터 편성 창에도 들어가 있습니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 1,
+            "lines": [
+              16,
+              35
+            ],
+            "fp": "// StageMapControll.cs"
+          }
+        ]
+      },
+      {
+        "key": "move-range",
+        "chapter": "choices",
+        "layout": "full",
+        "tab": "선택",
+        "title": {
+          "text": "4.1 플레이어블 유닛의 이동 범위",
+          "verbatim": true
+        },
+        "lead": {
+          "text": "유닛의 이동을 제한하는 대신, 승패 조건 쪽에 안전장치를 둔 선택입니다.",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "4. 고민과 선택",
+          "4.1 플레이어블 유닛의 이동 범위"
+        ],
+        "points": [],
+        "visuals": [
+          {
+            "kind": "table",
+            "n": 1,
+            "fp": "방법|내용|남은 점"
+          }
+        ]
+      },
+      {
+        "key": "prefab",
+        "chapter": "choices",
+        "layout": "full",
+        "tab": "선택",
+        "title": {
+          "text": "4.2 프리펩 데이터 할당 방식",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "4. 고민과 선택",
+          "4.2 프리펩 데이터 할당 방식"
+        ],
+        "points": [],
+        "visuals": [
+          {
+            "kind": "table",
+            "n": 1,
+            "fp": "방법|내용|남은 점"
+          }
+        ]
+      },
+      {
+        "key": "lookup",
+        "chapter": "choices",
+        "layout": "full",
+        "tab": "선택",
+        "title": {
+          "text": "4.3 데이터 조회 방식 — switch에서 enum 인덱스로",
+          "verbatim": true
+        },
+        "lead": {
+          "text": "switch 매칭을 (int)enum 인덱스 매칭으로 바꾼 뒤로는, 코드를 건드리지 않고 데이터만 추가해도 함수 하나로 값을 불러올 수 있게 됐습니다.",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "4. 고민과 선택",
+          "4.3 데이터 조회 방식 — switch에서 enum 인덱스로"
+        ],
+        "points": [],
+        "visuals": [
+          {
+            "kind": "table",
+            "n": 1,
+            "fp": "|바꾸기 전 (As-Is)|바꾼 뒤 (To-Be)"
+          }
+        ]
+      },
+      {
+        "key": "lookup-before",
+        "chapter": "choices",
+        "layout": "code",
+        "tab": "선택",
+        "title": {
+          "text": "4.3 바꾸기 전 — switch",
+          "verbatim": false
+        },
+        "lead": null,
+        "sectionPath": [
+          "4. 고민과 선택",
+          "4.3 데이터 조회 방식 — switch에서 enum 인덱스로"
+        ],
+        "points": [],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 1,
+            "fp": "public void UserDataLevelUp(GameLevelDataName levelName)"
+          }
+        ]
+      },
+      {
+        "key": "lookup-after",
+        "chapter": "choices",
+        "layout": "code",
+        "tab": "선택",
+        "title": {
+          "text": "4.3 바꾼 뒤 — enum 인덱스",
+          "verbatim": false
+        },
+        "lead": null,
+        "sectionPath": [
+          "4. 고민과 선택",
+          "4.3 데이터 조회 방식 — switch에서 enum 인덱스로"
+        ],
+        "points": [],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 2,
+            "fp": "[SerializeField] public List<GameLevelData> levelDataList;"
+          }
+        ]
+      },
+      {
+        "key": "pool-collider",
+        "chapter": "results",
+        "layout": "problem",
+        "tab": "문제 해결",
+        "title": {
+          "text": "문제 해결 1 — 풀에서 다시 꺼낸 유닛이 공격받지 않음",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "5. 결과와 배운 점",
+          "문제 해결 1 — 풀에서 다시 꺼낸 유닛이 공격받지 않음"
+        ],
+        "points": [
+          {
+            "label": "문제",
+            "text": "오브젝트 풀에서 다시 꺼내 쓴(재활용한) 유닛의 콜라이더가 꺼진 채로 나왔습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "원인",
+            "text": "유닛이 죽을 때 Die 상태에서 콜라이더를 끄고, 풀은 비활성화했다가 다시 켜서 쓰기 때문에 꺼 둔 콜라이더가 그대로 남았습니다.",
+            "verbatim": false
+          },
+          {
+            "label": "해결",
+            "text": "유닛이 다시 켜질 때(OnEnable) 콜라이더를 켜도록 했습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "결과",
+            "text": "재활용한 유닛도 처음 만든 유닛과 같은 상태로 전투에 나옵니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 1,
+            "fp": "private void OnEnable()"
+          }
+        ]
+      },
+      {
+        "key": "assign",
+        "chapter": "results",
+        "layout": "problem",
+        "tab": "문제 해결",
+        "title": {
+          "text": "문제 해결 2 — 씬마다 빠지는 인스펙터 할당",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "5. 결과와 배운 점",
+          "문제 해결 2 — 씬마다 빠지는 인스펙터 할당"
+        ],
+        "points": [
+          {
+            "label": "문제",
+            "text": "스테이지 씬마다 버튼·스포너에 연결해야 할 참조가 빠져 있었습니다.",
+            "verbatim": false
+          },
+          {
+            "label": "원인",
+            "text": "스테이지마다 같은 연결을 인스펙터에서 손으로 반복해야 하는 구조였습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "해결",
+            "text": "아군 풀의 부모(PoolParnt)를 인스펙터 대신 코드에서 직접 찾아 연결했습니다.",
+            "verbatim": false
+          },
+          {
+            "label": "결과",
+            "text": "씬마다 손으로 연결하지 않아도 스포너가 풀 부모를 찾습니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 1,
+            "fp": "void Awake()"
+          }
+        ]
+      },
+      {
+        "key": "retro-table",
+        "chapter": "results",
+        "layout": "full",
+        "tab": "결과",
+        "title": {
+          "text": "회고 — 당시의 판단과 지금의 판단",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "5. 결과와 배운 점",
+          "회고 — 당시의 판단과 지금의 판단"
+        ],
+        "points": [],
+        "visuals": [
+          {
+            "kind": "table",
+            "n": 1,
+            "fp": "주제|당시|지금"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -33,4 +33,4 @@
   <!-- 버튼·링크·태그에 쓰이는 색 하나. 예) #2F6FEB 블루, #0F9D76 그린, #D9480F 오렌지, #7048E8 퍼플 -->
 - 프로젝트 순서:
   <!-- 비워 두면 src/ 폴더 이름 순서. 바꾸려면 폴더 이름을 쉼표로: 2-Yggdrasil, 1-action-platformer -->
-1-nyanko-defense, 2-sh-server
+1-nyanko-defense, 2-sh-server, 3-hive-purge

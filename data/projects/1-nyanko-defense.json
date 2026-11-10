@@ -3,7 +3,7 @@
   "id": "1-nyanko-defense",
   "doc": "기술문서.md",
   "title": "냥코 디펜스",
-  "tagline": "스테이지마다 정해진 적이 정해진 방식으로 소환되는 디펜스 게임",
+  "tagline": "스테이지마다 정해진 적이 정해진 방식으로 소환되는 디펜스 게임 — 원본을 남기고 지금 다시 고친 코드까지",
   "cover": "images/ingame.jpg",
   "team": {
     "type": "solo",
@@ -17,7 +17,7 @@
     },
     {
       "label": "기간",
-      "value": "본 개발 2026.06.24 ~ 2026.07.04 (11일) · 보완 2026.07.05 ~ 2026.07.21"
+      "value": "본 개발 2026.06.24 ~ 2026.07.04 (11일) · 보완 2026.07.05 ~ 2026.07.21 · 회고 수정 2026.11"
     },
     {
       "label": "인원",
@@ -33,7 +33,7 @@
     "상태 머신",
     "ScriptableObject",
     "오브젝트 풀링",
-    "Input System",
+    "데이터 테이블",
     "DOTween"
   ],
   "links": {
@@ -52,55 +52,45 @@
       "how": "실제 데미지는 Update가 아니라, 공격 애니메이션 클립에 심어 둔 애니메이션 이벤트가 `OnAttackTrigger()`를 호출하는 시점에 들어갑니다.",
       "why": "타격 프레임과 실제 판정 프레임이 어긋나지 않게 맞추기 위해서입니다.",
       "section": "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지",
-      "image": {
-        "src": "images/ingame.jpg",
-        "w": 760,
-        "h": 428,
-        "caption": "인게임 — 아군 유닛과 적 유닛이 맞붙는 화면"
-      }
+      "image": null
     },
     {
-      "title": "인게임 머니",
-      "what": "초당 증가하는 골드를 정수로 반영합니다.",
-      "how": "`goldBuffer`에 소수분을 모아 뒀다가 1이 넘는 순간에만 정수로 떼어 `gold`에 반영하고, 최대치(`MaxGold`)도 매 호출마다 확인합니다.",
-      "why": "매 프레임 쌓이는 소수 값을 그대로 정수 골드에 더하면 반올림 오차가 프레임마다 누적되기 때문입니다.",
-      "section": "3.2 인게임 머니 — 초당 증가하는 골드를 정수로 반영",
+      "title": "데이터 조회 — 원본과 지금",
+      "what": "고양이 데이터를 enum 값을 배열 인덱스로 찾던 원본을, 데이터가 스스로 자기 키를 갖도록 다시 고쳤습니다.",
+      "how": "각 SO가 자기 `CatName`을 갖고, `GetCatSO`가 그 값을 키로 한 `Dictionary`에서 찾습니다.",
+      "why": "`CatSOArray[(int)catName]`은 enum의 순서와 인스펙터 배열의 순서가 반드시 같아야 동작합니다.",
+      "section": "4.2 데이터 조회 — enum 인덱스에서 데이터가 가진 키로",
+      "image": null
+    },
+    {
+      "title": "스폰 데이터 — SO 인스펙터에서 데이터 표로",
+      "what": "스테이지 SO 인스펙터에 흩어져 있던 웨이브를 데이터 표 한 장으로 모으고 코드가 읽게 했습니다.",
+      "how": "`Resources/Data/StageWave.txt`(TSV)를 `StageWaveTable`이 읽어 스테이지별로 묶고, `EnemySpawner`는 표에서 웨이브를 받습니다.",
+      "why": "서버 프로젝트에서 장르·키워드·아이템을 TSV 표로 두고 `DataManager`가 읽게 했던 구조를 그대로 가져왔습니다.",
+      "section": "4.3 스폰 데이터 — SO 인스펙터에서 데이터 표로",
       "image": null
     },
     {
       "title": "캐릭터 편성",
       "what": "드래그 앤 드롭으로 편성 슬롯과 보유 캐릭터 사이를 옮깁니다.",
       "how": "드래그를 시작하면 원본 슬롯의 고양이를 복제한 임시 '커서 슬롯'만 마우스를 따라다니고, 실제 편성 데이터(`CatSlotArray`)는 손을 뗀 시점(`OnPointerUp`)에 놓인 위치에 따라 반영됩니다.",
-      "why": "놓치거나 취소돼도 원래 편성이 흐트러지지 않습니다.",
-      "section": "3.3 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯",
+      "why": "",
+      "section": "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯",
       "image": {
         "src": "images/party.jpg",
         "w": 760,
         "h": 429,
         "caption": "캐릭터 편성 화면 — 위가 편성 슬롯, 아래가 보유 캐릭터"
       }
-    },
-    {
-      "title": "스테이지 선택",
-      "what": "클리어한 만큼만 지도 위 스테이지가 열리고, 손을 놓으면 가장 가까운 스테이지로 스냅됩니다.",
-      "how": "클리어한 스테이지 인덱스(`maxclearedStage`)까지만 지점을 활성화하고, 드래그를 놓은 순간 가장 가까운 인덱스로 스냅한 뒤 매 프레임 `Lerp`로 보간합니다.",
-      "why": "어중간한 위치에서 손을 떼도 항상 스테이지 하나에 딱 맞춰 멈추게 하기 위해서입니다.",
-      "section": "3.4 스테이지 선택 — 클리어한 만큼만 열리고, 가장 가까운 스테이지로 스냅",
-      "image": {
-        "src": "images/stage_map_1.jpg",
-        "w": 760,
-        "h": 429,
-        "caption": "스테이지 선택 화면 — 동아시아"
-      }
     }
   ],
   "troubleshooting": [
     {
       "title": "풀에서 다시 꺼낸 유닛의 콜라이더가 꺼져 있음",
-      "problem": "오브젝트 풀에서 다시 꺼내 쓴(재활용한) 유닛의 콜라이더가 꺼진 채로 나왔습니다.",
-      "cause": "유닛이 죽을 때 `Die` 상태에서 콜라이더를 끄는데, 풀은 오브젝트를 파괴하지 않고 비활성화했다가 다시 켜서 쓰기 때문에 꺼 둔 콜라이더가 그대로 남아 있었습니다.",
-      "solution": "유닛이 다시 켜질 때(`OnEnable`) 콜라이더를 켜도록 했습니다.",
-      "result": "재활용한 유닛도 처음 만든 유닛과 같은 상태로 전투에 나옵니다.",
+      "problem": "오브젝트 풀에서 다시 꺼내 쓴 유닛의 콜라이더가 꺼진 채로 나왔습니다.",
+      "cause": "유닛이 죽을 때 `Die` 상태에서 콜라이더를 끄는데, 풀은 오브젝트를 비활성화했다가 다시 켜서 쓰기 때문에 꺼 둔 콜라이더가 그대로 남아 있었습니다.",
+      "solution": "유닛이 다시 켜질 때(`OnEnable`) 상태·체력과 함께 콜라이더를 켜도록 했습니다.",
+      "result": "",
       "lesson": "풀링을 쓰면 \"죽을 때 바꾼 값\"을 \"다시 꺼낼 때\" 되돌려야 합니다.",
       "section": "문제 해결 1 — 풀에서 다시 꺼낸 유닛이 공격받지 않음"
     },
@@ -108,8 +98,8 @@
       "title": "씬마다 빠지는 인스펙터 할당",
       "problem": "스테이지 씬마다 버튼·스포너에 연결해야 할 참조가 빠져 있었습니다.",
       "cause": "스테이지마다 같은 연결을 인스펙터에서 손으로 반복해야 하는 구조였습니다.",
-      "solution": "아군 풀의 부모(`PoolParnt`)를 인스펙터 대신 코드에서 직접 찾아 연결했습니다.",
-      "result": "씬마다 손으로 연결하지 않아도 스포너가 풀 부모를 찾습니다.",
+      "solution": "아군 풀의 부모를 인스펙터 대신 코드에서 직접 찾아 연결했습니다.",
+      "result": "",
       "lesson": "",
       "section": "문제 해결 2 — 씬마다 빠지는 인스펙터 할당"
     }
@@ -120,18 +110,6 @@
       "w": 760,
       "h": 429,
       "caption": "캐릭터 편성 화면 — 위가 편성 슬롯, 아래가 보유 캐릭터"
-    },
-    {
-      "src": "images/stage_map_1.jpg",
-      "w": 760,
-      "h": 429,
-      "caption": "스테이지 선택 화면 — 동아시아"
-    },
-    {
-      "src": "images/stage_map_2.jpg",
-      "w": 760,
-      "h": 429,
-      "caption": "스테이지 선택 화면 — 옆으로 스와이프하면 동남아시아"
     },
     {
       "src": "images/user_data_so.jpg",
@@ -149,22 +127,19 @@
   "retro": {
     "achieved": [
       "어떤 기능이든 구현하는 방식은 여러 가지가 있다는 것과, 구현한다면 어떤 패턴과 구조가 맞는지 배울 수 있었습니다.",
-      "게임에 어떤 외부 데이터가 필요한지, 설계한 구조에 맞으려면 데이터가 어떤 형태여야 하는지 스스로 판단할 수 있게 됐습니다.",
-      "데이터 구조를 리팩토링해, switch문을 걷어 내고 enum 인덱스로 곧장 불러오는 방식으로 바꿀 수 있었습니다."
+      "원본을 태그로 남기고, 이후 프로젝트에서 배운 데이터 표·키 조회·경계값 확인을 이 프로젝트에 다시 적용했습니다."
     ],
     "regrets": [
-      "스폰 데이터가 인스펙터와 SO 데이터로 나뉘어 있습니다.",
-      "enum과 배열 순서로 매칭하고 있습니다.",
-      "고양이별 설명 텍스트 같은 데이터가 아직 코드에 하드코딩되어 있습니다.",
-      "플레이어블 요소가 더 돋보일 수 있는 장치를 충분히 넣지 못했습니다."
+      "프리펩 목록(GetCatPrefab)과 레벨 데이터는 아직 enum 순서에 기대고 있습니다.",
+      "GameDataLevelDic은 시작할 때 한 번 복사한 값이라, 게임 중 레벨이 오르면 실제 값과 달라집니다.",
+      "고양이별 설명 텍스트가 코드에 하드코딩되어 있습니다."
     ],
     "plans": [
-      "유지보수성과 확장성이 좋은 스폰 데이터 구조로, 데이터의 흐름을 더 일관성 있게 하나로 묶고 싶습니다.",
-      "종속성이 덜하고 순서와 상관없이 데이터가 연동되는 방법을 찾아 적용해 보고 싶습니다.",
-      "각 고양이 데이터에 붙여서 불러오게 만들면 수정이 훨씬 쉬워질 것 같습니다.",
-      "플레이어블 캐릭터에 스킬을 추가하거나, 플레이어블은 타워를 직접 공격하지 못하게 하는 등의 개선을 시도해 볼 생각입니다."
+      "4.2와 같은 방식으로 바꿀 수 있습니다.",
+      "값을 한 곳에서만 갖도록 정리해야 합니다.",
+      "웨이브처럼 표로 옮기면 수정이 쉬워집니다."
     ],
-    "section": "아쉬운 점과 개선 계획"
+    "section": "아직 남은 것"
   },
   "deck": {
     "chapters": [
@@ -190,10 +165,10 @@
         ]
       },
       {
-        "key": "choices",
-        "title": "고민과 선택",
+        "key": "growth",
+        "title": "원본과 지금의 나",
         "sectionPath": [
-          "4. 고민과 선택"
+          "4. 원본과 지금의 나"
         ]
       },
       {
@@ -245,7 +220,7 @@
               "verbatim": true
             },
             "sectionPath": [
-              "냥코 디펜스 — 2D 횡스크롤 소환 디펜스"
+              "냥코 디펜스 — 원본과 지금의 나"
             ]
           }
         ]
@@ -269,13 +244,8 @@
         ],
         "points": [
           {
-            "label": "목표",
+            "label": "",
             "text": "적 데이터를 어떻게 정의하고, 그 적을 언제·어떻게 스폰하는지의 구조",
-            "verbatim": true
-          },
-          {
-            "label": "목표",
-            "text": "아군 유닛을 성장시키는 로직",
             "verbatim": true
           }
         ],
@@ -417,12 +387,12 @@
         ],
         "points": [
           {
-            "label": "플레이어 데이터",
+            "label": "",
             "text": "플레이어에 의해 바뀔 수 있는 데이터를 관리하는 매니저 — GameDataManager",
             "verbatim": false
           },
           {
-            "label": "고정 데이터",
+            "label": "",
             "text": "개발자가 미리 정해 놓은, 바뀌지 않는 데이터를 관리하는 매니저 — StageDataManager",
             "verbatim": false
           },
@@ -442,29 +412,6 @@
               "text": "UserGameDataSO 인스펙터 — 레벨 데이터 · 최대 클리어 스테이지 · 경험치 · 해금 목록 · 편성 슬롯",
               "verbatim": true
             }
-          }
-        ]
-      },
-      {
-        "key": "flow",
-        "chapter": "arch",
-        "layout": "full",
-        "tab": "흐름",
-        "title": {
-          "text": "전체 흐름",
-          "verbatim": true
-        },
-        "lead": null,
-        "sectionPath": [
-          "2. 시스템 구조",
-          "전체 흐름"
-        ],
-        "points": [],
-        "visuals": [
-          {
-            "kind": "table",
-            "n": 1,
-            "fp": "층|클래스|하는 일"
           }
         ]
       },
@@ -498,7 +445,11 @@
           {
             "kind": "code",
             "n": 1,
-            "fp": "public override void Update()"
+            "fp": "public override void Update()",
+            "lines": [
+              1,
+              17
+            ]
           }
         ]
       },
@@ -532,54 +483,11 @@
           {
             "kind": "code",
             "n": 2,
+            "fp": "public void OnAttackTrigger()",
             "lines": [
               1,
               5
-            ],
-            "fp": "public void OnAttackTrigger()"
-          }
-        ]
-      },
-      {
-        "key": "gold",
-        "chapter": "features",
-        "layout": "code",
-        "tab": "구현",
-        "title": {
-          "text": "3.2 인게임 머니 — 초당 증가하는 골드를 정수로 반영",
-          "verbatim": true
-        },
-        "lead": null,
-        "sectionPath": [
-          "3. 핵심 기능",
-          "3.2 인게임 머니 — 초당 증가하는 골드를 정수로 반영"
-        ],
-        "points": [
-          {
-            "label": "구현",
-            "text": "goldBuffer에 소수분을 모아 뒀다가 1이 넘는 순간에만 정수로 떼어 gold에 반영합니다.",
-            "verbatim": true
-          },
-          {
-            "label": "이유",
-            "text": "이 값을 그대로 정수 골드에 더하면 반올림 오차가 프레임마다 누적되므로",
-            "verbatim": true
-          },
-          {
-            "label": "회고",
-            "text": "goldBuffer > 1이라서, 버퍼가 정확히 1일 때는 버퍼에만 담기고 실제 골드는 오르지 않을 수 있습니다.",
-            "verbatim": true
-          }
-        ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 1,
-            "lines": [
-              7,
-              23
-            ],
-            "fp": "private void Update()"
+            ]
           }
         ]
       },
@@ -589,13 +497,13 @@
         "layout": "code",
         "tab": "구현",
         "title": {
-          "text": "3.3 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯",
+          "text": "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯",
           "verbatim": true
         },
         "lead": null,
         "sectionPath": [
           "3. 핵심 기능",
-          "3.3 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯"
+          "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯"
         ],
         "points": [
           {
@@ -605,7 +513,7 @@
           },
           {
             "label": "결과",
-            "text": "놓치거나 취소돼도 원래 편성이 흐트러지지 않습니다.",
+            "text": "놓칠 곳에 놓으면 원래 슬롯에 되돌려서 원래 편성이 흐트러지지 않습니다.",
             "verbatim": true
           }
         ],
@@ -613,83 +521,62 @@
           {
             "kind": "code",
             "n": 1,
+            "fp": "public void OnPointerDown(PointerEventData eventData)",
             "lines": [
-              4,
-              23
-            ],
-            "fp": "public void OnPointerDown(PointerEventData eventData)"
+              1,
+              20
+            ]
           }
         ]
       },
       {
-        "key": "stage",
-        "chapter": "features",
-        "layout": "screens",
-        "tab": "결과",
+        "key": "retro-fixes",
+        "chapter": "growth",
+        "layout": "full",
+        "tab": "선택",
         "title": {
-          "text": "3.4 스테이지 선택 — 클리어한 만큼만 열리고, 가장 가까운 스테이지로 스냅",
-          "verbatim": true
+          "text": "원본과 지금의 나",
+          "verbatim": false
         },
         "lead": {
-          "text": "클리어한 스테이지 인덱스(maxclearedStage)까지만 지도 위 지점을 활성화해, 아직 깨지 않은 스테이지는 아예 보이지 않게 막습니다.",
+          "text": "원본은 태그 v1.0-project-end로 그대로 두고, 아쉬운 세 곳을 retrospective-fixes 브랜치에서 다시 고쳤습니다.",
           "verbatim": true
         },
         "sectionPath": [
-          "3. 핵심 기능",
-          "3.4 스테이지 선택 — 클리어한 만큼만 열리고, 가장 가까운 스테이지로 스냅"
+          "4. 원본과 지금의 나"
         ],
         "points": [],
         "visuals": [
           {
-            "kind": "image",
-            "src": "images/stage_map_1.jpg",
-            "w": 760,
-            "h": 429,
-            "caption": {
-              "text": "스테이지 선택 화면 — 동아시아",
-              "verbatim": true
-            }
-          },
-          {
-            "kind": "image",
-            "src": "images/stage_map_2.jpg",
-            "w": 760,
-            "h": 429,
-            "caption": {
-              "text": "스테이지 선택 화면 — 옆으로 스와이프하면 동남아시아",
-              "verbatim": true
-            }
+            "kind": "table",
+            "n": 1,
+            "fp": "#|원본의 문제|당시의 나|지금의 나|커밋"
           }
         ]
       },
       {
-        "key": "stage-code",
-        "chapter": "features",
+        "key": "gold",
+        "chapter": "growth",
         "layout": "code",
-        "tab": "구현",
+        "tab": "선택",
         "title": {
-          "text": "3.4 스테이지 선택 — 스냅",
-          "verbatim": false
+          "text": "4.1 골드 버퍼 — 경계값",
+          "verbatim": true
         },
         "lead": null,
         "sectionPath": [
-          "3. 핵심 기능",
-          "3.4 스테이지 선택 — 클리어한 만큼만 열리고, 가장 가까운 스테이지로 스냅"
+          "4. 원본과 지금의 나",
+          "4.1 골드 버퍼 — 경계값"
         ],
         "points": [
           {
-            "label": "구현",
-            "text": "드래그를 놓은 순간에는 스크롤 값을 그대로 쓰지 않고 가장 가까운 스테이지 인덱스로 스냅시킵니다.",
-            "verbatim": false
-          },
-          {
-            "label": "이유",
-            "text": "어중간한 위치에서 손을 떼도 항상 스테이지 하나에 딱 맞춰 멈추게 하기 위해서입니다.",
+            "label": "문제",
+            "text": "조건이 > 1이면 버퍼가 딱 1.0일 때 그 프레임에는 반영되지 않습니다.",
             "verbatim": true
           },
           {
-            "label": "",
-            "text": "이 기능은 파워업, 캐릭터 편성 창에도 들어가 있습니다.",
+            "label": "배운 점",
+            "text": "경계값을 어떻게 다룰지를 코드에 정확히 쓰는 습관을 서버 프로젝트의 회고(입장 인원 \"최대 + 1\", 방 개수 상한)에서 배웠습니다.",
             "verbatim": true
           }
         ],
@@ -697,132 +584,144 @@
           {
             "kind": "code",
             "n": 1,
-            "lines": [
-              16,
-              35
-            ],
-            "fp": "// StageMapControll.cs"
-          }
-        ]
-      },
-      {
-        "key": "move-range",
-        "chapter": "choices",
-        "layout": "full",
-        "tab": "선택",
-        "title": {
-          "text": "4.1 플레이어블 유닛의 이동 범위",
-          "verbatim": true
-        },
-        "lead": {
-          "text": "유닛의 이동을 제한하는 대신, 승패 조건 쪽에 안전장치를 둔 선택입니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "4. 고민과 선택",
-          "4.1 플레이어블 유닛의 이동 범위"
-        ],
-        "points": [],
-        "visuals": [
+            "fp": "public void IncreaseGold(float amount)"
+          },
           {
-            "kind": "table",
-            "n": 1,
-            "fp": "방법|내용|남은 점"
-          }
-        ]
-      },
-      {
-        "key": "prefab",
-        "chapter": "choices",
-        "layout": "full",
-        "tab": "선택",
-        "title": {
-          "text": "4.2 프리펩 데이터 할당 방식",
-          "verbatim": true
-        },
-        "lead": null,
-        "sectionPath": [
-          "4. 고민과 선택",
-          "4.2 프리펩 데이터 할당 방식"
-        ],
-        "points": [],
-        "visuals": [
-          {
-            "kind": "table",
-            "n": 1,
-            "fp": "방법|내용|남은 점"
-          }
-        ]
-      },
-      {
-        "key": "lookup",
-        "chapter": "choices",
-        "layout": "full",
-        "tab": "선택",
-        "title": {
-          "text": "4.3 데이터 조회 방식 — switch에서 enum 인덱스로",
-          "verbatim": true
-        },
-        "lead": {
-          "text": "switch 매칭을 (int)enum 인덱스 매칭으로 바꾼 뒤로는, 코드를 건드리지 않고 데이터만 추가해도 함수 하나로 값을 불러올 수 있게 됐습니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "4. 고민과 선택",
-          "4.3 데이터 조회 방식 — switch에서 enum 인덱스로"
-        ],
-        "points": [],
-        "visuals": [
-          {
-            "kind": "table",
-            "n": 1,
-            "fp": "|바꾸기 전 (As-Is)|바꾼 뒤 (To-Be)"
+            "kind": "code",
+            "n": 2,
+            "fp": "if(goldBuffer >= 1)"
           }
         ]
       },
       {
         "key": "lookup-before",
-        "chapter": "choices",
+        "chapter": "growth",
         "layout": "code",
         "tab": "선택",
         "title": {
-          "text": "4.3 바꾸기 전 — switch",
+          "text": "4.2 바꾸기 전 — enum 인덱스",
           "verbatim": false
         },
         "lead": null,
         "sectionPath": [
-          "4. 고민과 선택",
-          "4.3 데이터 조회 방식 — switch에서 enum 인덱스로"
+          "4. 원본과 지금의 나",
+          "4.2 데이터 조회 — enum 인덱스에서 데이터가 가진 키로"
+        ],
+        "points": [
+          {
+            "label": "문제",
+            "text": "CatSOArray[(int)catName]은 enum의 순서와 인스펙터 배열의 순서가 반드시 같아야 동작합니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 1,
+            "fp": "// CatName과 CatSO를 연결하는 배열, CatName을 인덱스로 사용하여 CatSO를 가져올 수 "
+          }
+        ]
+      },
+      {
+        "key": "lookup-after",
+        "chapter": "growth",
+        "layout": "code",
+        "tab": "선택",
+        "title": {
+          "text": "4.2 바꾼 뒤 — 데이터가 가진 키로",
+          "verbatim": false
+        },
+        "lead": null,
+        "sectionPath": [
+          "4. 원본과 지금의 나",
+          "4.2 데이터 조회 — enum 인덱스에서 데이터가 가진 키로"
+        ],
+        "points": [
+          {
+            "label": "해결",
+            "text": "이제 배열 순서와 상관없이, 각 데이터에 적힌 키로 사전(Dictionary)에서 찾습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "구현",
+            "text": "같은 키가 두 번 들어 있거나 없는 키를 찾으면 경고를 남겨, 데이터 실수가 조용히 넘어가지 않게 했습니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 2,
+            "fp": "// EntitySO.cs",
+            "lines": [
+              10,
+              28
+            ]
+          }
+        ]
+      },
+      {
+        "key": "spawn-before",
+        "chapter": "growth",
+        "layout": "code",
+        "tab": "선택",
+        "title": {
+          "text": "4.3 바꾸기 전 — 스테이지 SO 인스펙터",
+          "verbatim": false
+        },
+        "lead": {
+          "text": "바꾸기 전 — 스테이지마다 SO 하나, 웨이브는 인스펙터에서 한 칸씩 입력",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "4. 원본과 지금의 나",
+          "4.3 스폰 데이터 — SO 인스펙터에서 데이터 표로"
         ],
         "points": [],
         "visuals": [
           {
             "kind": "code",
             "n": 1,
-            "fp": "public void UserDataLevelUp(GameLevelDataName levelName)"
+            "fp": "public List<StageWaveData> waves;"
+          },
+          {
+            "kind": "code",
+            "n": 2,
+            "fp": "Stage\tOrder\tEnemyName\tMinSpawnInterval\tIsRandomTime\tMaxSpawn"
           }
         ]
       },
       {
-        "key": "lookup-after",
-        "chapter": "choices",
+        "key": "spawn-after",
+        "chapter": "growth",
         "layout": "code",
         "tab": "선택",
         "title": {
-          "text": "4.3 바꾼 뒤 — enum 인덱스",
+          "text": "4.3 바꾼 뒤 — 데이터 표",
           "verbatim": false
         },
         "lead": null,
         "sectionPath": [
-          "4. 고민과 선택",
-          "4.3 데이터 조회 방식 — switch에서 enum 인덱스로"
+          "4. 원본과 지금의 나",
+          "4.3 스폰 데이터 — SO 인스펙터에서 데이터 표로"
         ],
-        "points": [],
+        "points": [
+          {
+            "label": "이유",
+            "text": "서버 프로젝트에서 장르·키워드·아이템을 TSV 표로 두고 DataManager가 읽게 했던 구조를 그대로 가져왔습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "결과",
+            "text": "이제 웨이브를 고칠 때 스테이지 SO를 하나씩 열지 않고 표 한 장만 고치면 되고, 모든 스테이지의 스폰 흐름을 한눈에 비교할 수 있습니다.",
+            "verbatim": true
+          }
+        ],
         "visuals": [
           {
             "kind": "code",
-            "n": 2,
-            "fp": "[SerializeField] public List<GameLevelData> levelDataList;"
+            "n": 3,
+            "fp": "// StageWaveTable.cs — 표를 읽어 스테이지별로 묶음"
           }
         ]
       },
@@ -843,22 +742,22 @@
         "points": [
           {
             "label": "문제",
-            "text": "오브젝트 풀에서 다시 꺼내 쓴(재활용한) 유닛의 콜라이더가 꺼진 채로 나왔습니다.",
+            "text": "오브젝트 풀에서 다시 꺼내 쓴 유닛의 콜라이더가 꺼진 채로 나왔습니다.",
             "verbatim": true
           },
           {
             "label": "원인",
-            "text": "유닛이 죽을 때 Die 상태에서 콜라이더를 끄고, 풀은 비활성화했다가 다시 켜서 쓰기 때문에 꺼 둔 콜라이더가 그대로 남았습니다.",
-            "verbatim": false
-          },
-          {
-            "label": "해결",
-            "text": "유닛이 다시 켜질 때(OnEnable) 콜라이더를 켜도록 했습니다.",
+            "text": "유닛이 죽을 때 Die 상태에서 콜라이더를 끄는데, 풀은 오브젝트를 비활성화했다가 다시 켜서 쓰기 때문에 꺼 둔 콜라이더가 그대로 남아 있었습니다.",
             "verbatim": true
           },
           {
-            "label": "결과",
-            "text": "재활용한 유닛도 처음 만든 유닛과 같은 상태로 전투에 나옵니다.",
+            "label": "해결",
+            "text": "유닛이 다시 켜질 때(OnEnable) 상태·체력과 함께 콜라이더를 켜도록 했습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "배운 점",
+            "text": "풀링을 쓰면 \"죽을 때 바꾼 값\"을 \"다시 꺼낼 때\" 되돌려야 합니다.",
             "verbatim": true
           }
         ],
@@ -888,7 +787,7 @@
           {
             "label": "문제",
             "text": "스테이지 씬마다 버튼·스포너에 연결해야 할 참조가 빠져 있었습니다.",
-            "verbatim": false
+            "verbatim": true
           },
           {
             "label": "원인",
@@ -897,12 +796,7 @@
           },
           {
             "label": "해결",
-            "text": "아군 풀의 부모(PoolParnt)를 인스펙터 대신 코드에서 직접 찾아 연결했습니다.",
-            "verbatim": false
-          },
-          {
-            "label": "결과",
-            "text": "씬마다 손으로 연결하지 않아도 스포너가 풀 부모를 찾습니다.",
+            "text": "아군 풀의 부모를 인스펙터 대신 코드에서 직접 찾아 연결했습니다(c7f3374).",
             "verbatim": true
           }
         ],
@@ -915,25 +809,25 @@
         ]
       },
       {
-        "key": "retro-table",
+        "key": "growth-table",
         "chapter": "results",
         "layout": "full",
         "tab": "결과",
         "title": {
-          "text": "회고 — 당시의 판단과 지금의 판단",
+          "text": "이 프로젝트 이후 달라진 것",
           "verbatim": true
         },
         "lead": null,
         "sectionPath": [
           "5. 결과와 배운 점",
-          "회고 — 당시의 판단과 지금의 판단"
+          "이 프로젝트 이후 달라진 것"
         ],
         "points": [],
         "visuals": [
           {
             "kind": "table",
             "n": 1,
-            "fp": "주제|당시|지금"
+            "fp": "|냥코 디펜스 (원본)|이후 프로젝트에서|이 프로젝트에 다시 적용"
           }
         ]
       }

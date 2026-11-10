@@ -17,7 +17,7 @@
 │   ├── images/              #    스크린샷·GIF
 │   ├── code/                #    (선택) 핵심 소스코드 .cs
 │   ├── deck-edits.json      #    (/portfolio-edit) 발표 덱 장면 고치기 — 요청을 받아 Claude가 씀, 커밋함, 기술 문서가 아님, build는 읽기만
-│   └── _intake/             #    (/portfolio-intake) 재료집·촬영목록 — 기술 문서가 아님, git 제외, build·check가 읽지 않음
+│   └── _intake/             #    (/portfolio-intake) 재료집·촬영목록·발표자료(.pptx에서 꺼낸 글 + pptx/ 그림) — 기술 문서가 아님, git 제외, build·check가 읽지 않음
 ├── format/                  # 📏 가이드 판정 기준 (읽기 전용)
 ├── data/                    # 🤖 /portfolio-build가 생성 (portfolio.json, projects/*.json)
 ├── index.html               # 🖥 고정 렌더러 — 포트폴리오 문서 (아래로 읽는 한 페이지, A4 인쇄 = 제출 PDF)
@@ -66,7 +66,7 @@ flowchart LR
 | `/portfolio-theme [되돌리기\|요청]` | 첨부한 웹페이지 스크린샷에서 색·모양·영문 글꼴·효과를 정해진 규칙으로 뽑아 `theme/theme.css`에 씀(세 페이지가 함께 바뀜). 렌더러는 안 건드림. 말로 "이 사이트 느낌으로", "버튼 덜 둥글게"라고 해도 됨 |
 | `/portfolio-custom [디자인 요청]` | 직접 생성 모드. **사용자가 직접 입력했을 때만** 실행 |
 | `/portfolio-update [되돌리기]` | 템플릿 원본에서 렌더러·스킬·`format/`·`CLAUDE.md`만 받아 반영(`src/`·`profile.md`·`data/`·`custom/`은 안 건드림). **사용자가 직접 입력했을 때만** 실행 |
-| `/portfolio-intake <레포 주소\|폴더>` | GitHub 레포에서 핵심 `.cs`·재료집(사실 + 질문)·촬영 목록을 `src/<NN>/`에 만듦. 기술 문서는 만들지 않음. **사용자가 직접 입력했을 때만** 실행 |
+| `/portfolio-intake <레포 주소\|폴더\|발표.pptx>` | GitHub 레포에서 핵심 `.cs`·재료집(사실 + 질문)·촬영 목록을 `src/<NN>/`에 만듦. `.pptx`면 슬라이드 글·표·노트·그림을 그대로 `_intake/발표자료.md`·`_intake/pptx/`로 꺼냄(`pptx-extract.py`, 표준 라이브러리만). 기술 문서는 만들지 않음. **사용자가 직접 입력했을 때만** 실행 |
 
 ---
 

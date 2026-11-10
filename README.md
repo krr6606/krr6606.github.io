@@ -5,7 +5,7 @@
 **포트폴리오 웹페이지 세 가지**(포트폴리오 문서 · 발표 덱 · 상세 기술문서)와 **점검 리포트**를 만들어 줍니다.
 결과물은 설치·빌드 과정 없이 GitHub Pages로 바로 배포되고, 제출용 PDF로도 저장할 수 있습니다. 발표 덱은 PowerPoint 파일(PPTX)로 저장해 직접 고쳐 쓸 수도 있습니다.
 
-**예시 보기** → https://krkoohoo.github.io/portfolio-test/
+**예시 보기** → https://krkoohoo.github.io/portfolio-template/
 (이 레포에 들어 있는 샘플 프로필과 선배 수강생 작품 3편으로 만든 페이지입니다.)
 
 ```mermaid
@@ -555,7 +555,7 @@ python -m http.server 4600
 |---|---|
 | 렌더러(`index.html`·`project.html`·`doc.html`·`assets/`), Claude 명령(`.claude/skills/portfolio-*`), 판정 기준(`format/`), `CLAUDE.md`, `.nojekyll`. `.gitignore`·`.claude/launch.json`은 새 줄만 더함 | `src/`, `profile.md`, `data/`, `custom/`, `report.md`, `theme/theme.css`·`theme/strings.tsv`(없을 때만 새로 만듦) |
 
-- 템플릿(`https://github.com/krKooHoo/portfolio-test`)에서 받기 전, 파일을 바꾸기 전, 커밋하기 전에 **각각 동의를 받습니다**. 무엇이 바뀌는지 먼저 보여 줍니다.
+- 템플릿(`https://github.com/krKooHoo/portfolio-template`)에서 받기 전, 파일을 바꾸기 전, 커밋하기 전에 **각각 동의를 받습니다**. 무엇이 바뀌는지 먼저 보여 줍니다.
 - 커밋하지 않은 변경이 있으면 먼저 커밋하라고 하고 멈춥니다.
 - README는 직접 고치지 않았으면 새 것으로 바꾸고, 고쳤으면 유지할지 묻습니다(기본은 유지). 렌더러나 명령 파일을 직접 고친 흔적이 있으면 파일마다 바꿀지 남길지 묻습니다.
 - 문구 표에 새 문구 자리가 생겼거나 `profile.md` 안내가 바뀌었으면 알려만 줍니다(내 파일은 고치지 않음).
@@ -565,7 +565,7 @@ python -m http.server 4600
 **내 레포에 `/portfolio-update` 명령이 없다면** (옛 템플릿으로 만든 레포) — 레포 폴더의 터미널에서 아래 두 줄을 **한 번만** 실행해 명령부터 받습니다.
 
 ```bash
-git fetch https://github.com/krKooHoo/portfolio-test main
+git fetch https://github.com/krKooHoo/portfolio-template main
 ```
 
 ```bash
@@ -582,7 +582,7 @@ Fork한 레포는 GitHub의 **Sync fork** 버튼으로도 받을 수 있지만, 
 1. Sync fork 화면에 충돌이 보이면 **Discard commits는 누르지 마세요**(내 커밋이 사라집니다). 대신 내 PC에서 받습니다.
 
    ```bash
-   git remote add upstream https://github.com/krKooHoo/portfolio-test.git
+   git remote add upstream https://github.com/krKooHoo/portfolio-template.git
    ```
 
    (위 한 줄은 처음 한 번만)

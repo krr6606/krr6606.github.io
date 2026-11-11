@@ -32,7 +32,8 @@ CHART_KO = {'barChart': '막대', 'bar3DChart': '막대', 'lineChart': '꺾은�
             'doughnutChart': '도넛', 'areaChart': '영역', 'area3DChart': '영역', 'scatterChart': '분산형', 'radarChart': '방사형',
             'bubbleChart': '거품형', 'stockChart': '주식형', 'surfaceChart': '표면형', 'surface3DChart': '표면형', 'ofPieChart': '원형'}
 DEFAULT_TITLE = re.compile(r'^(powerpoint\s*(프레젠테이션|presentation)|프레젠테이션\s*\d*|presentation\s*\d*|제목 없는 프레젠테이션|untitled presentation)$', re.I)
-EMAIL = re.compile(r'(?:mailto:)?[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+')
+# 마지막 칸이 글자 2자 이상일 때만 이메일로 봄 — com.unity.inputsystem@1.7.0 같은 "패키지@버전" 표기를 가리지 않게
+EMAIL = re.compile(r'(?:mailto:)?[A-Za-z0-9._%+-]+@(?!\d+\.\d)(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}(?![A-Za-z0-9-]|\.[A-Za-z0-9])')
 PHONE = re.compile(r'(?<![\d.])(?:\+82[-. ]?0?|0)1[016789][-. ]?\d{3,4}[-. ]?\d{4}(?!\d)|(?<![\d.])0(?:2|[3-6]\d)[-. )]\d{3,4}[-. ]\d{4}(?!\d)')
 CTRL = re.compile(r'[\x00-\x08\x0b\x0c\x0e-\x1f]')
 PAGE_NO = re.compile(r'^[-–(\[]?\s*(?:p\.?\s*)?\d{1,3}\s*(?:/\s*\d{1,3})?\s*[-–)\]]?$', re.I)

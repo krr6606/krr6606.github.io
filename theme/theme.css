@@ -1,43 +1,10 @@
 /* ─────────────────────────────────────────────────────────────
-   테마 (theme/theme.css) — /portfolio-theme가 만듦 · 2026-11-06
-   참고한 화면: 흰 바탕의 게임 회사 채용 소개 페이지(아래로 긴 한 페이지, 노랑·주황 띠 하나)
-   뽑은 인상: 흰 바탕 · 검은 굵은 제목 · 주황 강조(숫자 배지·제목 끝 점) · 노랑→주황 띠 · 각진 사진 카드 · 알약 배지 · 굵은 기하학 영문
-   값을 고쳐도 됩니다(저장 → 새로고침). 손잡이 설명: .claude/skills/portfolio-theme/rules.md
-   이 파일은 /portfolio-update가 건드리지 않습니다. 기본 테마로 되돌리기: /portfolio-theme 되돌리기
+   테마 (theme/theme.css) — 포트폴리오 문서·발표 덱·상세 문서가 마지막에 싣는 파일
+   지금은 비어 있어 기본 테마(어두운 바탕 · profile.md 강조색 → 보랏빛 그러데이션)를 씁니다.
+
+   바꾸려면: Claude Code에서 마음에 드는 웹페이지 스크린샷을 첨부하고
+     /portfolio-theme
+   를 입력하세요. Claude가 색·모양·영문 글꼴·효과를 정해진 규칙으로 뽑아 이 파일을 채웁니다.
+   손잡이(--t-*) 설명: .claude/skills/portfolio-theme/rules.md
+   이 파일은 /portfolio-update가 건드리지 않습니다(템플릿을 업데이트해도 내 테마가 남음).
    ───────────────────────────────────────────────────────────── */
-@import url("https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.3.0/latin-700.css");
-@import url("https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.3.0/latin-800.css");
-
-:root {
-  /* ① 바탕과 글자 — 바탕 대비: 제목 12 · 본문 7 · 보조 4.5 이상(check-theme.py가 확인) */
-  --t-scheme: light;
-  --t-bg: #FFFFFF;              /* 페이지 바탕(흰색) */
-  --t-surface: #F8F8F8;         /* 카드·판 — 화면 아래 바닥 띠의 아주 옅은 회색 */
-  --t-ink: #000000;             /* 큰 제목·영문 분야 이름의 검정 */
-  --t-body: #2B2B2B;            /* 카드 아래 설명 글 */
-  --t-muted: #6E6E6E;           /* 영문 옆 작은 한글 라벨(화면은 #797979 — 대비 4.5를 맞추려 조금 진하게) */
-  --t-line: #EBEBEB;            /* 목록 사이 아주 옅은 구분선(화면은 #F1F1F1 — 카드 회색 위에서도 보이게 한 단 진하게) */
-  --t-line-2: #D1D1D1;         /* 알약 버튼 테두리(구분선보다 한 단 진하게) */
-
-  /* ② 강조색 — 이 줄을 지우면 profile.md의 강조색을 씀. 글자용 진하기·흰 글자 칠은 페이지가 자동으로 맞춤 */
-  --t-accent: #FF9800;          /* 숫자 배지·제목 끝 점의 주황 */
-  --t-accent-2: #FFC200;        /* 큰 띠 그러데이션의 노랑 쪽 */
-  --t-accent-3: #FFAC00;        /* 큰 띠 그러데이션의 주황 쪽 */
-
-  /* ③ 모양 */
-  --t-radius: 0px;              /* 사진 카드·띠가 모두 각짐 */
-  --t-pill: 999px;              /* 숫자 배지·버튼이 알약 */
-  --t-shadow: rgb(20 22 30 / .16);   /* 사진 카드 아래 옅은 그림자 */
-
-  /* ④ 영문 라벨 글꼴(PORTFOLIO·CHAPTER 같은 눈썹 글자, 머리 뒤 큰 영문 이름) — 한글은 늘 Pretendard */
-  --t-display: 'Poppins';
-
-  /* ⑤ 효과 */
-  --t-grad: linear-gradient(var(--accent-ink), var(--accent-ink));   /* 제목 글자는 그러데이션 없이 단색 */
-  --t-badge: linear-gradient(160deg, var(--accent-fill) 0%, var(--accent-2-fill) 62%, var(--accent-3) 130%);   /* 노랑·주황 그러데이션 띠 */
-  --t-glow: 0;                  /* 바탕에 번지는 빛 없음(평평한 흰 바탕) */
-  --t-mark: 0;                  /* 배경에 깔린 큰 장식 글자 없음 */
-
-  /* ⑥ 다이어그램 판 — 밝은 바탕이라 카드 색과 같게 */
-  --t-diagram: #F8F8F8;
-}

@@ -25,7 +25,7 @@ flowchart LR
 - **시작**: [무엇이 만들어지나요](#무엇이-만들어지나요) · [도구 한눈에](#도구-한눈에) · [준비물](#준비물) · [빠른 시작](#빠른-시작)
 - **처음 따라 하기**: [1. 내 레포 만들기](#1단계-내-레포-만들기) → [2. 기술 문서와 소스 넣기](#2단계-기술-문서와-소스-넣기) → [3. profile.md 채우기](#3단계-profilemd-채우기) → [4. 포트폴리오 만들기](#4단계-포트폴리오-만들기) → [5. 미리보기](#5단계-미리보기) → [6. 배포하기](#6단계-배포하기) → [7. PDF로 제출하기](#7단계-pdf로-제출하기)
 - **도구 설명서**: [재료 모으기](#재료-모으기)([레포](#github-레포에서-가져오기) · [PPTX 가져오기](#발표-자료pptx에서-가져오기)) · [점검받기](#쓰는-중에-점검받기) · [만들기](#포트폴리오-데이터-만들기) · [장면 고치기](#발표-덱-장면-고치기) · [디자인 바꾸기](#디자인-바꾸기)([배치 따라 하기](#다른-사이트-배치-따라-하기)) · [PPTX로 저장](#발표-덱을-pptx로-저장하기) · [템플릿 업데이트](#템플릿-업데이트-받기)
-- **참고**: [세 페이지 자세히](#세-페이지-자세히) · [문제 해결](#문제-해결) · [폴더 구조](#폴더-구조) · [기준 문서](#기준-문서-format) · [지키는 원칙](#지키는-원칙)
+- **참고**: [세 페이지 자세히](#세-페이지-자세히) · [문제 해결](#문제-해결) · [폴더 구조](#폴더-구조) · [스킬 구성](#스킬-구성-claudeskills) · [기준 문서](#기준-문서-format) · [지키는 원칙](#지키는-원칙)
 
 ---
 
@@ -863,6 +863,21 @@ Fork한 레포는 GitHub의 **Sync fork** 버튼으로도 받을 수 있지만, 
 ✍ 내가 쓰는 것 · 🤖 Claude가 만드는 것 · 🎨 디자인 · 🖥 렌더러(템플릿 업데이트로 바뀜) · 📏 ⚙ 기준과 규칙 · 📋 내 PC에만
 
 </details>
+
+### 스킬 구성 (.claude/skills/)
+
+명령 하나가 스킬 폴더 하나입니다. 폴더 안의 `SKILL.md`가 Claude가 따르는 절차이고, 스크립트는 그 절차 안에서 Claude가 실행합니다(직접 실행할 일은 없습니다).
+
+| 스킬 폴더 | 실행 | 들어 있는 파일 | 필요한 것 | 쓰는 파일 |
+|---|---|---|---|---|
+| `portfolio-intake` | ✋ 직접 입력 | `SKILL.md` · `templates.md`(재료집·촬영목록·발표자료 형식) · `pptx-extract.py`(.pptx에서 꺼내기) | Git(레포일 때) · Python(.pptx일 때) | `src/<폴더>/code/`·`_intake/`, `report-intake.md` |
+| `portfolio-check` | 말로도 | `SKILL.md` | — | `report.md` |
+| `portfolio-build` | 말로도 | `SKILL.md` · `schema.md`(`data/` 형식) · `deck-edits.py`(장면 고치기 반영) | Python(권장) · 미리보기 | `data/`, `report.md` |
+| `portfolio-edit` | 말로도 | `SKILL.md`(build 폴더의 `deck-edits.py`·`schema.md`를 씀) | Python(필요) · 미리보기 | `src/<폴더>/deck-edits.json`, `data/projects/<폴더>.json` |
+| `portfolio-theme` | 말로도 | `SKILL.md` · `rules.md`(손잡이·뽑는 규칙) · `sample-colors.py` · `check-theme.py` · `theme-template.css` · `theme-default.css` | Python(점검) · 미리보기 | `theme/theme.css` |
+| `portfolio-layout` | 말로도 | `SKILL.md` · `measure-layout.js`(레퍼런스 페이지에서 배치 재기) | 브라우저 도구(주소일 때) | `theme/layout.json` |
+| `portfolio-custom` | ✋ 직접 입력 | `SKILL.md` | 미리보기 | `custom/index.html` |
+| `portfolio-update` | ✋ 직접 입력 | `SKILL.md` | Git | 렌더러·명령·기준 + 업데이트 커밋 1개 |
 
 ### 기준 문서 (format/)
 

@@ -13,7 +13,7 @@ flowchart LR
     A["① 재료 모으기 (선택)<br/>레포 · PPTX → /portfolio-intake"] --> B["② 기술 문서 쓰기<br/>✍ 직접 쓰기 · /portfolio-check"]
     B --> C["③ 페이지 만들기<br/>/portfolio-build → report.md"]
     C -->|"리포트를 보고 소스를 고쳐 다시"| B
-    C --> D["④ 다듬기<br/>/portfolio-edit · /portfolio-theme<br/>문구 표 · /portfolio-custom"]
+    C --> D["④ 다듬기<br/>/portfolio-edit · /portfolio-theme · 문구 표<br/>/portfolio-layout → /portfolio-custom"]
     D --> E["⑤ 내보내기<br/>🌐 github.io 배포 · 📄 제출 PDF · 📊 PPTX"]
 ```
 
@@ -24,7 +24,7 @@ flowchart LR
 
 - **시작**: [무엇이 만들어지나요](#무엇이-만들어지나요) · [도구 한눈에](#도구-한눈에) · [준비물](#준비물) · [빠른 시작](#빠른-시작)
 - **처음 따라 하기**: [1. 내 레포 만들기](#1단계-내-레포-만들기) → [2. 기술 문서와 소스 넣기](#2단계-기술-문서와-소스-넣기) → [3. profile.md 채우기](#3단계-profilemd-채우기) → [4. 포트폴리오 만들기](#4단계-포트폴리오-만들기) → [5. 미리보기](#5단계-미리보기) → [6. 배포하기](#6단계-배포하기) → [7. PDF로 제출하기](#7단계-pdf로-제출하기)
-- **도구 설명서**: [재료 모으기](#재료-모으기)([레포](#github-레포에서-가져오기) · [PPTX 가져오기](#발표-자료pptx에서-가져오기)) · [점검받기](#쓰는-중에-점검받기) · [만들기](#포트폴리오-데이터-만들기) · [장면 고치기](#발표-덱-장면-고치기) · [디자인 바꾸기](#디자인-바꾸기) · [PPTX로 저장](#발표-덱을-pptx로-저장하기) · [템플릿 업데이트](#템플릿-업데이트-받기)
+- **도구 설명서**: [재료 모으기](#재료-모으기)([레포](#github-레포에서-가져오기) · [PPTX 가져오기](#발표-자료pptx에서-가져오기)) · [점검받기](#쓰는-중에-점검받기) · [만들기](#포트폴리오-데이터-만들기) · [장면 고치기](#발표-덱-장면-고치기) · [디자인 바꾸기](#디자인-바꾸기)([배치 따라 하기](#다른-사이트-배치-따라-하기)) · [PPTX로 저장](#발표-덱을-pptx로-저장하기) · [템플릿 업데이트](#템플릿-업데이트-받기)
 - **참고**: [세 페이지 자세히](#세-페이지-자세히) · [문제 해결](#문제-해결) · [폴더 구조](#폴더-구조) · [기준 문서](#기준-문서-format) · [지키는 원칙](#지키는-원칙)
 
 ---
@@ -58,6 +58,7 @@ flowchart LR
 | | 강조색 바꾸기 | [`profile.md`의 강조색](#3단계-profilemd-채우기) 파일 → 다시 만들기 | `profile.md` |
 | | 절 이름·버튼 문구 바꾸기 | [`theme/strings.tsv`](#문구-바꾸기) 파일 | 그 파일 (다시 만들 필요 없음) |
 | | 다른 사이트 느낌으로(색·모양·영문 글꼴) | [`/portfolio-theme`](#다른-사이트-느낌으로-바꾸기) 명령 | `theme/theme.css` |
+| | 다른 사이트의 배치(단 나눔·카드 격자) 따라 하기 | [`/portfolio-layout`](#다른-사이트-배치-따라-하기) 명령 → ✋ `/portfolio-custom` | `theme/layout.json` → `custom/index.html` |
 | | 배치까지 새 디자인 | ✋ [`/portfolio-custom`](#나만의-디자인-새로-만들기) 명령 | `custom/index.html` |
 | 내보내기 | 인터넷에 공개 | [commit · push + GitHub Pages](#6단계-배포하기) | — |
 | | 제출용 PDF(A4) | 포트폴리오 문서의 [\[PDF로 저장\]](#7단계-pdf로-제출하기) 버튼 | PDF 파일 |
@@ -249,7 +250,7 @@ python -m http.server 4600
 
 | commit · push해야 배포에 보이는 것 | 내 PC에만 남는 것 (자동으로 git 제외) |
 |---|---|
-| `src/`(기술 문서·images·code·`deck-edits.json`), `profile.md`, `data/`, `theme/theme.css`, `theme/strings.tsv`, `custom/`(만들었다면) | `report.md`, `report-intake.md`, `src/*/_intake/` |
+| `src/`(기술 문서·images·code·`deck-edits.json`), `profile.md`, `data/`, `theme/theme.css`, `theme/strings.tsv`, `theme/layout.json`·`custom/`(만들었다면) | `report.md`, `report-intake.md`, `src/*/_intake/` |
 
 > Claude는 push하지 않습니다. 미리보기로 확인한 뒤 **여러분이 직접** commit · push하세요.
 
@@ -447,6 +448,7 @@ python -m http.server 4600
 | 색만 바꾸기 | `profile.md`의 **강조색** → `/portfolio-build` (세 페이지 모두에 적용. 테마에 강조색을 넣었다면 테마 색이 먼저) |
 | 절 이름·버튼 문구 바꾸기 | `theme/strings.tsv`(문구 표)의 맨 끝 **"내 문구"** 칸 → 저장·새로고침. 다시 빌드할 필요 없음 → [문구 바꾸기](#문구-바꾸기) |
 | 다른 사이트 느낌으로 | 마음에 드는 웹페이지 스크린샷을 첨부하고 `/portfolio-theme` → 색·모서리·영문 라벨 글꼴·광채를 세 페이지에 함께 입힘. 배치는 그대로 → [다른 사이트 느낌으로 바꾸기](#다른-사이트-느낌으로-바꾸기) |
+| 다른 사이트 배치로 | 레퍼런스 주소(또는 스크린샷)와 함께 `/portfolio-layout` → 배치 확인 → `/portfolio-custom` → `custom/index.html`. 포트폴리오 문서·제출 PDF는 그대로 → [다른 사이트 배치 따라 하기](#다른-사이트-배치-따라-하기) |
 | 완전히 새 디자인 | `/portfolio-custom [디자인 요청]` → `custom/index.html` 생성. 배치까지 새로 → [나만의 디자인 새로 만들기](#나만의-디자인-새로-만들기) |
 
 > 렌더러(`index.html`·`project.html`·`doc.html`·`assets/`)는 직접 고치지 마세요. 템플릿을 업데이트하면 고친 것이 사라지고, 발표 덱은 글자 크기를 재서 장면을 나누므로 쉽게 깨집니다.
@@ -494,6 +496,7 @@ python -m http.server 4600
 
 - **되돌리기**: `/portfolio-theme 되돌리기` — 기본 테마로 돌아갑니다.
 - **레퍼런스의 로고·회사 이름·문구·그림은 옮기지 않습니다.** 남의 브랜드처럼 보이는 포트폴리오가 되지 않도록 색·모양·글꼴의 인상만 가져옵니다.
+- 테마는 **배치**(단 나눔·카드 격자)를 바꾸지 않습니다. 배치를 따라 하려면 → [다른 사이트 배치 따라 하기](#다른-사이트-배치-따라-하기)
 
 <details>
 <summary><b>입력 방법 더 보기 · 이어서 다듬는 말</b> — 파일 경로 · 사이트 주소 · "버튼 덜 둥글게"</summary>
@@ -529,6 +532,38 @@ python -m http.server 4600
 
 </details>
 
+#### 다른 사이트 배치 따라 하기
+
+`/portfolio-layout <레퍼런스 주소 | 스크린샷 첨부> [요청 | 되돌리기]` · 말로 해도 됨 — "이 사이트처럼 배치해 줘"
+
+마음에 드는 페이지의 **배치**(첫 화면 크기, 2단·카드 격자 같은 나눔, 그림이 놓이는 쪽, 콘텐츠 폭)를 재서, 내 포트폴리오의 절마다 빌려 올 배치를 `theme/layout.json`에 적습니다. 그 배치로 실제 페이지를 그리는 것은 [`/portfolio-custom`](#나만의-디자인-새로-만들기)입니다.
+
+1. Claude Code에 레퍼런스 주소를 주거나(브라우저 도구가 있으면 열어서 잼) 위에서부터 캡처한 스크린샷 2~3장을 첨부하고 `/portfolio-layout`을 입력합니다.
+2. Claude가 레퍼런스의 띠마다 배치를 한 줄 그림으로 보여 주고, 내 절(머리·자기소개·기술 스택·프로젝트 소개·기능 소개·한눈에 보기·연락처)마다 어떤 배치를 빌려 올지 표로 묻습니다. **네**라고 해야 씁니다.
+3. `/portfolio-custom`을 직접 입력하면 그 배치로 `custom/index.html`을 만듭니다. 색·분위기는 뒤에 덧붙여 말합니다(예: `/portfolio-custom 다크 톤, 강조색은 내 색`).
+
+- **바뀌는 것**: `theme/layout.json` 한 파일. 포트폴리오 문서(`index.html`)와 제출 PDF의 배치는 그대로입니다(A4 인쇄·발표 덱 측정이 고정 배치에 맞춰져 있음).
+- **되돌리기**: `/portfolio-layout 되돌리기` — 배치 레퍼런스를 지웁니다(이미 만든 `custom/index.html`은 그대로).
+- **레퍼런스의 글·그림·로고·이름은 가져오지 않습니다.** 상자의 위치·크기 같은 숫자만 잽니다. 절의 순서와 내용도 내 포트폴리오 그대로입니다.
+
+<details>
+<summary><b>한 줄 그림 읽는 법 · 재지 못할 때 · 색은 어디서</b></summary>
+
+이 템플릿의 포트폴리오 문서를 잰 예입니다.
+
+```text
+ 2 hero    [≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡              ]   한 단 · 큰 글자 4.8배 · 배경 그림·그러데이션 · 높이 0.65화면
+ 4 list    [─────┼─────────────────────] ×3줄  줄마다 2단 20:80 × 3줄 · 배경색 다름 · 높이 0.86화면
+ 5 split   [■■■■■■■■■■■■■■|·················] 2단 45:55 · 그림 왼쪽 · 높이 0.99화면
+```
+
+- `■`는 그림 칸, `·`·`≡`는 글 칸, `▢`는 카드, `─┼─`는 줄마다 나뉜 목록입니다. 비율은 넓은 화면(1440px)에서 잰 폭입니다.
+- 주소를 열 수 없거나(로그인이 필요한 페이지, 한 화면짜리 앱) 브라우저 도구가 없으면 스크린샷을 보고 어림합니다. "첫 화면 크게, 프로젝트는 카드 3열로"처럼 말로만 정해도 됩니다.
+- 색·모서리·영문 글꼴은 [다른 사이트 느낌으로 바꾸기](#다른-사이트-느낌으로-바꾸기)(`/portfolio-theme`)나 `/portfolio-custom`의 디자인 요청으로 정합니다. 둘을 함께 써도 됩니다.
+- `theme/layout.json`은 템플릿을 업데이트해도 그대로 남습니다. 커밋해 두면 다음에 `/portfolio-custom`을 다시 실행해도 같은 배치를 씁니다.
+
+</details>
+
 #### 나만의 디자인 새로 만들기
 
 `/portfolio-custom [디자인 요청]` · ✋ **직접 입력할 때만**
@@ -540,6 +575,7 @@ python -m http.server 4600
 ```
 
 - **바뀌는 것**: `custom/index.html` 한 파일. 주소는 `https://<아이디>.github.io/<레포>/custom/` 입니다. 요청을 비우면 "취업용답게 깔끔하고 절제된" 디자인으로 만듭니다.
+- `theme/layout.json`(배치 레퍼런스)이 있으면 그 배치를 따릅니다 → [다른 사이트 배치 따라 하기](#다른-사이트-배치-따라-하기)
 - 포트폴리오 문서와 <b>같은 데이터(`data/`)</b>를 읽어 그리므로 내용은 같고 겉모습만 다릅니다. 다음에 `/portfolio-build`만 다시 하면 이 페이지도 최신 내용이 됩니다.
 - **실행할 때마다 결과가 달라질 수 있습니다.** 화면을 직접 확인하고, 다듬고 싶으면 "방금 만든 페이지에서 [이 부분]을 [이렇게] 바꿔줘"처럼 이어서 말하세요.
 
@@ -603,7 +639,7 @@ python -m http.server 4600
 
 | 바뀌는 것 | 그대로 두는 것 |
 |---|---|
-| 렌더러(`index.html`·`project.html`·`doc.html`·`assets/`), Claude 명령(`.claude/skills/portfolio-*`), 판정 기준(`format/`), `CLAUDE.md`, `.nojekyll`. `.gitignore`·`.claude/launch.json`은 새 줄만 더함 | `src/`, `profile.md`, `data/`, `custom/`, `report.md`, `theme/theme.css`·`theme/strings.tsv`(없을 때만 새로 만듦) |
+| 렌더러(`index.html`·`project.html`·`doc.html`·`assets/`), Claude 명령(`.claude/skills/portfolio-*`), 판정 기준(`format/`), `CLAUDE.md`, `.nojekyll`. `.gitignore`·`.claude/launch.json`은 새 줄만 더함 | `src/`, `profile.md`, `data/`, `custom/`, `report.md`, `theme/layout.json`, `theme/theme.css`·`theme/strings.tsv`(없을 때만 새로 만듦) |
 
 - 템플릿(`https://github.com/krKooHoo/portfolio-template`)에서 받기 전, 파일을 바꾸기 전, 커밋하기 전에 **각각 동의를 받습니다**. 무엇이 바뀌는지 먼저 보여 줍니다.
 - 업데이트는 커밋 1개로 남고 **push는 하지 않습니다**. **되돌리기**: `/portfolio-update 되돌리기`.
@@ -810,6 +846,7 @@ Fork한 레포는 GitHub의 **Sync fork** 버튼으로도 받을 수 있지만, 
 │   └── <번호-이름>/       ·  기술문서.md · images/ · code/ · deck-edits.json(/portfolio-edit) · _intake/(/portfolio-intake, git 제외)
 ├── theme/theme.css       🎨 내 테마 (/portfolio-theme가 씀, 비어 있으면 기본 테마)
 ├── theme/strings.tsv     ✍ 문구 표 — 절 이름·버튼·라벨 문구 (맨 끝 "내 문구" 칸을 직접 고침)
+├── theme/layout.json     🎨 배치 레퍼런스 (/portfolio-layout이 씀, /portfolio-custom이 읽음 · 선택)
 ├── data/                 🤖 /portfolio-build가 생성 (직접 고치지 않기, 커밋은 함)
 ├── custom/               🎨 /portfolio-custom 결과 (선택)
 ├── index.html            🖥 포트폴리오 문서 (아래로 읽는 한 페이지, A4 인쇄 = 제출용 PDF)
@@ -817,7 +854,7 @@ Fork한 레포는 GitHub의 **Sync fork** 버튼으로도 받을 수 있지만, 
 ├── doc.html              🖥 상세 기술문서 (?p=폴더 이름)
 ├── assets/               🖥 세 페이지의 스타일·스크립트 (고치지 않기)
 ├── format/               📏 가이드 판정 기준 — Claude가 점검할 때 읽는 기준표 (사람이 읽어도 좋습니다)
-├── .claude/skills/       ⚙ Claude 명령 정의 (portfolio-build · check · edit · theme · custom · intake · update)
+├── .claude/skills/       ⚙ Claude 명령 정의 (portfolio-build · check · edit · theme · layout · custom · intake · update)
 ├── CLAUDE.md             ⚙ Claude가 지키는 규칙
 ├── report.md             📋 점검 리포트 (git에 올라가지 않음)
 └── report-intake.md      📋 /portfolio-intake 리포트 (git에 올라가지 않음)

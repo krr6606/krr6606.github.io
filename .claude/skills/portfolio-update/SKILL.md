@@ -29,7 +29,7 @@ Fork로 만든 레포든, 파일을 복사해 만든 레포든 똑같이 동작�
 | 추가만 | `.claude/launch.json` | 이름(`name`)이 없는 구성만 더함 |
 | 없을 때만 | `theme/theme.css` | 내 레포에 **없을 때만** 템플릿 것(빈 기본 테마)을 만듦. 있으면 수강생의 테마(`/portfolio-theme`)이므로 읽지도 비교하지도 않고 그대로 둠 |
 | 없을 때만 | `theme/strings.tsv` | 내 레포에 **없을 때만** 템플릿 것("내 문구"가 빈 문구 표)을 만듦. 있으면 수강생의 문구 표이므로 바꾸지 않고, 템플릿에 **새로 생긴 키**만 §3처럼 찾아 알림(그 키는 표에 없어도 기본 문구로 보임) |
-| 금지 | `src/`, `profile.md`, `data/`, `custom/`, `report.md`, `report-intake.md`, 위 표에 없는 모든 경로 | 읽기만 하고 절대 바꾸지 않음 |
+| 금지 | `src/`, `profile.md`, `data/`, `custom/`, `theme/layout.json`(`/portfolio-layout`의 배치 레퍼런스), `report.md`, `report-intake.md`, 위 표에 없는 모든 경로 | 읽기만 하고 절대 바꾸지 않음 |
 
 `profile.md`·`data/`는 형식이 처음 버전부터 호환되므로 바꿀 필요가 없습니다(바뀐 안내는 마무리에서 알려 줌).
 

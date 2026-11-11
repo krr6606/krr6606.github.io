@@ -568,6 +568,32 @@
         ]
       },
       {
+        "key": "measured",
+        "chapter": "results",
+        "layout": "full",
+        "tab": "결과",
+        "title": {
+          "text": "측정 결과 (약식)",
+          "verbatim": true
+        },
+        "lead": {
+          "text": "아래는 당시 작업 기록에 남아 있던 요약 수치입니다.",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "5. 결과와 배운 점",
+          "측정 결과 (약식)"
+        ],
+        "points": [],
+        "visuals": [
+          {
+            "kind": "table",
+            "n": 1,
+            "fp": "측정|고치기 전|고친 뒤"
+          }
+        ]
+      },
+      {
         "key": "lessons",
         "chapter": "results",
         "layout": "overview",

@@ -9,6 +9,8 @@
 
   // md → { frag, headings: [{ el, level, text, id, parents }] }. 상대경로는 src/<폴더>/… 로 바꾸고 원래 값은 data-md-src에 둠
   function parse(md, id) {
+    // CDN이 막혀 marked를 받지 못했으면 이유를 말하고 멈춤(부르는 쪽이 안내 화면으로 바꿈)
+    if (!window.marked) throw new Error('Markdown 해석 라이브러리(marked)를 불러오지 못했습니다 — 네트워크에서 cdn.jsdelivr.net에 연결되는지 확인해 주세요');
     const tpl = document.createElement('template');
     tpl.innerHTML = marked.parse(md, { gfm: true });
     const frag = tpl.content;

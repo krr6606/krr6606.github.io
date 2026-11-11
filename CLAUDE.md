@@ -17,7 +17,7 @@
 │   ├── images/              #    스크린샷·GIF
 │   ├── code/                #    (선택) 핵심 소스코드 .cs
 │   ├── deck-edits.json      #    (/portfolio-edit) 발표 덱 장면 고치기 — 요청을 받아 Claude가 씀, 커밋함, 기술 문서가 아님, build는 읽기만
-│   └── _intake/             #    (/portfolio-intake) 재료집·촬영목록 — 기술 문서가 아님, git 제외, build·check가 읽지 않음
+│   └── _intake/             #    (/portfolio-intake) 재료집·촬영목록·발표자료(.pptx에서 꺼낸 글 + pptx/ 그림) — 기술 문서가 아님, git 제외, build·check가 읽지 않음
 ├── format/                  # 📏 가이드 판정 기준 (읽기 전용)
 ├── data/                    # 🤖 /portfolio-build가 생성 (portfolio.json, projects/*.json)
 ├── index.html               # 🖥 고정 렌더러 — 포트폴리오 문서 (아래로 읽는 한 페이지, A4 인쇄 = 제출 PDF)
@@ -26,6 +26,7 @@
 ├── assets/                  # 🖥 렌더러 CSS·JS (포트폴리오 문서·덱 키트·장면 키트·상세 문서·md-blocks.js = 기술 문서 md 해석과 원문 블록 찾기, 발표 덱·상세 문서 공용 · strings.js = UI 문구 기본값과 문구 표 읽기 · deck-pptx.js = 발표 덱 [PPTX로 저장], 그린 장면을 재서 PowerPoint 개체로)
 ├── theme/theme.css          # 🎨 /portfolio-theme 결과 — 색·모양·영문 글꼴 손잡이(--t-*). 세 페이지가 마지막에 싣음. 비어 있으면 기본 테마, /portfolio-update가 건드리지 않음
 ├── theme/strings.tsv        # ✍ 문구 표(스트링 테이블) — 절 이름·버튼·라벨 문구. 수강생이 맨 끝 "내 문구" 칸을 직접 고침(빈 칸 = 기본 문구). /portfolio-update는 없을 때만 만듦
+├── theme/layout.json        # 🎨 /portfolio-layout 결과 — 배치 레퍼런스(내 절마다 빌려 올 단 나눔·카드 격자·그림 쪽). /portfolio-custom만 읽음(렌더러는 안 읽음). 템플릿에 없음, /portfolio-update가 건드리지 않음
 ├── custom/                  # 🎨 /portfolio-custom 결과 (직접 생성 모드)
 ├── report.md                # 📋 점검 리포트 (git 제외, 로컬 전용)
 └── report-intake.md         # 📋 /portfolio-intake 리포트 (git 제외 — 비밀값 위치·작성자 정보)
@@ -53,6 +54,8 @@ flowchart LR
     SR["theme/strings.tsv 문구 표"] -->|"절 이름·버튼·라벨 문구"| I
     S -.->|"기술 문서 md (doc.html 전문 · project.html은 deck이 가리키는 원문 블록)"| I
     D -.->|"직접 입력 시만"| C["/portfolio-custom → custom/index.html"]
+    LY["/portfolio-layout"] -->|"레퍼런스 페이지 → 배치 골격"| LJ["theme/layout.json"]
+    LJ -.->|"절마다 빌려 올 배치"| C
     I -->|"발표 덱 [PPTX로 저장] (브라우저에서)"| PX["프로젝트 제목 - 발표 덱.pptx<br/>PowerPoint에서 고쳐 씀 · 소스로 돌아오지 않음"]
 ```
 
@@ -64,9 +67,10 @@ flowchart LR
 | `/portfolio-check [폴더]` | 기술 문서를 가이드 기준으로 점검만 (데이터는 안 건드림) |
 | `/portfolio-edit [폴더] [장면] [요청]` | 발표 덱 장면 하나의 배치(틀·원문 블록 고르기·줄 범위·나누기·합치기·숨기기·순서)를 고침. `src/<NN>/deck-edits.json`에 써서 다시 빌드해도 남음. 말로 요청해도 되지만 **장면 카드로 확인받은 뒤에만** 씀. 내용(사실·설명) 문제는 기술 문서로 안내 |
 | `/portfolio-theme [되돌리기\|요청]` | 첨부한 웹페이지 스크린샷에서 색·모양·영문 글꼴·효과를 정해진 규칙으로 뽑아 `theme/theme.css`에 씀(세 페이지가 함께 바뀜). 렌더러는 안 건드림. 말로 "이 사이트 느낌으로", "버튼 덜 둥글게"라고 해도 됨 |
-| `/portfolio-custom [디자인 요청]` | 직접 생성 모드. **사용자가 직접 입력했을 때만** 실행 |
+| `/portfolio-layout [주소\|스크린샷\|되돌리기]` | 레퍼런스 페이지의 배치 골격(띠·단 나눔·카드 격자·그림 쪽·콘텐츠 폭)을 `measure-layout.js`로 재거나(브라우저 도구) 스크린샷으로 어림해, 내 절에 맞춘 뒤 **확인받고** `theme/layout.json`에 씀. 글·그림·로고·이름은 안 가져옴. 페이지에는 `/portfolio-custom`이 반영(`index.html`·제출 PDF는 그대로) |
+| `/portfolio-custom [디자인 요청]` | 직접 생성 모드. `theme/layout.json`이 있으면 그 배치를 따름. **사용자가 직접 입력했을 때만** 실행 |
 | `/portfolio-update [되돌리기]` | 템플릿 원본에서 렌더러·스킬·`format/`·`CLAUDE.md`만 받아 반영(`src/`·`profile.md`·`data/`·`custom/`은 안 건드림). **사용자가 직접 입력했을 때만** 실행 |
-| `/portfolio-intake <레포 주소\|폴더>` | GitHub 레포에서 핵심 `.cs`·재료집(사실 + 질문)·촬영 목록을 `src/<NN>/`에 만듦. 기술 문서는 만들지 않음. **사용자가 직접 입력했을 때만** 실행 |
+| `/portfolio-intake <레포 주소\|폴더\|발표.pptx>` | GitHub 레포에서 핵심 `.cs`·재료집(사실 + 질문)·촬영 목록을 `src/<NN>/`에 만듦. `.pptx`면 슬라이드 글·표·노트·그림을 그대로 `_intake/발표자료.md`·`_intake/pptx/`로 꺼냄(`pptx-extract.py`, 표준 라이브러리만). 기술 문서는 만들지 않음. **사용자가 직접 입력했을 때만** 실행 |
 
 ---
 
@@ -83,8 +87,8 @@ flowchart LR
    발표 덱의 **장면 배치**(기술 문서를 읽는 사람에게는 달라질 필요가 없는 것: 틀·어떤 원문 블록을 보일지·나누기·합치기·숨기기·순서)는
    `/portfolio-edit`가 `src/<NN>/deck-edits.json`에 씁니다. 이 파일도 소스이고, 글은 원문 그대로이거나 줄인 것(→ "확인해 주세요")뿐입니다.
 5. **렌더러는 건드리지 않는다.** `index.html`, `project.html`, `doc.html`, `assets/`는 사용자가 요청할 때만 수정합니다.
-   디자인 변경 요청은 ① `profile.md`의 강조색 ② `theme/strings.tsv`(문구 표 — 절 이름·버튼·라벨 문구) ③ `/portfolio-theme`(레퍼런스 화면 → `theme/theme.css`, 색·모양·영문 글꼴) ④ `/portfolio-custom`(배치까지 새로) 순으로 안내합니다.
-   `theme/theme.css`·`theme/strings.tsv`는 렌더러가 아니라 수강생의 파일입니다(테마는 `/portfolio-theme`가 씀).
+   디자인 변경 요청은 ① `profile.md`의 강조색 ② `theme/strings.tsv`(문구 표 — 절 이름·버튼·라벨 문구) ③ `/portfolio-theme`(레퍼런스 화면 → `theme/theme.css`, 색·모양·영문 글꼴) ④ `/portfolio-custom`(배치까지 새로 — 따라 할 레퍼런스 배치가 있으면 먼저 `/portfolio-layout` → `theme/layout.json`) 순으로 안내합니다.
+   `theme/theme.css`·`theme/strings.tsv`·`theme/layout.json`은 렌더러가 아니라 수강생의 파일입니다(테마는 `/portfolio-theme`, 배치 레퍼런스는 `/portfolio-layout`이 씀).
    **문구 표**는 UI 문구만 바꿉니다(사실·설명은 기술 문서). 수강생이 직접 고치는 것이 기본이고, "고쳐 줘"라고 하면 그 줄의 맨 끝 "내 문구" 칸만 고칩니다
    (키·보이는 곳·기본 문구 칸, 칸 사이 탭은 그대로. `{name.deck}`처럼 점이 있는 자리표시는 다른 줄의 문구, `{n}`처럼 점이 없는 자리표시는 페이지가 넣는 값이라 지우지 않음).
    기본 문구 자체는 `assets/strings.js`(렌더러)에 있습니다.

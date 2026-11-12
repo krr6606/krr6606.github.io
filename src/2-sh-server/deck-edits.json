@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "pin": [
+    {
+      "key": "env",
+      "chapter": "overview",
+      "layout": "full",
+      "tab": "개요",
+      "title": {
+        "text": "개발 환경",
+        "verbatim": true
+      },
+      "lead": null,
+      "sectionPath": [
+        "1. 개요",
+        "개발 환경"
+      ],
+      "points": [
+        {
+          "label": "",
+          "text": "서버는 수업에서 제공된 WebSocket 기반 코드 위에 만들었고, 제가 만들거나 고친 부분은 다음과 같습니다.",
+          "verbatim": false
+        }
+      ],
+      "visuals": [
+        {
+          "kind": "table",
+          "n": 1,
+          "fp": "항목|내용"
+        },
+        {
+          "kind": "table",
+          "n": 2,
+          "fp": "영역|수업 기반 코드|내가 만들거나 고친 것",
+          "sectionPath": [
+            "1. 개요",
+            "팀과 내 역할"
+          ]
+        }
+      ],
+      "from": {
+        "key": "env",
+        "sectionPath": [
+          "1. 개요",
+          "개발 환경"
+        ],
+        "sig": [
+          "개발 환경|table|1|항목|내용"
+        ]
+      },
+      "group": "merge-env"
+    },
+    {
+      "key": "ref1-after",
+      "chapter": "refactor",
+      "layout": "code",
+      "tab": "선택",
+      "title": {
+        "text": "4.1 1차 — 바꾼 뒤",
+        "verbatim": false
+      },
+      "lead": null,
+      "sectionPath": [
+        "4. 고민과 선택 — 리팩토링 두 번",
+        "4.1 1차 — 프로토콜 전면 정리 (09-02, `61447ab`)"
+      ],
+      "points": [
+        {
+          "label": "결정 과정",
+          "text": "착수 전에 클라이언트 담당자에게 효과와 필요성을 설명하고 \"일정 안에 어려우면 바꾸지 않겠다\"는 선택지도 먼저 드렸고, 동의를 받은 뒤 바꿨습니다.",
+          "verbatim": true
+        },
+        {
+          "label": "",
+          "text": "파일 30개를 바꿨고, 새 상태를 추가하는 일이 ① TurnMessageType에 값 추가 ② (필요할 때만) 파라미터 클래스 추가 ③ 팩토리 메서드 하나 추가, 3단계로 정리됐습니다.",
+          "verbatim": true
+        }
+      ],
+      "visuals": [
+        {
+          "kind": "code",
+          "n": 2,
+          "fp": "// DebateTimeState.cs (61447ab)"
+        },
+        {
+          "kind": "table",
+          "n": 1,
+          "fp": "방법|장점|이 게임에서의 문제"
+        }
+      ],
+      "from": {
+        "key": "ref1-after",
+        "sectionPath": [
+          "4. 고민과 선택 — 리팩토링 두 번",
+          "4.1 1차 — 프로토콜 전면 정리 (09-02, `61447ab`)"
+        ],
+        "sig": [
+          "4.1 1차 — 프로토콜 전면 정리 (09-02, 61447ab)|code|2|// DebateTimeState.cs (61447ab)"
+        ]
+      },
+      "group": "merge-ref1-after"
+    },
+    {
+      "key": "ref2-code",
+      "chapter": "refactor",
+      "layout": "code",
+      "tab": "선택",
+      "title": {
+        "text": "4.2 2차 — 타이머 콜백에서 진행 루프로",
+        "verbatim": false
+      },
+      "lead": null,
+      "sectionPath": [
+        "4. 고민과 선택 — 리팩토링 두 번",
+        "4.2 2차 — 코드 리뷰를 하루이틀 만에 반영 (09-09 ~ 09-10)"
+      ],
+      "points": [
+        {
+          "label": "바꾸기 전",
+          "text": "상태마다 System.Timers.Timer 콜백에서 진행",
+          "verbatim": false
+        }
+      ],
+      "visuals": [
+        {
+          "kind": "code",
+          "n": 1,
+          "fp": "gameManager.currentRoom.timer.AutoReset = true;"
+        }
+      ],
+      "from": {
+        "key": "ref2-code",
+        "sectionPath": [
+          "4. 고민과 선택 — 리팩토링 두 번",
+          "4.2 2차 — 코드 리뷰를 하루이틀 만에 반영 (09-09 ~ 09-10)"
+        ],
+        "sig": [
+          "4.2 2차 — 코드 리뷰를 하루이틀 만에 반영 (09-09 09-10)|code|1|gameManager.currentRoom.timer.AutoReset = true;",
+          "4.2 2차 — 코드 리뷰를 하루이틀 만에 반영 (09-09 09-10)|code|2|// RoomHub.cs — 방송 루프 안에서 게임 진행"
+        ]
+      }
+    },
+    {
+      "key": "ref2-code-b",
+      "chapter": "refactor",
+      "layout": "code",
+      "tab": "선택",
+      "title": {
+        "text": "4.2 2차 — 타이머 콜백에서 진행 루프로",
+        "verbatim": false
+      },
+      "lead": null,
+      "sectionPath": [
+        "4. 고민과 선택 — 리팩토링 두 번",
+        "4.2 2차 — 코드 리뷰를 하루이틀 만에 반영 (09-09 ~ 09-10)"
+      ],
+      "points": [
+        {
+          "label": "바꾼 뒤",
+          "text": "10Hz 진행 루프 한 곳에서 진행하고, 시간 판정은 부모 한 곳에서",
+          "verbatim": true
+        }
+      ],
+      "visuals": [
+        {
+          "kind": "code",
+          "n": 2,
+          "fp": "// RoomHub.cs — 방송 루프 안에서 게임 진행"
+        }
+      ],
+      "after": "ref2-code",
+      "group": "split-ref2-code-b"
+    }
+  ],
+  "hide": [
+    {
+      "key": "team",
+      "from": {
+        "key": "team",
+        "sectionPath": [
+          "1. 개요",
+          "팀과 내 역할"
+        ],
+        "sig": [
+          "팀과 내 역할|table|2|영역|수업 기반 코드|내가 만들거나 고친 것"
+        ]
+      },
+      "group": "merge-env"
+    },
+    {
+      "key": "ref1-table",
+      "from": {
+        "key": "ref1-table",
+        "sectionPath": [
+          "4. 고민과 선택 — 리팩토링 두 번",
+          "4.1 1차 — 프로토콜 전면 정리 (09-02, `61447ab`)"
+        ],
+        "sig": [
+          "4.1 1차 — 프로토콜 전면 정리 (09-02, 61447ab)|table|1|방법|장점|이 게임에서의 문제"
+        ]
+      },
+      "group": "merge-ref1-after"
+    }
+  ]
+}

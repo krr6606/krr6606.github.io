@@ -360,6 +360,36 @@
     return s;
   }
 
+  // ── [내 수정 2026-11-12] 내용이 적은 장면 키우기: 채움률이 when 미만인 본문 장면을 감싸개(.pf-zoomwrap) 배율로 키움 ──
+  //   축소(shrinkOrClip)와 같은 감싸개를 반대로 씀. 배율을 0.05씩 올리며 시각 자료를 다시 맞추고, 넘치거나(감사) 채움률이 target을 넘으면 멈춤.
+  //   그림이 든 장면은 흐려지지 않게 1.15배까지만. 가로로 긴 다이어그램처럼 폭에 막힌 장면은 키워도 커지지 않아 그대로 남음.
+  //   /portfolio-update가 이 파일을 덮어쓰면 이 함수와 PF 내보내기, project-deck.js의 호출 한 줄을 다시 넣어야 합니다.
+  function growScene(s, { when = 0.75, target = 0.9, max = 1.35 } = {}) {
+    const b = body(s);
+    if (!b || !s.classList.contains('pf-sum') || b.querySelector(':scope > .pf-zoomwrap') || s.querySelector('.pf-clipped, .vbox.err')) return s;
+    const M = measureRoot(); const wasIn = s.isConnected; if (!wasIn) M.appendChild(s);
+    if (b.clientHeight && fillOf(s) < when && fitsScene(s)) {
+      const zmax = s.querySelector('.vbox[data-kind="image"]') ? Math.min(max, 1.15) : max;
+      const hasVis = !!s.querySelector('.vis');
+      const bw = b.clientWidth, bh = b.clientHeight;
+      const w = document.createElement('div'); w.className = 'pf-zoomwrap'; w.append(...b.childNodes); b.appendChild(w);
+      const set = (z) => {
+        Object.assign(w.style, { zoom: String(z), width: `${bw / z}px`, height: `${bh / z}px` });
+        if (hasVis) fitVisuals(s);
+        return fitsScene(s) && fillOf(s) <= target + 0.03;
+      };
+      let z = 1;
+      for (let t = 1.05; t <= zmax + 1e-9; t = +(t + 0.05).toFixed(2)) { if (set(t)) z = t; else break; }
+      if (z > 1) {
+        set(z); s.dataset.pfGrow = z.toFixed(2);
+        s.querySelectorAll('.vbox[data-eff]').forEach((x) => { x.dataset.eff = (+x.dataset.eff * z).toFixed(1); });   // 다이어그램 실효 글자는 감싸개 배율까지 곱한 값
+      }
+      else { b.append(...w.childNodes); w.remove(); if (hasVis) fitVisuals(s); }
+    }
+    if (!wasIn) s.remove();
+    return s;
+  }
+
   // ── 프로젝트 소개 장면(발표 덱 표지, 결정 G4): 큰 대표 이미지 · 메타 격자 · 개발 의도 · 링크 카드 · 태그 ──
   //   글: title · tagline · meta · team.role · intent · tags(data 그대로). 링크: [{ k, label, href, kind, visible }]
   //   메타 이름(data의 meta[].label, 기술 문서의 말) → 영문 라벨 키
@@ -406,5 +436,5 @@
   }
 
   Object.assign(PF, { sleep, loadFonts, imageSize, measureRoot, dropMeasure, scene, body, fitsScene, fitsM, pack, shrinkOrClip, guard, msgScene, DOT, imgTag, extLinks, refitOnLateFont,
-                      projectIntro, note, fillOf, noteFill, vband, fitVisuals, visScore, minFonts, deckSceneNear, FLOOR, extEn });
+                      projectIntro, note, fillOf, noteFill, growScene, vband, fitVisuals, visScore, minFonts, deckSceneNear, FLOOR, extEn });
 })();

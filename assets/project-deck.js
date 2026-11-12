@@ -335,7 +335,8 @@
     const end = endScene(p, foot, ext, auto);
     const toc = tocScene(p, foot, tocItems, retro, auto);
     const all = [cover, toc, ...chapterScenes, ...retro, end];
-    PF.noteFill(all, { fill: !auto });                                  // 예전 데이터 자동 구성은 채움률 참고를 내지 않음(다시 빌드 안내 1건만)
+    if (!auto) all.forEach((s) => PF.growScene(s));                     // [내 수정 2026-11-12] 내용이 적은 장면 키우기(deck-common.js growScene)
+    PF.noteFill(all, { fill: !auto });                                // 예전 데이터 자동 구성은 채움률 참고를 내지 않음(다시 빌드 안내 1건만)
     if (auto) PF.note('cover', 'auto-mode', 1, '예전 데이터로 자동 구성(다시 빌드하면 발표 덱)');
     else if (all.length > 30) PF.note('cover', 'many-scenes', all.length, `장면 ${all.length}장(권장 15~30장)`);
     Object.assign(info.summary, { scenes: all.length, chapters: model.length, slides: model.reduce((a, c) => a + c.slides.length, 0), mode: info.mode });

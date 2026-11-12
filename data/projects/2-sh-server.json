@@ -316,7 +316,7 @@
           "verbatim": true
         },
         "lead": {
-          "text": "서버는 수업에서 제공된 WebSocket 기반 코드 위에 만들었습니다.",
+          "text": "서버는 수업에서 제공된 WebSocket 기반 코드 위에 만들었고, 제가 만들거나 고친 부분은 다음과 같습니다.",
           "verbatim": true
         },
         "sectionPath": [
@@ -877,23 +877,23 @@
         "layout": "full",
         "tab": "결과",
         "title": {
-          "text": "회고 — 원본을 남기고 다시 고친 버그 5건",
+          "text": "회고 — 프로젝트 종료 후 다시 고친 버그 5건",
           "verbatim": true
         },
         "lead": {
-          "text": "원본은 git 태그 v1.0-project-end로 남겼고, 고친 것은 retrospective-fixes 브랜치에 한 건에 커밋 하나씩 남겼습니다.",
+          "text": "종료 시점의 코드는 git 태그 v1.0-project-end로 남겼고, 고친 것은 retrospective-fixes 브랜치에 한 건에 커밋 하나씩 남겼습니다.",
           "verbatim": true
         },
         "sectionPath": [
           "5. 결과와 배운 점",
-          "회고 — 원본을 남기고 다시 고친 버그 5건"
+          "회고 — 프로젝트 종료 후 다시 고친 버그 5건"
         ],
         "points": [],
         "visuals": [
           {
             "kind": "table",
             "n": 1,
-            "fp": "#|문제|당시의 나|지금의 나|수정"
+            "fp": "#|문제|당시 판단|지금 판단|수정"
           }
         ]
       }

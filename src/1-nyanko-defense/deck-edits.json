@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "pin": [
+    {
+      "key": "what",
+      "chapter": "overview",
+      "layout": "overview",
+      "tab": "개요",
+      "title": {
+        "text": "무엇을 만들었나",
+        "verbatim": true
+      },
+      "lead": {
+        "text": "스테이지마다 정해진 적이 정해진 방식으로 소환되는 디펜스 게임입니다.",
+        "verbatim": true
+      },
+      "sectionPath": [
+        "1. 개요",
+        "무엇을 만들었나"
+      ],
+      "points": [
+        {
+          "label": "",
+          "text": "조작 가능한 플레이어블 요소 한 가지를 추가해 보았습니다.",
+          "verbatim": true
+        },
+        {
+          "label": "",
+          "text": "적 기지를 파괴하면 스테이지가 클리어되며, 획득한 경험치로 신규 캐릭터가 해금되고 보유 전투 요소를 레벨업·편성해 다음 스테이지에 대비합니다.",
+          "verbatim": true
+        },
+        {
+          "label": "",
+          "text": "정립된 디펜스 장르의 설계를 배워 보려고 만든 학습용 프로젝트입니다.",
+          "verbatim": false
+        },
+        {
+          "label": "",
+          "text": "적 데이터를 어떻게 정의하고, 그 적을 언제·어떻게 스폰하는지의 구조",
+          "verbatim": false
+        }
+      ],
+      "visuals": [
+        {
+          "kind": "image",
+          "src": "images/ingame.jpg",
+          "w": 760,
+          "h": 428,
+          "caption": {
+            "text": "인게임 플레이 화면",
+            "verbatim": true
+          },
+          "sectionPath": [
+            "냥코 디펜스 — 2D 소환 디펜스"
+          ]
+        }
+      ],
+      "from": {
+        "key": "what",
+        "sectionPath": [
+          "1. 개요",
+          "무엇을 만들었나"
+        ],
+        "sig": [
+          "냥코 디펜스 — 2D 소환 디펜스|image|images/ingame.jpg|1"
+        ]
+      },
+      "group": "merge-what"
+    },
+    {
+      "key": "lookup-before",
+      "chapter": "growth",
+      "layout": "code",
+      "tab": "선택",
+      "title": {
+        "text": "4.2 바꾸기 전 — enum 인덱스",
+        "verbatim": false
+      },
+      "lead": null,
+      "sectionPath": [
+        "4. 개선 가능성",
+        "4.2 데이터 조회 — enum 인덱스에서 데이터가 가진 키로"
+      ],
+      "points": [
+        {
+          "label": "문제",
+          "text": "CatSOArray[(int)catName]은 enum의 순서와 인스펙터 배열의 순서가 반드시 같아야 동작합니다.",
+          "verbatim": true
+        },
+        {
+          "label": "해결",
+          "text": "이제 배열 순서와 상관없이, 각 데이터에 적힌 키로 사전(Dictionary)에서 찾습니다.",
+          "verbatim": true
+        },
+        {
+          "label": "구현",
+          "text": "같은 키가 두 번 들어 있거나 없는 키를 찾으면 경고를 남겨, 데이터 실수가 조용히 넘어가지 않게 했습니다.",
+          "verbatim": true
+        }
+      ],
+      "visuals": [
+        {
+          "kind": "code",
+          "n": 1,
+          "fp": "// CatName과 CatSO를 연결하는 배열, CatName을 인덱스로 사용하여 CatSO를 가져올 수 "
+        },
+        {
+          "kind": "code",
+          "n": 2,
+          "fp": "// EntitySO.cs",
+          "lines": [
+            10,
+            28
+          ]
+        }
+      ],
+      "from": {
+        "key": "lookup-before",
+        "sectionPath": [
+          "4. 개선 가능성",
+          "4.2 데이터 조회 — enum 인덱스에서 데이터가 가진 키로"
+        ],
+        "sig": [
+          "4.2 데이터 조회 — enum 인덱스에서 데이터가 가진 키로|code|1|// CatName과 CatSO를 연결하는 배열, CatName을 인덱스로 사용하여 CatSO를 가져올 수"
+        ]
+      },
+      "group": "merge-lookup-before"
+    }
+  ],
+  "hide": [
+    {
+      "key": "why",
+      "from": {
+        "key": "why",
+        "sectionPath": [
+          "1. 개요",
+          "왜 만들었나"
+        ],
+        "sig": []
+      },
+      "group": "merge-what"
+    },
+    {
+      "key": "lookup-after",
+      "from": {
+        "key": "lookup-after",
+        "sectionPath": [
+          "4. 개선 가능성",
+          "4.2 데이터 조회 — enum 인덱스에서 데이터가 가진 키로"
+        ],
+        "sig": [
+          "4.2 데이터 조회 — enum 인덱스에서 데이터가 가진 키로|code|2|// EntitySO.cs"
+        ]
+      },
+      "group": "merge-lookup-before"
+    }
+  ]
+}

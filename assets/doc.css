@@ -216,6 +216,15 @@ dialog.lightbox::backdrop { background: rgba(10, 11, 14, .82); }
 .md > :is(pre, .table-wrap) { margin-left: max(0px, (100% - var(--measure)) / 2); max-width: calc(100% - max(0px, (100% - var(--measure)) / 2)); }
 .md > :is(.mmd, .pf-figure) { margin-inline: auto; }
 
+/* ── [내 수정 2026-11-12] 그림 틀 통일(화면만): 모든 그림을 같은 폭의 판에 가운데로, 높이 상한, 작은 그림은 키우지 않음, 아래에 캡션(대체 글)
+      /portfolio-update가 이 파일을 덮어쓰면 이 블록과 doc.js ⑥의 .pf-cap 한 줄을 다시 넣어야 합니다 ── */
+.md .pf-figure .pf-cap { display: block; margin-top: 10px; font-size: 13px; line-height: 1.5; color: var(--muted); text-align: center; }
+@media screen {
+  .md > .pf-figure { --fig-w: 800px; --fig-h: 520px; width: min(100%, var(--fig-w)); max-width: none; margin: 28px auto; padding: 12px;
+                     background: var(--surface); border: 1px solid var(--line); border-radius: calc(var(--r) * .7); }
+  .md > .pf-figure img { margin: 0 auto; width: auto; height: auto; max-width: 100%; max-height: var(--fig-h); border: 0; }
+}
+
 /* ── 반응형 (화면에만; 인쇄 폭에서 켜지지 않게 screen으로 한정) ── */
 @media screen and (max-width: 1799.98px) {
   .doc-page { grid-template-columns: var(--toc-w) minmax(0, 1fr); grid-template-areas: "toc main"; }

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "madeAt": "2026-11-12",
+  "reference": "참고 화면 없이 말로 정한 배치 — 크기가 다른 카드를 격자로 채우는 벤토 구성, 큰 제목 머리, 열을 맞춘 줄 목록",
+  "mode": "described",
+  "viewport": "1440×900",
+  "page": { "contentWidth": 1120, "nav": "sticky" },
+  "sections": {
+    "cover":    { "layout": "stack", "align": "left", "height": 0.6, "background": "same" },
+    "intro":    { "layout": "stack", "align": "left" },
+    "stack":    { "layout": "grid", "cols": 3, "media": "none" },
+    "project":  { "layout": "split", "ratio": [55, 45], "media": "left", "alternate": false },
+    "features": { "layout": "grid", "cols": 2, "media": "none" },
+    "glance":   { "layout": "rows", "cols": 3, "ratio": [25, 50, 25] },
+    "contact":  { "layout": "split", "ratio": [40, 60] }
+  },
+  "unused": [],
+  "wireframe": "1 머리 막대   [이름 ........ 절 이동 · PDF]            위 고정\n2 머리        [큰 이름 / 한 줄 정체성 / 버튼]           한 단 · 왼쪽 정렬\n3 자기소개    [좁은 글줄]                               한 단\n4 기술 스택   [카드][카드][카드]                        격자 3열 × 2줄\n              [카드][카드][카드]\n5 프로젝트    [대표 이미지 (큰 칸)  ][장르][기간]        2단 55:45 · 그림 왼쪽\n              [                     ][인원][역할]\n              [개발 의도 · 태그 · 링크              ]\n6 기능 소개   [기능 카드][기능 카드]                    격자 2열 · 그림 없음\n              [기능 카드][기능 카드]\n7 한눈에 보기 [이름 | 요약·기술·역할 | 링크]            줄 목록 3단 25:50:25\n8 연락처      [내 연락처 | 프로젝트별 링크]             2단 40:60"
+}

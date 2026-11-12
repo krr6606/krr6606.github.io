@@ -159,6 +159,7 @@
       const only = kids.length === 1 && kids[0].nodeType === 1 ? kids[0] : null;
       const img = only && (only.tagName === 'IMG' ? only : (only.tagName === 'A' && only.children.length >= 1 && [...only.childNodes].every((n) => n.nodeType === 1 ? n.tagName === 'IMG' || n.classList.contains('pf-newtab-icon') || n.classList.contains('pf-newtab-sr') : !n.textContent.trim()) ? only.querySelector('img') : null));
       if (img) para.classList.add('pf-figure');
+      if (img && img.alt && !para.querySelector('.pf-cap')) { const cap = document.createElement('span'); cap.className = 'pf-cap'; cap.setAttribute('aria-hidden', 'true'); cap.textContent = img.alt; para.appendChild(cap); }   // [내 수정 2026-11-12] 그림 아래 캡션 = 대체 글
     });
 
     // ⑦ Mermaid (theme default, securityLevel loose). 글꼴을 먼저 받아 글자 폭을 맞춤

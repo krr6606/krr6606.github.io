@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>포트폴리오</title>
+<!-- 직접 생성 모드(/portfolio-custom) 결과 — 포트폴리오 문서(../index.html)와 같은 데이터, 다른 배치.
+     데이터: ../data/portfolio.json · ../data/projects/<id>.json (fetch) · 문구: ../theme/strings.tsv · 색·모양·영문 글꼴: ../theme/theme.css
+     배치: ../theme/layout.json(벤토 · 격자 · 줄 목록). 발표 덱은 ../project.html?p=<id>, 상세 기술문서는 ../doc.html?p=<id>
+     CDN은 버전 고정(Pretendard v1.3.9 · React 18.3.1 · Babel standalone 7.24.7) + Tailwind CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="../theme/theme.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: { screens: { md: '760px' } } } };
+</script>
+<style>
+  :root {
+    --bg: var(--t-bg, #F5F5F7);
+    --surface: var(--t-surface, #FFFFFF);
+    --ink: var(--t-ink, #1D1D1F);
+    --body: var(--t-body, #424245);
+    --muted: var(--t-muted, #6E6E73);
+    --line: var(--t-line, #D2D2D7);
+    --line-2: var(--t-line-2, #AEAEB2);
+    --accent: var(--t-accent, var(--accent-data, #2F6FEB));
+    --accent-ink: color-mix(in srgb, var(--accent) 70%, #000);
+    --accent-soft: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    --radius: var(--t-radius, 20px);
+    --radius-in: calc(var(--radius) * .6);
+    --pill: var(--t-pill, 999px);
+    --shadow: var(--t-shadow, rgb(20 22 30 / .08));
+    --sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    --display: var(--t-display, 'Inter'), var(--sans);
+    --mono: 'D2Coding', Consolas, monospace;
+    --wrap: 1120px;
+    --nav-h: 52px;
+    color-scheme: var(--t-scheme, light);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-height: 1.6;
+         -webkit-font-smoothing: antialiased; word-break: keep-all; overflow-wrap: break-word; }
+  :focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; border-radius: 6px; }
+  code { font-family: var(--mono); font-size: .88em; background: var(--accent-soft); color: var(--accent-ink);
+         padding: 1px 6px; border-radius: 6px; overflow-wrap: anywhere; }
+
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); }
+  .sec { padding: clamp(56px, 8vw, 96px) 0; scroll-margin-top: var(--nav-h); }
+  .sec + .sec { border-top: 1px solid var(--line); }
+  .sec.tight { padding-top: 0; border-top: 0; }
+
+  /* 글자 단계: 큰 제목 · 절 제목 · 카드 제목 · 본문 · 보조 · 라벨 */
+  .t-hero { font-size: clamp(44px, 7.2vw, 76px); font-weight: 800; line-height: 1.06; letter-spacing: -.035em; }
+  .t-h2 { font-size: clamp(28px, 3.6vw, 40px); font-weight: 800; line-height: 1.18; letter-spacing: -.025em; }
+  .t-h3 { font-size: 19px; font-weight: 700; line-height: 1.35; letter-spacing: -.01em; }
+  .t-body { font-size: 16px; line-height: 1.7; color: var(--body); }
+  .t-sub { font-size: 14.5px; line-height: 1.65; color: var(--body); }
+  .t-cap { font-size: 13px; line-height: 1.5; color: var(--muted); }
+  .eyebrow { font-family: var(--display); font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+             color: var(--accent-ink); font-variant-numeric: lining-nums; }
+  .label { font-size: 12px; font-weight: 700; letter-spacing: .04em; color: var(--muted); }
+
+  /* 머리 막대 */
+  .nav { position: sticky; top: 0; z-index: 20; height: var(--nav-h); background: color-mix(in srgb, var(--bg) 78%, transparent);
+         backdrop-filter: saturate(180%) blur(16px); -webkit-backdrop-filter: saturate(180%) blur(16px);
+         border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent); }
+  .nav a { font-size: 13.5px; font-weight: 600; color: var(--muted); text-decoration: none; white-space: nowrap; transition: color .15s; }
+  .nav a:hover, .nav a.on { color: var(--ink); }
+  .nav .me { font-size: 15px; font-weight: 800; color: var(--ink); }
+
+  /* 카드: 그림자 대신 면 색 차이. 호버는 살짝 떠오르는 정도만 */
+  .card { background: var(--surface); border: 1px solid color-mix(in srgb, var(--line) 60%, transparent); border-radius: var(--radius); }
+  .card.lift { transition: transform .22s ease, box-shadow .22s ease; }
+  .card.lift:hover { transform: translateY(-2px); box-shadow: 0 10px 28px -12px var(--shadow), 0 2px 6px -2px var(--shadow); }
+  .card.in { border-radius: var(--radius-in); }
+  .rows > * + * { border-top: 1px solid var(--line); }
+
+  /* 버튼 · 태그 */
+  .btn { display: inline-flex; align-items: center; gap: 4px; padding: 9px 18px; border-radius: var(--pill); border: 1px solid var(--line-2);
+         font-size: 14px; font-weight: 700; line-height: 1.2; color: var(--ink); text-decoration: none; max-width: 100%; overflow-wrap: anywhere;
+         transition: background .15s, border-color .15s, color .15s; }
+  .btn:hover { border-color: var(--accent-ink); color: var(--accent-ink); background: var(--accent-soft); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.primary:hover { background: var(--accent-ink); border-color: var(--accent-ink); color: #fff; }
+  .tag { display: inline-block; padding: 3px 11px; border-radius: var(--pill); border: 1px solid var(--line); font-size: 12.5px; font-weight: 600; color: var(--body); }
+  .lk { font-size: 14px; font-weight: 700; color: var(--accent-ink); text-decoration: none; white-space: nowrap; }
+  .lk:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .num { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 22px; padding: 0 7px; border-radius: var(--pill);
+         background: var(--accent); color: #fff; font-family: var(--display); font-size: 11.5px; font-weight: 800; font-variant-numeric: lining-nums; }
+
+  /* 벤토: 프로젝트 소개 = 큰 대표 이미지 + 작은 정보 카드 */
+  .bento { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .cover { overflow: hidden; aspect-ratio: 16 / 9; }   /* 좁은 화면: 그림이 늦게 와도 자리가 밀리지 않게 비율로 자리를 잡음 */
+  .cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mini { padding: 16px 18px; }
+  .mini dd { margin-top: 4px; font-size: 15px; font-weight: 600; line-height: 1.45; color: var(--ink); }
+  @media (min-width: 760px) {
+    .bento { grid-template-columns: minmax(0, 55fr) minmax(0, 45fr); }
+    .bento.nocover { grid-template-columns: minmax(0, 1fr); }
+    .cover { aspect-ratio: auto; min-height: 280px; position: relative; }   /* 넓은 화면: 오른쪽 정보 카드 높이에 맞춰 채움 */
+    .cover img { position: absolute; inset: 0; }
+    .bento .wide { grid-column: 1 / -1; }
+  }
+
+  /* 한 번만 떠오르는 등장 */
+  .rise { opacity: 0; transform: translateY(10px); transition: opacity .5s ease, transform .5s ease; }
+  .rise.shown { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .rise { opacity: 1; transform: none; transition: none; }
+    .card.lift, .btn, .nav a { transition: none; }
+    .card.lift:hover { transform: none; }
+  }
+  .notice { max-width: 640px; margin: 96px auto; padding: 28px 32px; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef } = React;
+
+/* ── 문구 표: theme/strings.tsv의 "내 문구"(4번째 칸)가 있으면 그 문구, 없으면 기본 문구(3번째 칸) ── */
+const DEFAULT_STRINGS = {
+  'name.portfolio': '포트폴리오', 'name.deck': '발표 덱', 'name.doc': '상세 기술문서', 'name.doc-short': '상세 문서', 'name.video': '시연 영상',
+  'name.role': '내 역할', 'name.role-short': '역할', 'name.intent': '개발 의도', 'name.team': '팀 프로젝트', 'name.solo': '개인 프로젝트',
+  'page.updated': '업데이트 {date}', 'page.intro': '자기소개', 'page.stack': '기술 스택', 'page.stack-note': '근거 프로젝트와 함께',
+  'page.project-no': '{en.project} {no} / {total}', 'page.features': '기능 소개', 'page.see-in-deck': '{name.deck}에서 보기',
+  'page.deck-all': '{name.deck} 전체', 'page.glance': '프로젝트 요약', 'page.nav-intro': '소개', 'page.nav-stack': '{page.stack}',
+  'page.nav-projects': '프로젝트', 'page.nav-glance': '한눈에 보기', 'page.nav-contact': '연락처',
+  'en.portfolio': 'PORTFOLIO', 'en.about': 'ABOUT ME', 'en.skills': 'SKILLS', 'en.project': 'PROJECT', 'en.feature': 'FEATURE',
+  'en.glance': 'AT A GLANCE', 'en.contact': 'CONTACT', 'label.impl': '구현', 'label.reason': '이유',
+};
+function parseStrings(tsv) {
+  const out = {};
+  tsv.split(/\r?\n/).forEach((line, i) => {
+    if (i === 0 || !line || line.startsWith('#')) return;
+    const c = line.split('\t');
+    if (c.length < 3 || !c[0]) return;
+    out[c[0]] = (c[3] || '').trim() || c[2];
+  });
+  return out;
+}
+function makeT(table) {
+  const all = { ...DEFAULT_STRINGS, ...table };
+  const resolve = (s, depth = 0) => depth > 5 ? s : s.replace(/\{([a-z-]+\.[a-z-]+)\}/g, (m, k) => (k in all ? resolve(all[k], depth + 1) : m));
+  return (key, vars = {}) => resolve(all[key] ?? key).replace(/\{([a-z]+)\}/g, (m, k) => (k in vars ? vars[k] : m));
+}
+
+/* ── 작은 도구 ── */
+const pad2 = (n) => String(n).padStart(2, '0');
+const deckUrl = (id, sid) => `../project.html?p=${encodeURIComponent(id)}${sid ? `#s=${encodeURIComponent(sid)}` : ''}`;
+const docUrl = (id) => `../doc.html?p=${encodeURIComponent(id)}`;
+const imgUrl = (id, src) => `../src/${id}/${src}`;
+const norm = (s) => String(s || '').replace(/`/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+
+/* 기능이 가리키는 절(section) → 발표 덱 장면 주소. 못 찾으면 덱 처음으로 */
+function sceneFor(project, section) {
+  const want = norm(section);
+  if (!want) return '';
+  const slides = (project.deck && project.deck.slides) || [];
+  const paths = (s) => [s.sectionPath, ...((s.visuals || []).map((v) => v && v.sectionPath))].filter(Boolean);
+  const hit = slides.find((s) => paths(s).some((p) => norm(p[p.length - 1]) === want))
+           || slides.find((s) => paths(s).some((p) => p.some((x) => norm(x) === want)));
+  return hit && hit.key ? `d-${hit.key}` : '';
+}
+
+/* `코드` 조각을 <code>로 */
+function Rich({ text }) {
+  return String(text || '').split('`').map((part, i) => (i % 2 ? <code key={i}>{part}</code> : <React.Fragment key={i}>{part}</React.Fragment>));
+}
+
+/* 화면에 들어올 때 한 번만 떠오름 */
+function Rise({ as: Tag = 'div', className = '', children, ...rest }) {
+  const ref = useRef(null);
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !('IntersectionObserver' in window)) { setShown(true); return; }
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { setShown(true); io.disconnect(); }
+    }, { rootMargin: '0px 0px -8% 0px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return <Tag ref={ref} className={`rise ${shown ? 'shown' : ''} ${className}`} {...rest}>{children}</Tag>;
+}
+
+function Ext({ href, className, children }) {
+  return <a href={href} className={className} target="_blank" rel="noopener noreferrer">{children}<span aria-hidden="true"> ↗</span></a>;
+}
+
+function SecHead({ eyebrow, title, right }) {
+  return (
+    <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 mb-8 md:mb-10">
+      <div className="min-w-0">
+        <p className="eyebrow">{eyebrow}</p>
+        <h2 className="t-h2 mt-2">{title}</h2>
+      </div>
+      {right ? <p className="t-cap font-semibold">{right}</p> : null}
+    </div>
+  );
+}
+
+/* ── 머리 막대 ── */
+function Nav({ profile, t, firstProject }) {
+  const items = [
+    ['#intro', t('page.nav-intro')], ['#stack', t('page.nav-stack')],
+    firstProject ? [`#p-${firstProject}`, t('page.nav-projects')] : null,
+    ['#glance', t('page.nav-glance')], ['#contact', t('page.nav-contact')],
+  ].filter(Boolean);
+  return (
+    <header className="nav">
+      <div className="wrap h-full flex items-center gap-6">
+        <a href="#cover" className="me mr-auto truncate">{profile.name}</a>
+        <nav className="hidden md:block" aria-label={t('name.portfolio')}>
+          <ul className="flex gap-6">{items.map(([href, label]) => <li key={href}><a href={href}>{label}</a></li>)}</ul>
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+/* ── ① 머리: 한 단 · 왼쪽 정렬 · 화면 높이 0.6 ── */
+function Cover({ profile, generatedAt, t }) {
+  return (
+    <section id="cover" className="sec flex items-center" style={{ minHeight: '60vh' }}>
+      <div className="wrap w-full">
+        <div className="flex flex-wrap items-baseline justify-between gap-3">
+          <p className="eyebrow">{t('en.portfolio')}</p>
+          {generatedAt ? <p className="t-cap font-semibold">{t('page.updated', { date: generatedAt })}</p> : null}
+        </div>
+        <h1 className="t-hero mt-4">{profile.name}</h1>
+        {profile.nameEn ? <p className="mt-3 text-[19px] font-bold" style={{ fontFamily: 'var(--display)', color: 'var(--accent-ink)' }}>{profile.nameEn}</p> : null}
+        {profile.headline ? <p className="mt-6 max-w-[44rem] font-bold leading-snug tracking-tight" style={{ fontSize: 'clamp(20px, 2.6vw, 28px)' }}>{profile.headline}</p> : null}
+        <div className="mt-8 flex flex-wrap gap-2">
+          {profile.email ? <a className="btn primary" href={`mailto:${profile.email}`}>{profile.email}</a> : null}
+          {profile.github ? <Ext className="btn" href={profile.github}>GitHub</Ext> : null}
+          {(profile.links || []).filter((l) => l && l.url).map((l) => <Ext key={l.url} className="btn" href={l.url}>{l.label || l.url}</Ext>)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── ② 자기소개: 좁은 글줄 한 단 ── */
+function Intro({ profile, t }) {
+  if (!profile.intro) return null;
+  return (
+    <section id="intro" className="sec">
+      <div className="wrap">
+        <SecHead eyebrow={t('en.about')} title={t('page.intro')} />
+        <Rise as="p" className="max-w-[40rem] whitespace-pre-line font-semibold leading-relaxed" style={{ fontSize: 'clamp(17px, 2vw, 20px)' }}>
+          {profile.intro}
+        </Rise>
+      </div>
+    </section>
+  );
+}
+
+/* ── ③ 기술 스택: 3열 격자, 카드마다 구분선 목록 ── */
+function Stack({ skills, titles, t }) {
+  if (!skills || !skills.length) return null;
+  return (
+    <section id="stack" className="sec">
+      <div className="wrap">
+        <SecHead eyebrow={t('en.skills')} title={t('page.stack')} right={t('page.stack-note')} />
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {skills.map((s) => (
+            <Rise as="li" key={s.name} className="card lift overflow-hidden flex flex-col">
+              <h3 className="t-h3 px-5 pt-5 pb-3">{s.name}</h3>
+              <ul className="rows border-t" style={{ borderColor: 'var(--line)' }}>
+                {(s.evidence || []).map((e, i) => (
+                  <li key={i} className="px-5 py-3.5">
+                    <p className="t-sub"><Rich text={e.text} /></p>
+                    {e.project && titles[e.project] ? <a className="lk inline-block mt-1.5 !text-[13px]" href={`#p-${e.project}`}>{titles[e.project]}</a> : null}
+                  </li>
+                ))}
+              </ul>
+            </Rise>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+/* ── ④-1 프로젝트 소개: 벤토(큰 대표 이미지 55 : 작은 정보 카드 45) ── */
+function Project({ p, no, total, t }) {
+  const team = p.team || {};
+  const kind = team.type === 'team' ? [t('name.team'), team.size].filter(Boolean).join(' · ') : team.type === 'solo' ? t('name.solo') : '';
+  const meta = p.meta || [];
+  const links = p.links || {};
+  return (
+    <section id={`p-${p.id}`} className="sec">
+      <div className="wrap">
+        <SecHead eyebrow={t('page.project-no', { no: pad2(no), total: pad2(total) })} title={p.title} right={kind} />
+        {p.tagline ? <p className="t-body -mt-4 md:-mt-6 mb-8 max-w-[46rem]">{p.tagline}</p> : null}
+
+        <div className={`bento ${p.cover ? '' : 'nocover'}`}>
+          {p.cover ? (
+            <Rise as="figure" className="card lift cover">
+              <img src={imgUrl(p.id, p.cover)} alt={p.title} loading="lazy" />
+            </Rise>
+          ) : null}
+
+          <Rise as="dl" className="grid grid-cols-2 gap-3 content-start">
+            {meta.map((m) => (
+              <div key={m.label} className="card lift in mini">
+                <dt className="label">{m.label}</dt>
+                <dd>{m.value}</dd>
+              </div>
+            ))}
+            {team.role ? (
+              <div className="card lift in mini col-span-2">
+                <dt className="label" style={{ color: 'var(--accent-ink)' }}>{t('name.role')}</dt>
+                <dd>{team.role}</dd>
+              </div>
+            ) : null}
+          </Rise>
+
+          <Rise className="card wide p-5 md:p-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="min-w-0">
+              {p.intent && p.intent.text ? (
+                <>
+                  <p className="label" style={{ color: 'var(--accent-ink)' }}>{t('name.intent')}</p>
+                  <p className="t-body mt-1 max-w-[40rem]"><Rich text={p.intent.text} /></p>
+                </>
+              ) : null}
+              {p.tags && p.tags.length ? (
+                <ul className="mt-4 flex flex-wrap gap-1.5">{p.tags.map((tag) => <li key={tag} className="tag">{tag}</li>)}</ul>
+              ) : null}
+            </div>
+            <div className="flex flex-wrap gap-2 md:justify-end md:flex-none">
+              <a className="btn primary" href={deckUrl(p.id)}>{t('name.deck')}</a>
+              <a className="btn" href={docUrl(p.id)}>{t('name.doc')}</a>
+              {links.github ? <Ext className="btn" href={links.github}>GitHub</Ext> : null}
+              {links.video ? <Ext className="btn" href={links.video}>{t('name.video')}</Ext> : null}
+              {(links.extra || []).filter((l) => l && l.url).map((l) => <Ext key={l.url} className="btn" href={l.url}>{l.label || l.url}</Ext>)}
+            </div>
+          </Rise>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── ④-2 기능 소개: 2열 카드 격자. 화면이 있는 기능은 두 칸 폭에 그림 함께, 홀수로 남는 카드도 두 칸 ── */
+function featureSpans(list) {
+  const out = []; let col = 0;
+  list.forEach((h, i) => {
+    if (h.image) { if (col === 1) out[i - 1] = 2; out.push(2); col = 0; }
+    else { out.push(1); col = (col + 1) % 2; }
+  });
+  if (col === 1) out[out.length - 1] = 2;
+  return out;
+}
+function Features({ p, no, total, t }) {
+  const list = p.highlights || [];
+  if (!list.length) return null;
+  const spans = featureSpans(list);
+  return (
+    <section id={`p-${p.id}-core`} className="sec tight">
+      <div className="wrap">
+        <p className="eyebrow mb-4">{t('page.project-no', { no: pad2(no), total: pad2(total) })} · {t('page.features')}</p>
+        <ol className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {list.map((h, i) => {
+            const sid = sceneFor(p, h.section);
+            const img = h.image;
+            return (
+              <Rise as="li" key={i} className={`card lift overflow-hidden ${spans[i] === 2 ? 'md:col-span-2' : ''} ${img ? 'md:grid md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]' : ''}`}>
+                {img ? (
+                  <figure className="flex flex-col justify-center border-b md:border-b-0 md:border-r p-4" style={{ borderColor: 'var(--line)', background: 'var(--bg)' }}>
+                    <img className="w-full h-auto rounded-xl" src={imgUrl(p.id, img.src)} width={img.w || undefined} height={img.h || undefined} alt={img.caption || h.title} loading="lazy" />
+                    {img.caption ? <figcaption className="t-cap mt-2.5">{img.caption}</figcaption> : null}
+                  </figure>
+                ) : null}
+                <div className="p-5 md:p-6 flex flex-col h-full">
+                  <p className="flex items-center gap-2"><span className="num">{pad2(i + 1)}</span><span className="eyebrow">{t('en.feature')}</span></p>
+                  <h3 className="t-h3 mt-3">{h.title}</h3>
+                  {h.what ? <p className="t-sub mt-2"><Rich text={h.what} /></p> : null}
+                  {(h.how || h.why) ? (
+                    <dl className="rows mt-4 border-t" style={{ borderColor: 'var(--line)' }}>
+                      {h.how ? <div className="grid grid-cols-[3.2rem_minmax(0,1fr)] gap-3 py-2.5"><dt className="label pt-0.5">{t('label.impl')}</dt><dd className="t-sub"><Rich text={h.how} /></dd></div> : null}
+                      {h.why ? <div className="grid grid-cols-[3.2rem_minmax(0,1fr)] gap-3 py-2.5"><dt className="label pt-0.5">{t('label.reason')}</dt><dd className="t-sub"><Rich text={h.why} /></dd></div> : null}
+                    </dl>
+                  ) : null}
+                  <p className="mt-auto pt-3"><a className="lk" href={deckUrl(p.id, sid)}>{t('page.see-in-deck')} →</a></p>
+                </div>
+              </Rise>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+/* ── ⑤ 한눈에 보기: 줄 목록 3단 25 : 50 : 25 ── */
+function Glance({ projects, t }) {
+  if (!projects.length) return null;
+  return (
+    <section id="glance" className="sec">
+      <div className="wrap">
+        <SecHead eyebrow={t('en.glance')} title={t('page.glance')} />
+        <Rise as="ul" className="card rows overflow-hidden">
+          {projects.map((p) => {
+            const period = (p.meta || []).find((m) => /기간/.test(m.label));
+            const links = p.links || {};
+            return (
+              <li key={p.id} className="grid grid-cols-1 md:grid-cols-[minmax(0,25fr)_minmax(0,50fr)_minmax(0,25fr)] gap-x-8 gap-y-2 px-5 md:px-6 py-5">
+                <div>
+                  <a className="t-h3 no-underline hover:underline underline-offset-4" style={{ color: 'var(--ink)' }} href={`#p-${p.id}`}>{p.title}</a>
+                  {period ? <p className="t-cap mt-1">{period.value}</p> : null}
+                </div>
+                <div>
+                  {p.tagline ? <p className="t-sub">{p.tagline}</p> : null}
+                  {p.tags && p.tags.length ? <p className="t-cap mt-1.5">{p.tags.join(' · ')}</p> : null}
+                  {p.team && p.team.role ? <p className="t-cap mt-1"><b className="font-bold">{t('name.role-short')}</b> {p.team.role}</p> : null}
+                </div>
+                <div className="flex flex-wrap content-start gap-x-4 gap-y-1 md:justify-end">
+                  <a className="lk" href={deckUrl(p.id)}>{t('name.deck')}</a>
+                  <a className="lk" href={docUrl(p.id)}>{t('name.doc-short')}</a>
+                  {links.github ? <Ext className="lk" href={links.github}>GitHub</Ext> : null}
+                </div>
+              </li>
+            );
+          })}
+        </Rise>
+      </div>
+    </section>
+  );
+}
+
+/* ── ⑥ 연락처: 2단 40 : 60, 오른쪽은 구분선 목록 ── */
+function Contact({ profile, projects, t }) {
+  return (
+    <section id="contact" className="sec">
+      <div className="wrap grid grid-cols-1 md:grid-cols-[minmax(0,40fr)_minmax(0,60fr)] gap-x-12 gap-y-8">
+        <div>
+          <p className="eyebrow">{t('en.contact')}</p>
+          <p className="t-h2 mt-2">{profile.name}</p>
+          <div className="mt-6 flex flex-wrap gap-2">
+            {profile.email ? <a className="btn primary" href={`mailto:${profile.email}`}>{profile.email}</a> : null}
+            {profile.github ? <Ext className="btn" href={profile.github}>GitHub</Ext> : null}
+          </div>
+        </div>
+        <Rise as="ul" className="card rows overflow-hidden self-start">
+          {projects.map((p) => {
+            const links = p.links || {};
+            return (
+              <li key={p.id} className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 px-5 py-4">
+                <b className="text-[16px] font-bold">{p.title}</b>
+                <span className="flex flex-wrap gap-x-4 gap-y-1">
+                  <a className="lk" href={deckUrl(p.id)}>{t('name.deck')}</a>
+                  <a className="lk" href={docUrl(p.id)}>{t('name.doc-short')}</a>
+                  {links.github ? <Ext className="lk" href={links.github}>GitHub</Ext> : null}
+                  {links.video ? <Ext className="lk" href={links.video}>{t('name.video')}</Ext> : null}
+                </span>
+              </li>
+            );
+          })}
+        </Rise>
+      </div>
+    </section>
+  );
+}
+
+function App() {
+  const [state, setState] = useState({ status: 'loading' });
+  useEffect(() => {
+    (async () => {
+      try {
+        const get = async (url) => { const r = await fetch(url); if (!r.ok) throw new Error(`${url} (${r.status})`); return r; };
+        const portfolio = await (await get('../data/portfolio.json')).json();
+        const projects = await Promise.all((portfolio.projects || []).map(async (id) => (await get(`../data/projects/${id}.json`)).json()));
+        let table = {};
+        try { table = parseStrings(await (await get('../theme/strings.tsv')).text()); } catch (e) { /* 문구 표가 없으면 기본 문구 */ }
+        setState({ status: 'ok', portfolio, projects, t: makeT(table) });
+      } catch (err) {
+        setState({ status: 'error', message: String(err && err.message || err) });
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (state.status !== 'ok') return;
+    const { portfolio, t } = state;
+    const accent = portfolio.settings && portfolio.settings.accent;
+    if (accent) document.documentElement.style.setProperty('--accent-data', accent);
+    document.title = `${portfolio.profile.name} · ${t('name.portfolio')}`;
+    // 주소의 #절로 이동. 스타일·그림이 늦게 들어와 자리가 밀릴 수 있어 몇 번 다시 맞춤(사용자가 먼저 움직이면 멈춤)
+    if (!location.hash) return;
+    let stop = false;
+    const quit = () => { stop = true; };
+    const go = () => { if (stop) return; const el = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (el) el.scrollIntoView({ behavior: 'instant' }); };
+    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach((ev) => window.addEventListener(ev, quit, { once: true, passive: true }));
+    const timers = [0, 250, 800, 1600].map((ms) => setTimeout(go, ms));
+    return () => timers.forEach(clearTimeout);
+  }, [state.status]);
+
+  if (state.status === 'loading') return <p className="wrap t-cap py-24">…</p>;
+  if (state.status === 'error') return (
+    <div className="card notice">
+      <h1 className="t-h3">데이터를 읽지 못했습니다</h1>
+      <p className="t-sub mt-2">로컬 서버(http://localhost:4600/custom/)로 열었는지, <code>/portfolio-build</code>로 data/를 만들었는지 확인해 주세요.</p>
+      <p className="t-cap mt-3">{state.message}</p>
+    </div>
+  );
+
+  const { portfolio, projects, t } = state;
+  const profile = portfolio.profile || {};
+  const titles = Object.fromEntries(projects.map((p) => [p.id, p.title]));
+  return (
+    <>
+      <Nav profile={profile} t={t} firstProject={projects[0] && projects[0].id} />
+      <main>
+        <Cover profile={profile} generatedAt={portfolio.generatedAt} t={t} />
+        <Intro profile={profile} t={t} />
+        <Stack skills={portfolio.skills} titles={titles} t={t} />
+        {projects.map((p, i) => (
+          <React.Fragment key={p.id}>
+            <Project p={p} no={i + 1} total={projects.length} t={t} />
+            <Features p={p} no={i + 1} total={projects.length} t={t} />
+          </React.Fragment>
+        ))}
+        <Glance projects={projects} t={t} />
+        <Contact profile={profile} projects={projects} t={t} />
+      </main>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

@@ -624,7 +624,8 @@
     });
     if (!layoutOnly) {
       s.querySelectorAll('img').forEach((i) => {
-        if (!i.complete) add(i.loading === 'lazy' ? 'img-lazy' : 'img-pending', i.getAttribute('src'));
+        // 아직 받지 않은 lazy 그림은 문제가 아님(터치 기기·데이터 절약에서는 보일 때 받는 것이 정상, 인쇄 전에는 beforeprint가 받음)
+        if (!i.complete) { if (i.loading !== 'lazy' || isPrint()) add(i.loading === 'lazy' ? 'img-lazy' : 'img-pending', i.getAttribute('src')); }
         else if (!i.naturalWidth) add('img-broken', i.getAttribute('src'));
       });
       s.querySelectorAll('.pf-clipped').forEach((c) => add('clipped', c.textContent.trim().slice(0, 80)));

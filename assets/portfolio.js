@@ -35,7 +35,11 @@
     catch (err) { info.errors.push(`data/portfolio.json: ${err && err.message || err}`); PF.noData(root, err); return; }
     PF.applyTheme(pf.settings?.accent);
     const projects = (await Promise.all((pf.projects || []).map((id) => PF.loadJSON(`data/projects/${encodeURIComponent(id)}.json`)
-      .catch((err) => { console.warn('[portfolio] 프로젝트 데이터 없음:', err.message); return null; })))).filter(Boolean);
+      .catch((err) => {                                                 // 그 프로젝트만 빼고 그리되, 점검(report().errors)에는 남김 — 조용히 사라지지 않게
+        console.warn('[portfolio] 프로젝트 데이터 없음:', err.message);
+        info.errors.push(`data/projects/${id}.json: ${err && err.message || err}`);
+        return null;
+      })))).filter(Boolean);
     await strings;
     render(pf, projects);
     bind();

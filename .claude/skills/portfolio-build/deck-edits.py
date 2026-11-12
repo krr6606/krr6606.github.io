@@ -30,6 +30,7 @@ import copy
 import hashlib
 import html
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -350,8 +351,19 @@ def digest(slides):
 
 
 def write_text(path, text, bom=False):                           # Path.write_text(newline=)는 3.10부터 → open으로
-    with open(str(path), 'w', encoding='utf-8-sig' if bom else 'utf-8', newline='') as f:
-        f.write(text)
+    # 옆에 임시 파일로 다 쓴 뒤 바꿔치기 — 쓰다 실패해도(인코딩 오류·디스크 가득) 원래 파일이 0바이트로 남지 않게
+    path = str(path)
+    tmp = '%s.tmp-%d' % (path, os.getpid())
+    try:
+        with open(tmp, 'w', encoding='utf-8-sig' if bom else 'utf-8', newline='') as f:
+            f.write(text)
+        os.replace(tmp, path)
+    except BaseException:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+        raise
 
 
 # ── 보고 ──

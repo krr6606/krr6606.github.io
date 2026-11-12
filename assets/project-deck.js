@@ -49,12 +49,12 @@
     if (PF.isFile()) { deck.replaceChildren(PF.msgScene({ title: '로컬 서버로 열어 주세요', html: PF.FILE_HELP })); return; }
     const strings = PF.loadStrings();
     const back = `<p>${link({ href: 'index.html', label: '← 포트폴리오로', kind: 'page' })}</p>`;
-    if (!id) { deck.replaceChildren(PF.msgScene({ title: '프로젝트를 고르세요', html: `<p>주소 끝에 <code>?p=폴더이름</code>을 붙여 주세요.</p>${back}` })); return; }
+    if (!id) { info.errors.push('no-project: 주소에 ?p=<폴더 이름>이 없습니다'); deck.replaceChildren(PF.msgScene({ title: '프로젝트를 고르세요', html: `<p>주소 끝에 <code>?p=폴더이름</code>을 붙여 주세요.</p>${back}` })); return; }
     const pf = await PF.loadJSON('data/portfolio.json').catch(() => ({}));
     PF.applyTheme(pf.settings?.accent);
     let p;
     try { p = await PF.loadJSON(`data/projects/${encodeURIComponent(id)}.json`); }
-    catch (err) { deck.replaceChildren(PF.msgScene({ title: '프로젝트를 찾을 수 없습니다', html: `<p>${esc(err.message)}</p>${back}` })); return; }
+    catch (err) { info.errors.push(`data/projects/${id}.json: ${err && err.message || err}`); deck.replaceChildren(PF.msgScene({ title: '프로젝트를 찾을 수 없습니다', html: `<p>${esc(err.message)}</p>${back}` })); return; }
     let md = null;
     try { md = await PF.loadText(PF.srcPath(p.id, p.doc)); }
     catch (e) {
@@ -213,31 +213,48 @@
   }
 
   // 장면 하나(나뉠 수 있음): 코드 줄 범위 20줄 단위, 표는 넘치면 행을 반으로
+  //   코드 블록마다 자기 줄 범위(ref.lines, 없으면 전체)를 따로 나눕니다 — 한 장면에 코드가 둘이어도 서로의 범위로 잘리지 않게
   function slideScenes(sl, sid, meta) {
     const vis = sl._v || [];
-    const code = vis.find((v) => v.ref.kind === 'code' && (v.status === 'ok' || v.status === 'changed'));
-    let chunks = [null];
-    if (code) {
-      const n = codeLines(code.el).length;
-      let [a, b] = Array.isArray(code.ref.lines) && code.ref.lines.length === 2 ? code.ref.lines : [1, n];
+    const ranges = new Map();                                          // 코드 시각 자료 → [[a, b], …]
+    vis.forEach((v) => {
+      if (v.ref.kind !== 'code' || !(v.status === 'ok' || v.status === 'changed')) return;
+      const n = codeLines(v.el).length;
+      let [a, b] = Array.isArray(v.ref.lines) && v.ref.lines.length === 2 ? v.ref.lines : [1, n];
       a = Math.max(1, Math.min(a, n)); b = Math.max(a, Math.min(b, n));
-      chunks = [];
-      const len = b - a + 1, parts = Math.ceil(len / MAXL);
+      const chunks = [], len = b - a + 1, parts = Math.ceil(len / MAXL);
       for (let i = 0; i < parts; i++) { const s0 = a + Math.round((len * i) / parts), e0 = a + Math.round((len * (i + 1)) / parts) - 1; chunks.push([s0, e0]); }
       if (parts > 1) PF.note(sid, 'long-code', len, `코드 ${len}줄을 장면 ${parts}개로 나눔`);
+      ranges.set(v, chunks);
+    });
+    // 코드 조각을 문서 순서대로 장면에 담습니다. 한 장면의 코드는 모두 합쳐 20줄 안팎 — 넘으면 다음 조각부터 "계속" 장면으로
+    const pages = [[]];                                                // 장면마다 [코드 시각 자료, 줄 범위] 목록
+    let used = 0, longOne = false;
+    vis.forEach((v) => (ranges.get(v) || []).forEach((ch, i, all) => {
+      const len = ch[1] - ch[0] + 1;
+      let pg = pages[pages.length - 1];
+      if (pg.length && (used + len > MAXL || pg.some(([x]) => x === v))) { pg = []; pages.push(pg); used = 0; }
+      pg.push([v, ch]); used += len;
+      if (all.length > 1) longOne = true;
+    }));
+    if (pages.length > 1 && !longOne) {
+      const total = [...ranges.values()].reduce((a, c) => a + c[0][1] - c[0][0] + 1, 0);
+      PF.note(sid, 'long-code', total, `코드 블록 ${ranges.size}개(모두 ${total}줄)를 장면 ${pages.length}개로 나눔`);
     }
     const out = [];
-    chunks.forEach((ch, ci) => {
-      const part = chunks.length > 1 ? `${ci + 1}/${chunks.length}` : '';
+    pages.forEach((pg, ci) => {
+      const mine = new Map(pg);
+      const part = pages.length > 1 ? `${ci + 1}/${pages.length}` : '';
       const myId = ci ? `${sid}-${ci + 1}` : sid;
-      const list = vis.filter((v) => !(ci > 0 && v.ref.kind !== 'code'));            // 나뉜 뒤쪽 장면은 코드만
+      const list = vis.filter((v) => mine.has(v) || (!ci && !ranges.has(v)));       // 나뉜 뒤쪽 장면은 코드만
       const me = { ...sl, points: ci ? [] : sl.points || [], layout: ci ? 'full' : sl.layout };
-      out.push(...fitSlide(me, list, myId, part, ch, meta));
+      out.push(...fitSlide(me, list, myId, part, (v) => mine.get(v) || null, meta));
     });
     return out;
   }
-  function fitSlide(sl, vis, sid, part, codeChunk, meta, tableChunk = null, depth = 0) {
-    const vs = vis.map((v) => vboxHtml(v, v.ref.kind === 'code' ? codeChunk : v.ref.kind === 'table' ? tableChunk : null));
+  //   codeChunk(v) = 그 코드의 이번 줄 범위 · tsplit = { v, rows: [a, b) } 행을 나누는 표 하나(다른 표는 그대로 둠)
+  function fitSlide(sl, vis, sid, part, codeChunk, meta, tsplit = null, depth = 0) {
+    const vs = vis.map((v) => vboxHtml(v, v.ref.kind === 'code' ? codeChunk(v) : v.ref.kind === 'table' && tsplit && tsplit.v === v ? tsplit.rows : null));
     const V = sl.layout === 'full' || sl.layout === 'screens' ? [{}, { tight: true }]
       : [{ vw: 1.4 }, { vw: 1.7 }, { vw: 1.15 }, { vw: 1.4, tight: true }, { stack: true }, { stack: true, tight: true }];
     const build = (v) => {
@@ -254,13 +271,15 @@
     for (const v of V) { const s = build(v); if (!PF.fitsM(s)) continue; const sc = PF.visScore(s); if (!best || sc > best.sc + 0.05) best = { s, sc }; }
     if (best) return [best.s];
     // 표가 하한에서도 안 들어가면 행을 반으로 나눠 "계속" 장면으로
-    const tbl = vis.find((v) => v.ref.kind === 'table' && v.el);
-    if (tbl && depth < 3) {
-      const rows = tableChunk ? tableChunk : [0, tbl.el.querySelectorAll('tbody tr').length];
+    //   표가 여럿이면 행이 가장 많은 표 하나만 나눕니다(같으면 앞의 것). 나머지 표는 앞 장면에 온전히 남음
+    const nrows = (v) => v.el.querySelectorAll('tbody tr').length;
+    const tbl = tsplit ? tsplit.v : vis.filter((v) => v.ref.kind === 'table' && v.el).reduce((m, v) => (!m || nrows(v) > nrows(m) ? v : m), null);
+    if (tbl && vis.includes(tbl) && depth < 3) {
+      const rows = tsplit ? tsplit.rows : [0, nrows(tbl)];
       if (rows[1] - rows[0] >= 4) {
         const mid = rows[0] + Math.ceil((rows[1] - rows[0]) / 2);
-        const a = fitSlide(sl, vis, sid, part, codeChunk, meta, [rows[0], mid], depth + 1);
-        const b = fitSlide({ ...sl, points: [], lead: null, layout: 'full' }, vis.filter((v) => v === tbl), `${sid}-t${depth + 1}`, part, codeChunk, meta, [mid, rows[1]], depth + 1);
+        const a = fitSlide(sl, vis, sid, part, codeChunk, meta, { v: tbl, rows: [rows[0], mid] }, depth + 1);
+        const b = fitSlide({ ...sl, points: [], lead: null, layout: 'full' }, vis.filter((v) => v === tbl), `${sid}-t${depth + 1}`, part, codeChunk, meta, { v: tbl, rows: [mid, rows[1]] }, depth + 1);
         return [...a, ...b];
       }
     }

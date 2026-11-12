@@ -119,6 +119,7 @@ flowchart LR
   을 실행해 `#pf-audit`의 base64 JSON(= `report()`)을 읽고, `ready`가 `yes`인지 확인합니다.
   포트폴리오 문서(`index.html`)는 장면이 없는 흐르는 페이지라 빨간 띠가 없고, `await PFPage.whenReady()` 뒤 `PFPage.report()`
   (깨진 이미지 `images.broken`·가로 넘침 `overflowX`·`errors`)를 봅니다. headless는 `index.html?pf-audit=1`로 같은 방법입니다.
+  상세 문서(`doc.html?p=<id>`)는 `await PFDoc.whenReady()` 뒤 `PFDoc.report()`(`errors`·깨진 이미지 `images.broken`·그리지 못한 다이어그램 `diagrams.failed`)를 봅니다.
   발표 덱의 빨간 띠(원문 블록을 찾지 못함·여러 곳·바뀜)도 `audit`에 함께 나오고, `info.mode`가 `auto`면 예전 데이터로 자동 구성된 덱이므로 `/portfolio-build`를 다시 실행하도록 안내합니다.
 - 발표 덱의 **[PPTX로 저장]**(`assets/deck-pptx.js`)은 렌더러 기능이라 데이터를 다시 만들지 않습니다. 결과가 이상하다고 하면 그 덱에서 `await PFScene.whenReady()` 뒤
   `(await PFPptx.build()).report`(내려받지 않음)의 `warnings`(넣지 못한 그림 등)·`slides`(슬라이드별 글상자·도형·그림·표·코드 개수)·`fonts`(들어간 글꼴 이름)를 봅니다.

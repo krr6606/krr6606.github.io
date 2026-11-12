@@ -37,13 +37,18 @@ def mixhex(a, b, t):   # a를 (1-t), b를 t 비율로(CSS color-mix(in srgb, a (
 
 def main(path):
     try:
-        raw = io.open(path, encoding='utf-8').read()
+        raw = io.open(path, encoding='utf-8-sig').read()               # utf-8-sig: 메모장이 붙이는 BOM도 읽음
     except OSError as e:
         print(f'[고칠 것] 파일을 읽지 못했습니다: {e}'); return 1
+    except UnicodeDecodeError:
+        print(f'[고칠 것] {path}가 UTF-8이 아닙니다 — 편집기에서 "UTF-8"로 다시 저장해 주세요(메모장: 다른 이름으로 저장 → 인코딩 UTF-8)'); return 1
     src = re.sub(r'/\*.*?\*/', '', raw, flags=re.S)
     errs, notes = [], []
 
     imports = re.findall(r'@import\s+url\(\s*["\']?([^"\')]+)["\']?\s*\)\s*;', src)
+    first_root = re.search(r':root\s*\{', src)
+    if first_root and re.search(r'@import\b', src[first_root.start():]):
+        errs.append('@import는 :root보다 앞(파일 맨 위)에 둡니다 — 뒤에 있으면 브라우저가 무시해 글꼴이 들어오지 않습니다')
     rest = re.sub(r'@import\s+url\([^)]*\)\s*;', '', src)
     roots = re.findall(r':root\s*\{([^{}]*)\}', rest)
     leftover = re.sub(r':root\s*\{[^{}]*\}', '', rest).strip()
@@ -55,18 +60,30 @@ def main(path):
     if re.search(r'url\(', body):
         errs.append('손잡이 값에 url(…)을 쓰지 않습니다(그림 파일·외부 주소 금지)')
 
-    T = {}
-    for k, v in re.findall(r'--t-([a-z0-9-]+)\s*:\s*([^;]+);', body):
-        T[k] = v.strip()
-    other = [k for k in re.findall(r'(--[a-z0-9-]+)\s*:', body) if not k.startswith('--t-')]
+    # 선언을 ';'로 나눠 하나씩 봅니다(마지막 줄에 ';'가 없어도 읽고, --t-가 아닌 속성은 모두 알림)
+    T, other, broken = {}, [], []
+    for decl in body.split(';'):
+        decl = decl.strip()
+        if not decl: continue
+        m = re.fullmatch(r'([A-Za-z0-9_-]+)\s*:\s*(.+)', decl, flags=re.S)
+        if not m: broken.append(decl[:40]); continue
+        name, val = m.group(1), m.group(2).strip()
+        if re.fullmatch(r'--t-[a-z0-9-]+', name): T[name[4:]] = val
+        else: other.append(name)
     if other:
-        errs.append(f'--t-로 시작하지 않는 변수는 쓰지 않습니다: {", ".join(other)}')
+        errs.append(f':root에는 --t-로 시작하는 손잡이만 둡니다(다른 변수·속성 금지): {", ".join(other)}')
+    if broken:
+        errs.append(f'읽을 수 없는 줄이 있습니다("이름: 값;" 꼴이 아님): {" / ".join(broken)}')
     for k in T:
         if k not in KNOWN:
             errs.append(f'모르는 손잡이 --t-{k} (rules.md §1 표에 있는 것만)')
 
     if not T and not imports:
-        print('손잡이가 없습니다 — 기본 테마(어두운 바탕)를 씁니다. 통과'); return 0
+        if not errs:
+            print('손잡이가 없습니다 — 기본 테마(어두운 바탕)를 씁니다. 통과'); return 0
+        print(f'테마 점검: {path}')                                    # 손잡이는 없는데 다른 규칙·속성이 있음 → 통과시키지 않음
+        for e in errs: print(f'[고칠 것] {e}')
+        print(f'고칠 것 {len(errs)}개'); return 1
 
     # 형식
     for k in COLOR_KEYS:
@@ -106,7 +123,7 @@ def main(path):
         if not m: errs.append(f'@import 주소: {u} → https://cdn.jsdelivr.net/npm/@fontsource/<글꼴>@<버전>/latin-700.css 꼴만(버전 고정)')
         elif m.group(1) != pkg: errs.append(f'@import {m.group(1)}가 --t-display({disp})와 다릅니다')
     if pkg:
-        got = {re.search(r'latin-(\d+)', u).group(1) for u in imports if f'/{pkg}@' in u}
+        got = {w for u in imports if f'/{pkg}@' in u for w in re.findall(r'/latin-(\d+)\.css$', u)}
         if got != {'700', '800'}: errs.append(f'{disp}: latin-700.css·latin-800.css 두 줄을 @import 합니다(지금: {", ".join(sorted(got)) or "없음"})')
     elif imports and disp in FONTS:
         errs.append(f'{disp}는 페이지가 이미 싣습니다 — @import를 지웁니다')
@@ -123,7 +140,8 @@ def main(path):
         need('ink', 'bg', 12, '제목 글자 / 바탕'); need('ink', 'surface', 10, '제목 글자 / 카드')
         need('body', 'bg', 7, '본문 글자 / 바탕'); need('body', 'surface', 7, '본문 글자 / 카드')
         need('muted', 'bg', 4.5, '보조 글자 / 바탕'); need('muted', 'surface', 4.5, '보조 글자 / 카드')
-        faint = T.get('faint') or mixhex(C['muted'], C['bg'], 0.15)
+        faint = T.get('faint', '')
+        if not re.fullmatch(r'#[0-9A-Fa-f]{6}', faint): faint = mixhex(C['muted'], C['bg'], 0.15)   # 꼴이 틀린 값은 위에서 이미 [고칠 것]
         C['faint'] = faint; need('faint', 'bg', 3, '흐린 글자 / 바탕', hard=False)
         need('line', 'bg', 1.15, '구분선 / 바탕', hard=False); need('line-2', 'bg', 1.5, '알약 테두리 / 바탕', hard=False)
         need('surface', 'bg', 1.04, '카드 / 바탕(구분)', hard=False)

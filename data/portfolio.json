@@ -31,7 +31,7 @@
       "name": "C# 데이터 구조",
       "evidence": [
         {
-          "text": "enum 인덱스 조회를 데이터가 가진 키의 Dictionary 조회로, 스폰 데이터를 TSV 표로 다시 고침",
+          "text": "스테이지 SO의 웨이브 데이터와 NextWaveIndex로 적 스폰 흐름 구성",
           "project": "1-nyanko-defense"
         },
         {

@@ -493,20 +493,6 @@
           {"label": "해결", "text": "남은 인원으로 계속하지 않고 게임을 끝냅니다.", "verbatim": true}
         ],
         "visuals": [{"kind": "code", "n": 1, "fp": "members.TryRemove(member.User.Id, out _);"}]
-      },
-      {
-        "key": "retro-table",
-        "chapter": "results",
-        "layout": "full",
-        "tab": "결과",
-        "title": {"text": "회고 — 프로젝트 종료 후 다시 고친 버그 5건", "verbatim": true},
-        "lead": {
-          "text": "종료 시점의 코드는 git 태그 v1.0-project-end로 남겼고, 고친 것은 retrospective-fixes 브랜치에 한 건에 커밋 하나씩 남겼습니다.",
-          "verbatim": true
-        },
-        "sectionPath": ["5. 결과와 배운 점", "회고 — 프로젝트 종료 후 다시 고친 버그 5건"],
-        "points": [],
-        "visuals": [{"kind": "table", "n": 1, "fp": "#|문제|당시 판단|지금 판단|수정"}]
       }
     ],
     "base": [
@@ -848,22 +834,8 @@
           {"label": "해결", "text": "남은 인원으로 계속하지 않고 게임을 끝냅니다.", "verbatim": true}
         ],
         "visuals": [{"kind": "code", "n": 1, "fp": "members.TryRemove(member.User.Id, out _);"}]
-      },
-      {
-        "key": "retro-table",
-        "chapter": "results",
-        "layout": "full",
-        "tab": "결과",
-        "title": {"text": "회고 — 프로젝트 종료 후 다시 고친 버그 5건", "verbatim": true},
-        "lead": {
-          "text": "종료 시점의 코드는 git 태그 v1.0-project-end로 남겼고, 고친 것은 retrospective-fixes 브랜치에 한 건에 커밋 하나씩 남겼습니다.",
-          "verbatim": true
-        },
-        "sectionPath": ["5. 결과와 배운 점", "회고 — 프로젝트 종료 후 다시 고친 버그 5건"],
-        "points": [],
-        "visuals": [{"kind": "table", "n": 1, "fp": "#|문제|당시 판단|지금 판단|수정"}]
       }
     ],
-    "applied": "981ccd797f4bf04e"
+    "applied": "1825bc241ed1e319"
   }
 }

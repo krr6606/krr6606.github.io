@@ -37,8 +37,8 @@
   ],
   "links": {
     "github": "https://github.com/krr6606/3rd-2D-Project-krr6606",
-    "video": "",
-    "extra": []
+    "video": "https://youtu.be/HqqZD-s-3rY",
+    "extra": [{"label": "숏츠", "url": "https://youtube.com/shorts/in9jNq5RYYU"}]
   },
   "intent": {
     "text": "정립된 디펜스 장르의 설계를 배워 보려고 만든 학습용 프로젝트입니다.",

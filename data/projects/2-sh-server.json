@@ -38,8 +38,8 @@
   ],
   "links": {
     "github": "https://github.com/KooHoo-Dev/3rd-TeamProject-SH-Server",
-    "video": "",
-    "extra": []
+    "video": "https://youtu.be/qa76D4hZvSs",
+    "extra": [{"label": "숏츠", "url": "https://youtube.com/shorts/Kq8cJ30VOf0"}]
   },
   "intent": {
     "text": "랜덤 요소, 시간, 현재 턴은 모든 클라이언트가 똑같이 봐야 하는 동기화 요소이면서, 서버가 권위를 가져야 하는 요소라고 판단해 서버에서 맡기로 했습니다.",

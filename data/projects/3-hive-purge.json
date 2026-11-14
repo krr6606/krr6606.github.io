@@ -38,8 +38,8 @@
   ],
   "links": {
     "github": "https://github.com/KooHoo-Dev/3rd_3D_1-3D-Project-team_even",
-    "video": "",
-    "extra": []
+    "video": "https://youtu.be/h8nFAuI8KAY",
+    "extra": [{"label": "숏츠", "url": "https://youtube.com/shorts/cJZfjStR3s0"}]
   },
   "intent": {
     "text": "IK와 애니메이션은 제가 약한 분야라, 테스트 과정을 코드로 자동화해 데이터를 뽑고 그 데이터로 원인을 좁히는 방식으로 바꿨습니다.",

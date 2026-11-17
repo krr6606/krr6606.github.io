@@ -6,6 +6,12 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "4600"],
       "port": 4600
+    },
+    {
+      "name": "portfolio-edit",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["editor/server.py", "4601"],
+      "port": 4601
     }
   ]
 }

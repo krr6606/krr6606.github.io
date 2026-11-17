@@ -1,0 +1,102 @@
+/* 편집 도구 모양 — 편집 서버(editor/server.py)로 열었을 때만 실립니다. 배포된 페이지·인쇄(PDF)에는 나오지 않습니다. */
+.pfe, .pfe * { box-sizing: border-box; }
+.pfe { --e-bg: #1B1C21; --e-bg2: #25262D; --e-line: #3A3B45; --e-ink: #F1F1F4; --e-sub: #A9ABB6; --e-acc: #5B9BFF; --e-ok: #46C58A; --e-bad: #FF7A7A;
+  font: 400 13.5px/1.5 'Pretendard', system-ui, -apple-system, 'Malgun Gothic', sans-serif; color: var(--e-ink); letter-spacing: 0; text-align: left; }
+@media print { .pfe { display: none !important; } }
+
+.pfe button, .pfe input, .pfe select, .pfe textarea { font: inherit; color: var(--e-ink); letter-spacing: 0; margin: 0; }
+.pfe button { cursor: pointer; background: var(--e-bg2); border: 1px solid var(--e-line); border-radius: 8px; padding: 6px 11px; line-height: 1.3; white-space: nowrap; }
+.pfe button:hover { border-color: var(--e-acc); }
+.pfe button:disabled { opacity: .45; cursor: default; }
+.pfe button.pfe-primary { background: var(--e-acc); border-color: var(--e-acc); color: #0B1220; font-weight: 700; }
+.pfe button.pfe-mini { padding: 2px 7px; border-radius: 6px; font-size: 12.5px; }
+.pfe button.pfe-danger:hover { border-color: var(--e-bad); color: var(--e-bad); }
+.pfe input[type=text], .pfe input[type=search], .pfe input[type=number], .pfe select, .pfe textarea {
+  width: 100%; background: #121317; border: 1px solid var(--e-line); border-radius: 7px; padding: 6px 9px; outline: none; }
+.pfe textarea { resize: vertical; min-height: 58px; line-height: 1.5; }
+.pfe input:focus, .pfe select:focus, .pfe textarea:focus { border-color: var(--e-acc); }
+.pfe input[type=color] { width: 34px; height: 30px; padding: 0; border: 1px solid var(--e-line); border-radius: 7px; background: none; flex: none; cursor: pointer; }
+.pfe a { color: var(--e-acc); text-decoration: underline; cursor: pointer; }
+.pfe small, .pfe .pfe-hint { display: block; color: var(--e-sub); font-size: 12px; line-height: 1.45; }
+.pfe pre { white-space: pre-wrap; word-break: break-word; background: #121317; border: 1px solid var(--e-line); border-radius: 7px; padding: 8px; margin: 6px 0; font: 12px/1.5 'D2Coding', Consolas, monospace; max-height: 220px; overflow: auto; }
+
+/* 오른쪽 가장자리 단추 */
+.pfe-fab { position: fixed; right: 0; top: 38%; z-index: 2147482000; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+.pfe-fab button { border-radius: 10px 0 0 10px; border-right: 0; padding: 9px 12px; background: var(--e-bg); box-shadow: 0 6px 20px rgb(0 0 0 / .35); font-weight: 700; }
+.pfe-fab button.pfe-primary { background: var(--e-acc); }
+.pfe-open .pfe-fab { display: none; }
+
+/* 편집 창 */
+.pfe-panel { position: fixed; right: 0; top: 0; bottom: 0; width: min(420px, 100vw); z-index: 2147482001; display: none; flex-direction: column;
+  background: var(--e-bg); border-left: 1px solid var(--e-line); box-shadow: -12px 0 40px rgb(0 0 0 / .35); }
+.pfe-open .pfe-panel { display: flex; }
+.pfe-head { display: flex; align-items: center; gap: 8px; padding: 10px 12px 0; }
+.pfe-head b { font-size: 15px; flex: 1; }
+.pfe-tabs { display: flex; gap: 2px; padding: 8px 12px 0; border-bottom: 1px solid var(--e-line); }
+.pfe-tabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; color: var(--e-sub); padding: 7px 10px; font-weight: 600; }
+.pfe-tabs button[aria-selected=true] { color: var(--e-ink); border-bottom-color: var(--e-acc); }
+.pfe-body { flex: 1; overflow: auto; padding: 14px 12px 20px; overscroll-behavior: contain; }
+.pfe-foot { border-top: 1px solid var(--e-line); padding: 9px 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--e-sub); font-size: 12.5px; }
+.pfe-flash { margin: 0 0 12px; padding: 8px 10px; border-radius: 8px; background: #17382A; border: 1px solid #2B6B4D; }
+.pfe-flash.pfe-bad { background: #3B1D1F; border-color: #7C3438; }
+.pfe-row { display: block; margin: 0 0 12px; }
+.pfe-l { display: block; font-weight: 700; margin: 0 0 4px; font-size: 12.5px; color: var(--e-sub); }
+.pfe-h { font-weight: 800; font-size: 13.5px; margin: 18px 0 8px; padding-top: 12px; border-top: 1px solid var(--e-line); }
+.pfe-h:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.pfe-line { display: flex; gap: 6px; align-items: center; }
+.pfe-line > .pfe-grow { flex: 1; min-width: 0; }
+.pfe-acts { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 0; }
+.pfe-card { border: 1px solid var(--e-line); border-radius: 9px; padding: 8px; margin: 0 0 8px; background: var(--e-bg2); }
+.pfe-card .pfe-line + * { margin-top: 6px; }
+.pfe-tag { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 1px 7px; border-radius: 99px; background: #33384A; color: #C9D4FF; white-space: nowrap; }
+.pfe-key { font: 11.5px/1.4 Consolas, monospace; color: var(--e-sub); word-break: break-all; }
+.pfe-ell { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pfe-thumb { width: 54px; height: 38px; object-fit: cover; border-radius: 5px; background: #000; flex: none; }
+.pfe-num { width: 64px !important; flex: none; }
+.pfe-order { list-style: none; margin: 0; padding: 0; }
+.pfe-order li { display: flex; gap: 6px; align-items: center; padding: 5px 8px; border: 1px solid var(--e-line); border-radius: 8px; margin-bottom: 5px; background: var(--e-bg2); }
+.pfe-order li span { flex: 1; min-width: 0; }
+
+/* 화면에서 글 고르기 */
+html.pfe-picking, html.pfe-picking * { cursor: crosshair !important; }
+.pfe-pick-hover { outline: 2px solid #5B9BFF !important; outline-offset: 2px; }
+.pfe-toast { position: fixed; left: 50%; bottom: 64px; transform: translateX(-50%); z-index: 2147482002; max-width: min(560px, 90vw); padding: 10px 14px; border-radius: 10px;
+  background: #1B1C21; border: 1px solid #3A3B45; box-shadow: 0 10px 30px rgb(0 0 0 / .4); }
+
+/* 상세 문서 미리보기(편집 화면 오른쪽 틀 안) */
+html.pfe-frame #doc > * { cursor: text; }
+html.pfe-frame #doc > *:hover { outline: 1px dashed rgb(91 155 255 / .7); outline-offset: 4px; }
+html.pfe-frame #doc > .pfe-cur { outline: 2px solid #5B9BFF; outline-offset: 4px; }
+html.pfe-frame .doc-fab { display: none !important; }
+
+/* ── 기술 문서 편집 화면(editor/doc-edit.html) ── */
+body.pfe-shell { margin: 0; height: 100vh; display: flex; flex-direction: column; background: #1B1C21; overflow: hidden; }
+.pfe-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 7px 10px; border-bottom: 1px solid var(--e-line); background: var(--e-bg); }
+.pfe-bar .pfe-sp { flex: 1; }
+.pfe-bar .pfe-sep { width: 1px; height: 20px; background: var(--e-line); margin: 0 3px; }
+.pfe-bar select { width: auto; max-width: 220px; }
+.pfe-status { font-size: 12.5px; color: var(--e-sub); min-width: 0; }
+.pfe-status.pfe-dirty { color: #FFC857; font-weight: 700; }
+.pfe-status.pfe-bad { color: var(--e-bad); font-weight: 700; }
+.pfe-split { flex: 1; min-height: 0; display: flex; --w: 46%; }
+.pfe-src { width: var(--w); min-width: 240px; display: flex; flex-direction: column; min-height: 0; }
+.pfe-src .CodeMirror { flex: 1; height: auto; min-height: 0; font: 14px/1.65 'D2Coding', Consolas, 'Malgun Gothic', monospace; background: #15161A; color: #E6E6EA; }
+.pfe-src .CodeMirror-gutters { background: #15161A; border-right: 1px solid #2A2B33; }
+.pfe-src .CodeMirror-linenumber { color: #5F616C; }
+.pfe-src .CodeMirror-cursor { border-left-color: #fff; }
+.pfe-src .CodeMirror-selected { background: #2F4A7A !important; }
+.pfe-src .cm-header { color: #8FB8FF; font-weight: 700; } .pfe-src .cm-quote { color: #9BC49B; } .pfe-src .cm-link, .pfe-src .cm-url { color: #7FC4D8; }
+.pfe-src .cm-comment { color: #D7A76B; } .pfe-src .cm-strong { color: #fff; font-weight: 700; } .pfe-src .cm-variable-2 { color: #D6D7DE; } .pfe-src .cm-em { font-style: italic; }
+.pfe-src .pfe-hit { background: rgb(91 155 255 / .16); }
+.pfe-src > textarea { flex: 1; resize: none; border: 0; border-radius: 0; font: 14px/1.65 'D2Coding', Consolas, monospace; padding: 12px; min-height: 0; }
+.pfe-divider { width: 7px; cursor: col-resize; background: var(--e-line); flex: none; }
+.pfe-divider:hover, .pfe-dragging .pfe-divider { background: var(--e-acc); }
+.pfe-view { flex: 1; min-width: 200px; position: relative; background: #fff; }
+.pfe-view iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.pfe-dragging iframe { pointer-events: none; }
+.pfe-note { padding: 6px 10px; font-size: 12.5px; color: var(--e-sub); border-top: 1px solid var(--e-line); background: var(--e-bg); }
+dialog.pfe-dlg { width: min(720px, 92vw); max-height: 84vh; border: 1px solid #3A3B45; border-radius: 12px; background: #1B1C21; color: #F1F1F4; padding: 14px; }
+dialog.pfe-dlg::backdrop { background: rgb(0 0 0 / .5); }
+.pfe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 8px; margin-top: 10px; }
+.pfe-grid button { display: flex; flex-direction: column; gap: 4px; padding: 6px; white-space: normal; word-break: break-all; font-size: 11.5px; text-align: left; }
+.pfe-grid img, .pfe-grid video { width: 100%; height: 84px; object-fit: contain; background: #000; border-radius: 5px; }

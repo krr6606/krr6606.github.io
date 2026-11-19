@@ -9,7 +9,7 @@ disable-model-invocation: true
 
 디자인 요청: `$ARGUMENTS` (비어 있으면 "취업용답게 깔끔하고 절제된, 템플릿 같지 않은 디자인")
 
-고정 렌더러(포트폴리오 문서 `index.html`)와 **같은 데이터**로, 겉모습만 새로 그린 페이지를 `custom/index.html`에 만듭니다.
+고정 렌더러(포트폴리오 페이지 `index.html`)와 **같은 데이터**로, 겉모습만 새로 그린 페이지를 `custom/index.html`에 만듭니다.
 고정 렌더러 파일(`index.html`·`project.html`·`doc.html`·`assets/`)은 **수정하지 않습니다.**
 
 ## 0. 준비
@@ -29,7 +29,7 @@ disable-model-invocation: true
   → 다음에 `/portfolio-build`만 다시 하면 이 페이지도 자동으로 최신이 됩니다.
 - 내용은 데이터에 있는 것만. 문구를 새로 지어내지 않습니다 (섹션 제목·버튼 문구 같은 UI 텍스트는 예외).
   UI 텍스트는 문구 표 `theme/strings.tsv`를 따릅니다: 맨 끝 "내 문구" 칸이 있으면 그 문구, 비어 있으면 기본 문구(`assets/strings.js`의 같은 키). 표에 없는 자리만 새로 정합니다.
-- 프로젝트 페이지는 새로 만들지 않고 `format/05` 규칙 3대로 링크합니다: 발표 덱 `../project.html?p=<id>`, 상세 기술문서 `../doc.html?p=<id>`.
+- 프로젝트 페이지는 새로 만들지 않고 `format/05` 규칙 3대로 링크합니다: 슬라이드 `../project.html?p=<id>`, 프로젝트 상세 문서 `../doc.html?p=<id>`.
 - 이미지 경로: `../src/<id>/<cover 또는 screenshots[].src>` (상대경로).
 - 강조색은 `settings.accent`를 기본으로 하되, 디자인 요청에 다른 색이 있으면 그 색.
 - 반응형(모바일 375px에서 가로 스크롤 없음), 3색 이내, 여백·타이포그래피 중심.
@@ -37,7 +37,7 @@ disable-model-invocation: true
 
 ### 1-1. 배치 레퍼런스(`theme/layout.json`)가 있을 때
 
-- **절과 순서는 포트폴리오 문서와 같습니다**: 머리(`cover`) → 자기소개(`intro`) → 기술 스택(`stack`) → 프로젝트마다 [프로젝트 소개(`project`) → 기능 소개(`features`)] → 한눈에 보기(`glance`) → 연락처(`contact`).
+- **절과 순서는 포트폴리오 페이지와 같습니다**: 머리(`cover`) → 자기소개(`intro`) → 기술 스택(`stack`) → 프로젝트마다 [프로젝트 소개(`project`) → 기능 소개(`features`)] → 한눈에 보기(`glance`) → 연락처(`contact`).
   `layout.json`은 레퍼런스의 띠 순서가 아니라 **절마다 빌려 올 배치**입니다.
 - `sections`에 있는 절은 그 배치로 그립니다(`format/04`의 패턴 고르기보다 먼저):
   - `layout`: `stack` 한 단 · `split` 2단 · `columns` 3단 이상 · `grid` 카드 격자(`cols`열) · `rows` 줄마다 같은 비율로 나뉜 목록. `ratio`는 넓은 화면의 폭 비율(%).

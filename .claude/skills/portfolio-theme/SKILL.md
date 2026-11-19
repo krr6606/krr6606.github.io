@@ -1,6 +1,6 @@
 ---
 name: portfolio-theme
-description: 수강생이 첨부한 웹페이지 스크린샷(또는 사이트 주소)에서 색·모양·영문 글꼴·효과를 정해진 규칙으로 뽑아 theme/theme.css 한 파일에 쓰고, 포트폴리오 문서·발표 덱·상세 문서 세 페이지에 함께 입힌다. 사용자가 이미지·사이트를 보여 주며 "이런 느낌으로", "이 사이트 테마·색으로 바꿔줘", "밝은/어두운 테마로", "버튼 덜 둥글게·광채 빼 줘"처럼 페이지의 색·스타일·테마를 바꿔 달라고 하거나 /portfolio-theme를 입력할 때 사용. 다른 페이지의 배치를 따라 하는 요청은 /portfolio-layout(→ /portfolio-custom), 배치를 새로 그리는 요청은 /portfolio-custom.
+description: 수강생이 첨부한 웹페이지 스크린샷(또는 사이트 주소)에서 색·모양·영문 글꼴·효과를 정해진 규칙으로 뽑아 theme/theme.css 한 파일에 쓰고, 포트폴리오 페이지·슬라이드·상세 문서 세 페이지에 함께 입힌다. 사용자가 이미지·사이트를 보여 주며 "이런 느낌으로", "이 사이트 테마·색으로 바꿔줘", "밝은/어두운 테마로", "버튼 덜 둥글게·광채 빼 줘"처럼 페이지의 색·스타일·테마를 바꿔 달라고 하거나 /portfolio-theme를 입력할 때 사용. 다른 페이지의 배치를 따라 하는 요청은 /portfolio-layout(→ /portfolio-custom), 배치를 새로 그리는 요청은 /portfolio-custom.
 argument-hint: "[되돌리기 | 덧붙일 요청 — 예: 강조색은 내 색 유지, 광채는 약하게]"
 ---
 
@@ -9,14 +9,14 @@ argument-hint: "[되돌리기 | 덧붙일 요청 — 예: 강조색은 내 색 �
 인자: `$ARGUMENTS`
 
 수강생이 보여 준 화면에서 **색·모양·영문 글꼴·효과**를 [rules.md](rules.md)의 규칙으로 뽑아 **`theme/theme.css` 한 파일**에 씁니다.
-세 렌더러가 이 파일을 마지막에 싣기 때문에 포트폴리오 문서·발표 덱·상세 문서가 함께 바뀝니다.
+세 렌더러가 이 파일을 마지막에 싣기 때문에 포트폴리오 페이지·슬라이드·상세 문서가 함께 바뀝니다.
 
 **쓰는 파일은 `theme/theme.css` 하나뿐입니다.** 렌더러(`index.html`·`project.html`·`doc.html`·`assets/`)·`src/`·`profile.md`·`data/`는 고치지 않습니다.
 렌더러는 `/portfolio-update`가 템플릿 것으로 바꾸기 때문에 거기에 쓴 테마는 업데이트 때 사라지지만, `theme/theme.css`는 업데이트가 건드리지 않습니다.
 
 ## 0. 되돌리기
 
-`$ARGUMENTS`가 `되돌리기`면 `theme/theme.css`를 [theme-default.css](theme-default.css) 내용으로 바꾸고(Write), §4-2(포트폴리오 문서)만 확인한 뒤
+`$ARGUMENTS`가 `되돌리기`면 `theme/theme.css`를 [theme-default.css](theme-default.css) 내용으로 바꾸고(Write), §4-2(포트폴리오 페이지)만 확인한 뒤
 "기본 테마(어두운 바탕 · profile.md 강조색)로 돌아갔습니다"라고 알리고 끝냅니다.
 
 ## 1. 입력 확인
@@ -36,7 +36,7 @@ argument-hint: "[되돌리기 | 덧붙일 요청 — 예: 강조색은 내 색 �
    대화가 "버튼 덜 둥글게"처럼 **지금 테마를 조금 고치는 요청**이면 §3 대신 rules.md §5의 손잡이 줄만 Edit로 고치고 §3-4·§4로 갑니다.
 4. `profile.md`의 강조색을 읽어 둡니다(보고에서 비교).
 5. `data/portfolio.json`이 없으면 확인(§4)을 할 수 없습니다. 테마는 쓰되 보고에 "`/portfolio-build` 뒤 미리보기에서 확인해 주세요"라고 적습니다.
-6. **기본 상태 기록**: 미리보기를 띄워(§4-1) 발표 덱마다 `PFScene.report().audit` 개수를 적어 둡니다. 테마를 입힌 뒤 늘어난 것만 테마 탓으로 봅니다.
+6. **기본 상태 기록**: 미리보기를 띄워(§4-1) 프로젝트마다 슬라이드(`project.html?p=<id>`)의 `PFScene.report().audit` 개수를 적어 둡니다. 테마를 입힌 뒤 늘어난 것만 테마 탓으로 봅니다.
 
 ## 3. 뽑기 → 쓰기
 
@@ -60,22 +60,22 @@ argument-hint: "[되돌리기 | 덧붙일 요청 — 예: 강조색은 내 색 �
    - 브라우저 화면이 숨겨져 있으면 폭이 0으로 재어집니다 → 화면 크기를 1440×900으로 지정한 뒤 잽니다(끝나면 되돌림).
      스크린샷이 시간 초과·잘림으로 안 되면 headless Chrome으로 찍습니다: `chrome --headless=new --hide-scrollbars --window-size=1440,900 --virtual-time-budget=20000 --screenshot=<파일.png> <주소>`.
    - 브라우저 도구가 없으면 `CLAUDE.md` 「미리보기」의 headless Chrome 방법(`?pf-audit=1`)으로 아래 `report()`를 읽고, 스크린샷도 위 headless 명령으로 찍습니다.
-2. **포트폴리오 문서**(`/`): `await PFPage.whenReady()` 뒤 `PFPage.report()` — `overflowX` 0 · `images.broken` 없음 · `errors` 없음.
+2. **포트폴리오 페이지**(`/`): `await PFPage.whenReady()` 뒤 `PFPage.report()` — `overflowX` 0 · `images.broken` 없음 · `errors` 없음.
    첫 화면과 프로젝트 소개·기능 소개를 스크린샷으로 보고, **레퍼런스와 나란히** rules.md §2의 인상(바탕·카드·글자 단계·강조·버튼 모양·라벨 글꼴·광채)이 살아 있는지 봅니다.
    다르면 손잡이를 고쳐 §3-4부터 다시.
-3. **발표 덱**(`data/projects/*.json`마다 `project.html?p=<id>`): `await PFScene.whenReady()` 뒤 `PFScene.report()` — `ready`가 `yes`, `audit`이 §2-6의 기록보다 늘지 않음.
+3. **슬라이드**(`data/projects/*.json`마다 `project.html?p=<id>`): `await PFScene.whenReady()` 뒤 `PFScene.report()` — `ready`가 `yes`, `audit`이 §2-6의 기록보다 늘지 않음.
    - 늘었다면 대부분 영문 라벨 글꼴이 넓어 윗줄이 넘친 것입니다 → rules.md §2-8 표에서 같은 인상의 **폭이 더 좁은** 글꼴로 바꾸고 다시. 그래도 남으면 Montserrat로.
    - `document.documentElement.dataset.pfFont`가 `fallback`이면 글꼴을 받지 못한 것 → `@import` 주소를 확인.
    - 표지·장 표지(광채)·코드나 표가 있는 장면을 한 장씩 스크린샷으로 봅니다.
 4. **상세 문서**(`doc.html?p=<id>` 하나): 콘솔 오류가 없고 본문·코드 판·표·다이어그램 판이 읽히는지 스크린샷으로 봅니다.
-5. **좁은 화면**: 브라우저 화면 크기를 375px로 흉내 내어(모바일) 포트폴리오 문서 `PFPage.report().overflowX`가 0인지 봅니다. 끝나면 화면 크기를 되돌립니다.
+5. **좁은 화면**: 브라우저 화면 크기를 375px로 흉내 내어(모바일) 포트폴리오 페이지 `PFPage.report().overflowX`가 0인지 봅니다. 끝나면 화면 크기를 되돌립니다.
    headless 스크린샷을 `--window-size=375,…`로 찍으면 페이지가 더 넓게 그려진 뒤 잘려 넘친 것처럼 보이므로, 좁은 화면 판정에는 쓰지 않습니다.
-6. 인쇄는 확인하지 않아도 됩니다 — 포트폴리오 문서(제출 PDF)·상세 문서는 테마와 상관없이 흰 종이로 찍힙니다(강조색만 테마를 따름). 발표 덱 PDF는 화면 색 그대로입니다.
+6. 인쇄는 확인하지 않아도 됩니다 — 포트폴리오 페이지(제출 PDF)·상세 문서는 테마와 상관없이 흰 종이로 찍힙니다(강조색만 테마를 따름). 슬라이드 PDF는 화면 색 그대로입니다.
 
 ## 5. 보고
 
 ```
-테마를 theme/theme.css에 썼습니다. 포트폴리오 문서·발표 덱·상세 문서가 함께 바뀝니다.
+테마를 theme/theme.css에 썼습니다. 포트폴리오 페이지·슬라이드·상세 문서가 함께 바뀝니다.
 
 | | 값 | 화면에서 본 것 |
 |---|---|---|
@@ -90,7 +90,7 @@ argument-hint: "[되돌리기 | 덧붙일 요청 — 예: 강조색은 내 색 �
 - 옮기지 않은 것: 로고·문구·그림, 배치(…가 화면에 있었지만 배치는 그대로), 한글 글꼴
 - 일부러 다르게 둔 것: 인쇄(제출 PDF)는 흰 종이, 다이어그램은 밝은 판, 코드는 어두운 판
 - 참고: (있을 때만) 레퍼런스와 일부러·어쩔 수 없이 달라진 점 — 예: 레퍼런스는 작은 라벨이 고딕인데 큰 제목 글꼴(세리프)을 따라 라벨도 세리프
-- 점검: 대비 통과([참고] …) · 포트폴리오 문서 넘침 0 · 발표 덱 N개 빨간 숫자 늘어남 0(원래 있던 것 n개는 /portfolio-build 리포트에서)
+- 점검: 대비 통과([참고] …) · 포트폴리오 페이지 넘침 0 · 슬라이드 N개 빨간 숫자 늘어남 0(원래 있던 것 n개는 /portfolio-build 리포트에서)
 - 더 고치려면 "버튼을 덜 둥글게", "광채 빼 줘"처럼 말하거나 theme/theme.css 값을 직접 고치세요(저장 → 새로고침)
 - 기본 테마로: /portfolio-theme 되돌리기
 - 배포: theme/theme.css를 커밋·push하면 배포된 페이지에도 적용됩니다
@@ -99,5 +99,5 @@ argument-hint: "[되돌리기 | 덧붙일 요청 — 예: 강조색은 내 색 �
 ## 지키는 것
 
 - 레퍼런스의 **로고·회사/서비스 이름·문구·그림·아이콘을 옮기지 않습니다**(테마 파일 주석 포함). 색·모양·글꼴 인상만 가져옵니다. 남의 브랜드처럼 보이는 포트폴리오가 되면 안 됩니다.
-- `theme/theme.css` 말고는 고치지 않습니다. 배치·글자 크기·간격을 바꾸는 요청은 테마로 하지 않고 이유(발표 덱 측정)를 설명한 뒤, 따라 할 레퍼런스 배치가 있으면 `/portfolio-layout`(→ `/portfolio-custom`), 없으면 `/portfolio-custom`을 안내합니다.
+- `theme/theme.css` 말고는 고치지 않습니다. 배치·글자 크기·간격을 바꾸는 요청은 테마로 하지 않고 이유(슬라이드 측정)를 설명한 뒤, 따라 할 레퍼런스 배치가 있으면 `/portfolio-layout`(→ `/portfolio-custom`), 없으면 `/portfolio-custom`을 안내합니다.
 - 커밋·push는 하지 않습니다(수강생이 확인한 뒤 직접).

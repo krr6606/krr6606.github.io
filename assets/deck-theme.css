@@ -1,7 +1,7 @@
 /* ════════════════════════════════════════════════════════════════════════════
-   덱 장면 테마 (assets/deck-theme.css) — 발표 덱(project.html)의 장면 모양. 인쇄 규칙 없음(인쇄는 scene-kit.css만).
-   포트폴리오 문서(index.html)는 덱이 아니라 흐르는 페이지라 이 파일을 싣지 않습니다(assets/portfolio.css).
-   출처: spikes/deck/pages/deck-theme.css(가이드 발표 덱의 글자 단계·모티프). 바꾼 곳: 인디고 고정색 → profile.md 강조색에서 파생한 토큰
+   슬라이드 장면 테마 (assets/deck-theme.css) — 슬라이드(project.html)의 장면 모양. 인쇄 규칙 없음(인쇄는 scene-kit.css만).
+   포트폴리오 페이지(index.html)는 슬라이드가 아니라 흐르는 페이지라 이 파일을 싣지 않습니다(assets/portfolio.css).
+   출처: spikes/deck/pages/deck-theme.css(가이드 슬라이드의 글자 단계·모티프). 바꾼 곳: 인디고 고정색 → profile.md 강조색에서 파생한 토큰
    주석의 설계 근거(docs/design/…의 portfolio-structure·deck-vs-scroll·01 §, R0, 결정 F·Q·# 번호)와 원본 시안(spikes/…)은 템플릿 유지관리용 maintainer 브랜치에 있습니다. 이 레포에 없어도 정상입니다.
    (common.js PF.applyTheme: 글자용 밝은 강조색은 어두운 바탕 7:1 이상, 흰 글자를 올리는 칠은 4.5:1 이상). 아래 값은 기본 강조색 #2F6FEB의 계산값.
    어두운 테마: 검은 장면(--bg) · 한 단 밝은 카드(--card) · 흰 글자 · 강조색 → 보랏빛 그러데이션(--grad 글자, --glow 번호·자리 표시, 장 표지·맺음의 광채).
@@ -114,7 +114,7 @@ table.kv td.role { color: var(--accent-ink); font-weight: 800; }
 .toprow { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
 .toprow .rl { font-size: 15px; font-weight: 700; color: var(--muted); }
 
-/* ── 목차(발표 덱 P2) ── */
+/* ── 목차(슬라이드 P2) ── */
 .t-P2 .pf-body { display: flex; flex-direction: column; }
 .toc-top { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; }
 .toc-h { font-family: var(--display); font-size: 56px; font-weight: 800; letter-spacing: -.01em; line-height: 1; color: var(--ink); }
@@ -174,7 +174,7 @@ table.kv td.role { color: var(--accent-ink); font-weight: 800; }
 .pf-sizing .pf-fill { flex: 1 1 auto; min-height: 0; margin-block: 0; display: flex; flex-direction: column; }
 .pf-sizing .pf-fill > * { flex: 1 1 auto; min-height: 0; }
 
-/* ── 프로젝트 소개(발표 덱 표지, 결정 G4) ── */
+/* ── 프로젝트 소개(슬라이드 표지, 결정 G4) ── */
 .t-P1 .pf-body { display: flex; flex-direction: column; }
 .pi-main { flex: 1; display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); grid-template-rows: minmax(0, 100%); gap: 40px; margin-top: 22px; min-height: 0; }
 .t-P1.portrait .pi-main { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
@@ -211,7 +211,7 @@ table.kv td.role { color: var(--accent-ink); font-weight: 800; }
 .pi-tight .lcard a { padding: 6px 28px 7px 12px; }
 .pi-tight .pi-left, .pi-tight .pi-right { gap: 12px; }
 
-/* ── 화면 카드(발표 덱 screens 장면의 열 하나): 화면 + FEATURE 0n + 제목 + 설명 ── */
+/* ── 화면 카드(슬라이드 screens 장면의 열 하나): 화면 + FEATURE 0n + 제목 + 설명 ── */
 .fe-card { display: flex; flex-direction: column; gap: 10px; min-width: 0; min-height: 0; }
 .pf-sizing .fe-card .vis { flex: 1 1 auto; }
 .fe-card .vis { min-height: 0; }
@@ -219,7 +219,7 @@ table.kv td.role { color: var(--accent-ink); font-weight: 800; }
 .fe-card h3 { font-size: 19px; font-weight: 800; line-height: 1.35; letter-spacing: -.01em; color: var(--ink); }
 .fe-card p { font-size: 15px; line-height: 1.6; color: var(--ink); }
 
-/* ── 발표 덱 장면(deck.slides[].layout) ── */
+/* ── 슬라이드 장면(deck.slides[].layout) ── */
 .dk { display: grid; gap: 28px; min-width: 0; }
 .dk-side { grid-template-columns: minmax(0, var(--vw, 1.4fr)) minmax(0, 1fr); align-items: center; }
 .dk-side.flip { grid-template-columns: minmax(0, 1fr) minmax(0, var(--vw, 1.4fr)); }
@@ -277,7 +277,7 @@ table.md-table img { max-height: 120px; max-width: 100%; height: auto; }   /* wi
 .pf-vband span { display: block; margin-top: 3px; font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere; }
 .pf-autoband { display: inline-block; margin-left: 12px; padding: 1px 9px; border-radius: var(--pill); background: #2E2410; color: #FCD679; font-size: 12px; font-weight: 700; }
 
-/* ── 장 표지(발표 덱) ── */
+/* ── 장 표지(슬라이드) ── */
 /* 광채: 장면 배경에 그러데이션만(그림 파일 없음) */
 .pf-scene.t-CH, .pf-scene.t-EN { background: radial-gradient(70% 95% at 100% 100%, color-mix(in srgb, var(--accent-2) calc(42% * var(--fx)), transparent), transparent 68%),
                                              radial-gradient(45% 70% at 72% 112%, color-mix(in srgb, var(--accent-3) calc(30% * var(--fx)), transparent), transparent 70%),
@@ -294,7 +294,7 @@ table.md-table img { max-height: 120px; max-width: 100%; height: auto; }   /* wi
 .ch-list.roomy .toc-list .pg { padding-top: 8px; }
 .ch-list.roomy .toc-list .ld { display: block; margin-top: 6px; font-size: 15px; line-height: 1.55; color: var(--ink); opacity: .82; }
 
-/* ── 맺음(발표 덱) ── */
+/* ── 맺음(슬라이드) ── */
 .t-EN .pf-body { display: flex; flex-direction: column; }
 .en-mid { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; min-height: 0; }
 .en-t { font-size: 46px; font-weight: 800; letter-spacing: -.03em; line-height: 1.15; color: var(--ink); }

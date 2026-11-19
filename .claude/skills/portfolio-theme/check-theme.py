@@ -53,7 +53,7 @@ def main(path):
     roots = re.findall(r':root\s*\{([^{}]*)\}', rest)
     leftover = re.sub(r':root\s*\{[^{}]*\}', '', rest).strip()
     if leftover:
-        errs.append(f'손잡이(:root의 --t-*)와 @import 말고 다른 규칙이 있습니다: "{leftover[:80]}…" — 페이지 구조를 바꾸는 규칙은 테마에 넣지 않습니다(발표 덱 배치 점검이 깨질 수 있음)')
+        errs.append(f'손잡이(:root의 --t-*)와 @import 말고 다른 규칙이 있습니다: "{leftover[:80]}…" — 페이지 구조를 바꾸는 규칙은 테마에 넣지 않습니다(슬라이드 배치 점검이 깨질 수 있음)')
     if len(roots) > 1:
         errs.append(':root 블록은 하나만 둡니다')
     body = roots[0] if roots else ''

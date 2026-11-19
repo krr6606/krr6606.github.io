@@ -3,7 +3,7 @@
 """장면 고치기 적용 스크립트 — /portfolio-edit·/portfolio-build가 실행합니다(수강생이 직접 실행하지 않아도 됩니다).
 
 src/<폴더>/deck-edits.json(장면 고치기 파일: 고정한 장면 pin + 숨긴 장면 hide)을
-data/projects/<폴더>.json의 발표 덱(deck)에 반영합니다. 형식과 규칙은 schema.md 「장면 고치기 파일」.
+data/projects/<폴더>.json의 슬라이드(deck)에 반영합니다. 형식과 규칙은 schema.md 「장면 고치기 파일」.
   - 빌드가 만든 장면 목록은 deck.base에 보관합니다 → 되돌리기·다시 적용해도 결과가 같습니다(멱등).
   - 글을 만들지 않습니다. 고친 장면의 원문 그대로(verbatim: true) 글 조각이 원문 그 절에 정말 있는지 검사만 합니다.
   - 원문 블록(그림·코드·표) 지문은 미리 대조해 [권장]으로 알리지만, 최종 판정은 미리보기 감사(visual-*)입니다.
@@ -75,7 +75,7 @@ def norm_src(s):                                                  # md-blocks.js
     return s[2:] if s.startswith('./') else s
 
 
-# ── 기술 문서 md: 제목·절 범위·원문 블록(marked 12 + md-blocks.js와 같은 판정을 목표로 한 근사) ──
+# ── 프로젝트 문서 md: 제목·절 범위·원문 블록(marked 12 + md-blocks.js와 같은 판정을 목표로 한 근사) ──
 FENCE_OPEN = re.compile(r'^ {0,3}(`{3,}|~{3,})(.*)$')
 ATX = re.compile(r'^ {0,3}(#{1,6})(?:[ \t]+(.*?))?(?:[ \t]+#+)?[ \t]*$')
 SETEXT = re.compile(r'^ {0,3}(=+|-+)[ \t]*$')
@@ -424,7 +424,7 @@ def validate(p, chapters, doc):
     if not key_ok(k):
         errs.append('key "%s"가 규칙(영문 소문자로 시작, 소문자·숫자·하이픈 2~32자, s-숫자 금지)에 맞지 않음' % k)
     if p.get('chapter') not in chapters:
-        errs.append('장 "%s"가 덱에 없음(%s)' % (p.get('chapter'), ', '.join(str(c) for c in chapters)))
+        errs.append('장 "%s"가 슬라이드에 없음(%s)' % (p.get('chapter'), ', '.join(str(c) for c in chapters)))
     lay = p.get('layout')
     if lay not in LAYOUTS:
         errs.append('layout "%s"는 %s 중 하나여야 함' % (lay, ' · '.join(LAYOUTS)))
@@ -604,7 +604,7 @@ def apply_edits(data, edits, doc, rep):
     for h in hides:
         t, how = find_target(h['key'], frm_of(h, '숨길 장면'), None)
         if t is None or how == 'conflict':
-            rep.add('권장', '숨길 장면 "%s"를 덱에서 찾지 못했습니다(다시 빌드로 key나 절 제목이 바뀌었나요?) → /portfolio-edit로 다시 숨기거나 되돌리세요' % h['key'])
+            rep.add('권장', '숨길 장면 "%s"를 슬라이드에서 찾지 못했습니다(다시 빌드로 key나 절 제목이 바뀌었나요?) → /portfolio-edit로 다시 숨기거나 되돌리세요' % h['key'])
             continue
         S.remove(t)
         removed.append(t)
@@ -622,11 +622,11 @@ def apply_edits(data, edits, doc, rep):
         frm = frm_of(p, '고친 장면')
         t, how = find_target(k, frm, p.get('sectionPath'))
         if how == 'conflict':
-            rep.add('권장', '고친 장면 "%s": 빌드 장면 "%s"는 지금 §%s를 다룹니다(원래 §%s). 기술 문서의 절 제목을 바꿨거나 빌드가 key를 다른 절에 썼습니다 → 고친 내용을 반영하지 않았습니다. /portfolio-edit로 다시 고치거나 되돌리세요'
+            rep.add('권장', '고친 장면 "%s": 빌드 장면 "%s"는 지금 §%s를 다룹니다(원래 §%s). 프로젝트 문서의 절 제목을 바꿨거나 빌드가 key를 다른 절에 썼습니다 → 고친 내용을 반영하지 않았습니다. /portfolio-edit로 다시 고치거나 되돌리세요'
                     % (k, k, (t.get('sectionPath') or [''])[-1], ((frm or {}).get('sectionPath') or p.get('sectionPath') or [''])[-1]))
             continue
         if t is None and frm:
-            rep.add('권장', '고친 장면 "%s"가 원래 장면(§%s)을 잃었습니다(기술 문서의 절 제목을 바꾸거나 절을 없앴나요?) → 고친 내용을 반영하지 않았습니다. /portfolio-edit로 다시 고치거나 되돌리세요'
+            rep.add('권장', '고친 장면 "%s"가 원래 장면(§%s)을 잃었습니다(프로젝트 문서의 절 제목을 바꾸거나 절을 없앴나요?) → 고친 내용을 반영하지 않았습니다. /portfolio-edit로 다시 고치거나 되돌리세요'
                     % (k, ' › '.join(frm.get('sectionPath') or [])))
             continue
         errs, warns, pieces, cross = validate(p, chapters, doc)
@@ -654,13 +654,13 @@ def apply_edits(data, edits, doc, rep):
         else:
             S.insert(end_of_chapter(out['chapter']), out)
         if any(s is not out and s.get('key') == k for s in S):
-            rep.add('필수', '고친 장면 "%s"의 key가 덱의 다른 장면과 겹칩니다 → 반영하지 않았습니다' % k)
+            rep.add('필수', '고친 장면 "%s"의 key가 슬라이드의 다른 장면과 겹칩니다 → 반영하지 않았습니다' % k)
             S.remove(out)
             continue
         if p.get('after') is not None:
             a = [s for s in S if s.get('key') == p['after'] and s is not out]
             if not a:
-                rep.add('권장', '고친 장면 "%s"의 after "%s"가 덱에 없습니다(숨겼거나 없어진 장면) → 순서를 옮기지 않았습니다' % (k, p['after']))
+                rep.add('권장', '고친 장면 "%s"의 after "%s"가 슬라이드에 없습니다(숨겼거나 없어진 장면) → 순서를 옮기지 않았습니다' % (k, p['after']))
             elif a[0].get('chapter') != out['chapter']:
                 rep.add('권장', '고친 장면 "%s"의 after "%s"가 다른 장에 있습니다 → 순서를 옮기지 않았습니다(장을 바꾸려면 chapter)' % (k, p['after']))
             else:
@@ -671,7 +671,7 @@ def apply_edits(data, edits, doc, rep):
         applied.append(out)
         if pieces or cross:
             parts = ['%s "%s"' % (nm, tx) for nm, tx in pieces] + cross
-            rep.review.append('[%s · 발표 덱 d-%s (§%s) · 고친 장면] %s' % (ptitle, k, (out.get('sectionPath') or [''])[-1], ' · '.join(parts)))
+            rep.review.append('[%s · 슬라이드 d-%s (§%s) · 고친 장면] %s' % (ptitle, k, (out.get('sectionPath') or [''])[-1], ' · '.join(parts)))
     # 중복 막기: 같은 절의 고친 장면이 그림을 모두 이미 보이는 빌드 장면은 뺌(합치기·나누기 뒤 다시 빌드해 장면이 다시 생긴 경우)
     shown = {}
     for s in applied:
@@ -683,7 +683,7 @@ def apply_edits(data, edits, doc, rep):
         if all(last_title(s) in shown.get(vsig(v, s.get('sectionPath')), ()) for v in s['visuals']):
             S.remove(s)
             rep.add('참고', '빌드 장면 "%s"의 그림이 모두 고친 장면에 이미 있어 뺐습니다(겹침 방지)' % s.get('key'))
-    # 장이 빈 경우 · 포트폴리오 문서 기능 소개의 [발표 덱에서 보기] 연결
+    # 장이 빈 경우 · 포트폴리오 페이지 기능 소개의 [슬라이드 열기] 연결
     left = {s.get('chapter') for s in S}
     gone = [c for c in chapters if c in {s.get('chapter') for s in base} and c not in left]
     for c in gone:
@@ -692,8 +692,8 @@ def apply_edits(data, edits, doc, rep):
         sec = hl.get('section')
         b = deck_scene_for(base, sec) if sec else None
         if b and not deck_scene_for(S, sec):
-            where = '그 장의 장 표지로' if b.get('chapter') in left else '장 표지도 사라져 발표 덱 표지로'
-            rep.add('권장', '포트폴리오 문서 기능 "%s"의 [발표 덱에서 보기]가 연결된 장면이 빠졌습니다 → %s 이어집니다' % (hl.get('title', sec), where))
+            where = '그 장의 장 표지로' if b.get('chapter') in left else '장 표지도 사라져 슬라이드 표지로'
+            rep.add('권장', '포트폴리오 페이지 기능 "%s"의 [슬라이드 열기]가 연결된 장면이 빠졌습니다 → %s 이어집니다' % (hl.get('title', sec), where))
     if applied or removed:
         rep.add('참고', '고친 장면 %d개 · 숨긴 장면 %d개를 반영했습니다' % (len(applied), len(removed)))
     n0, n1 = scene_count(chapters, base, data), scene_count(chapters, S, data)
@@ -724,13 +724,13 @@ def load_edits(pid, rep):
         return None, False
     e, err = load_json(ep, 'src/%s/%s' % (pid, EDITS))
     if err:
-        rep.add('필수', err + ' → 고친 내용을 반영하지 않았습니다(발표 덱은 마지막으로 반영한 상태 그대로)')
+        rep.add('필수', err + ' → 고친 내용을 반영하지 않았습니다(슬라이드는 마지막으로 반영한 상태 그대로)')
         return None, True
     if not isinstance(e, dict) or e.get('schemaVersion') != VERSION:
         rep.add('필수', 'src/%s/%s의 schemaVersion이 %s가 아닙니다(%r) → 반영하지 않았습니다' % (pid, EDITS, VERSION, e.get('schemaVersion') if isinstance(e, dict) else e))
         return None, True
     if e.get('portfolio') not in (None, {}, []):
-        rep.add('참고', 'portfolio(포트폴리오 문서 고치기)는 아직 지원하지 않아 무시했습니다')
+        rep.add('참고', 'portfolio(포트폴리오 페이지 고치기)는 아직 지원하지 않아 무시했습니다')
     return e, False
 
 
@@ -765,7 +765,7 @@ def _run_apply(pid, write, rep):
     deck = data.get('deck')
     if not (isinstance(data.get('schemaVersion'), int) and data['schemaVersion'] >= 2 and isinstance(deck, dict) and deck.get('slides')):
         if ep.exists():
-            rep.add('필수', '발표 덱 데이터(deck)가 없는 예전 데이터입니다 → 먼저 /portfolio-build를 실행해야 고친 장면을 반영할 수 있습니다')
+            rep.add('필수', '슬라이드 데이터(deck)가 없는 예전 데이터입니다 → 먼저 /portfolio-build를 실행해야 고친 장면을 반영할 수 있습니다')
         return
     edits, broken = load_edits(pid, rep)
     if broken:                                                     # 고치기 파일이 깨졌으면 data를 건드리지 않음(마지막 반영 상태 유지)
@@ -775,7 +775,7 @@ def _run_apply(pid, write, rep):
     if data.get('doc') and md.is_file():
         doc = Doc(md.read_bytes().decode('utf-8-sig', errors='replace'))
     elif edits and (edits.get('pin') or edits.get('hide')):
-        rep.add('필수', '기술 문서 src/%s/%s를 찾지 못해 고친 장면을 검사할 수 없습니다 → 반영하지 않았습니다(문서 이름을 바꿨다면 먼저 /portfolio-build)' % (pid, data.get('doc') or '?'))
+        rep.add('필수', '프로젝트 문서 src/%s/%s를 찾지 못해 고친 장면을 검사할 수 없습니다 → 반영하지 않았습니다(문서 이름을 바꿨다면 먼저 /portfolio-build)' % (pid, data.get('doc') or '?'))
         return
     slides, base = apply_edits(data, edits, doc, rep)
     new_deck = dict(deck)
@@ -794,9 +794,9 @@ def _run_apply(pid, write, rep):
     data['deck'] = new_deck
     if write:
         write_deck(dp, data, raw, bom)
-        rep.add('참고', 'data/projects/%s.json의 발표 덱을 갱신했습니다' % pid)
+        rep.add('참고', 'data/projects/%s.json의 슬라이드를 갱신했습니다' % pid)
     else:
-        rep.add('참고', '(check) 반영하면 발표 덱이 바뀝니다')
+        rep.add('참고', '(check) 반영하면 슬라이드가 바뀝니다')
 
 
 def all_ids():
@@ -882,7 +882,7 @@ def main():
         return 1
     data, cur, base, edits, ep = current(pid)
     if not cur:
-        print('발표 덱 데이터(deck)가 없습니다 → 먼저 /portfolio-build')
+        print('슬라이드 데이터(deck)가 없습니다 → 먼저 /portfolio-build')
         return 1
     if a.cmd == 'undo' and a.all:
         n = len(edits['pin']) + len(edits['hide'])
@@ -927,7 +927,7 @@ def main():
         if a.as_key:                                              # 나누기: 원래 장면도 고정(안 하면 겹침 막기가 원래 장면을 뺌) + 두 항목을 한 묶음으로
             nk = re.sub(r'^(?:#?s=)?d-', '', a.as_key.strip())
             if not key_ok(nk) or nk in known:
-                print('새 key "%s"를 쓸 수 없습니다(규칙 위반이거나 덱·고치기 파일·숨김 목록에 이미 있음)' % nk)
+                print('새 key "%s"를 쓸 수 없습니다(규칙 위반이거나 슬라이드·고치기 파일·숨김 목록에 이미 있음)' % nk)
                 return 1
             o = pin_of(key)
             if o is None:

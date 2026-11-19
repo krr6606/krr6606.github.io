@@ -1,7 +1,7 @@
-// 기술 문서 md 해석 공용 — doc.html(상세 기술문서) · project.html(발표 덱)이 common.js 다음에 싣습니다.
-//   하는 일: marked 12.0.2(gfm) → 비활성 <template> → 상대경로(그림·영상) → 제목 slug(PF.slugger) → 제목의 조상 목록 → 원문 블록 찾기
+// 프로젝트 문서 md 해석 공용 — doc.html(프로젝트 상세 문서) · project.html(슬라이드)가 common.js 다음에 싣습니다.
+//   하는 일: marked 12.0.2(gfm, PF.mdHtml — 한국어 굵은 글씨 보완 포함) → 비활성 <template> → 상대경로(그림·영상) → 제목 slug(PF.slugger) → 제목의 조상 목록 → 원문 블록 찾기
 //   <template>에 넣는 이유: 그 안의 내용은 비활성이라 문서 속 이미지(GIF 수십 MB)를 받지 않음(PF.headingsOf와 같은 방식)
-//   원문 블록 참조 규칙은 .claude/skills/portfolio-build/schema.md 「발표 덱」: 절 경로(sectionPath) → 그 절 범위(다음 제목 전까지) → kind별 n번째, 지문(fp) 대조
+//   원문 블록 참조 규칙은 .claude/skills/portfolio-build/schema.md 「슬라이드」: 절 경로(sectionPath) → 그 절 범위(다음 제목 전까지) → kind별 n번째, 지문(fp) 대조
 //   이 파일은 글을 만들지 않습니다. 원문 블록을 찾아 그대로 돌려줄 뿐입니다.
 (() => {
   const isRelative = (u) => u && !/^([a-z][a-z0-9+.-]*:|#|\/)/i.test(u);
@@ -12,7 +12,7 @@
     // CDN이 막혀 marked를 받지 못했으면 이유를 말하고 멈춤(부르는 쪽이 안내 화면으로 바꿈)
     if (!window.marked) throw new Error('Markdown 해석 라이브러리(marked)를 불러오지 못했습니다 — 네트워크에서 cdn.jsdelivr.net에 연결되는지 확인해 주세요');
     const tpl = document.createElement('template');
-    tpl.innerHTML = marked.parse(md, { gfm: true });
+    tpl.innerHTML = PF.mdHtml(md);
     const frag = tpl.content;
     frag.querySelectorAll('img[src], video[src], source[src]').forEach((el) => {
       const s = el.getAttribute('src');

@@ -1,4 +1,4 @@
-// 덱 장면 공통 — project.html(발표 덱)이 common.js 다음에 싣습니다. 출처: spikes/deck/pages/pf-common.js
+// 슬라이드 장면 공통 — project.html(슬라이드)가 common.js 다음에 싣습니다. 출처: spikes/deck/pages/pf-common.js
 //   장면 틀 scene()(제목 + 도입 1~2줄, 결정 G7), 측정 후 고르기 pack(), 넘침 처리 shrinkOrClip()(§4-3 원칙 5: 변형 → 축소 → 보이는 잘림 띠),
 //   글자 하한(결정 G5: 본문 14 · 코드 12 · 라벨 11px), 세로 가운데(.pf-fill, G8)·채움률, 시각 자료 맞추기(fitVisuals), 프로젝트 소개 장면, 글꼴·이미지 크기 대기
 //   주석의 설계 근거(docs/design/…의 portfolio-structure·deck-vs-scroll·01 §, R0, 결정 F·Q·# 번호)와 원본 시안(spikes/…)은 템플릿 유지관리용 maintainer 브랜치에 있습니다. 이 레포에 없어도 정상입니다.
@@ -163,7 +163,7 @@
     return s;
   }
 
-  // 참고 덱 모티프: 점 선(2px 선 + 14px 점)
+  // 참고 슬라이드 모티프: 점 선(2px 선 + 14px 점)
   const DOT = '<div class="dotrule" aria-hidden="true"><span class="ln"></span><span class="dot"></span></div>';
   const imgTag = (src, alt, d, cls = '') => `<img${cls ? ` class="${cls}"` : ''} src="${esc(src)}" alt="${esc(alt)}" loading="lazy" decoding="async"${d ? ` width="${d.w}" height="${d.h}"` : ''}>`;
 
@@ -390,9 +390,9 @@
     return s;
   }
 
-  // ── 프로젝트 소개 장면(발표 덱 표지, 결정 G4): 큰 대표 이미지 · 메타 격자 · 개발 의도 · 링크 카드 · 태그 ──
+  // ── 프로젝트 소개 장면(슬라이드 표지, 결정 G4): 큰 대표 이미지 · 메타 격자 · 개발 의도 · 링크 카드 · 태그 ──
   //   글: title · tagline · meta · team.role · intent · tags(data 그대로). 링크: [{ k, label, href, kind, visible }]
-  //   메타 이름(data의 meta[].label, 기술 문서의 말) → 영문 라벨 키
+  //   메타 이름(data의 meta[].label, 프로젝트 문서의 말) → 영문 라벨 키
   const META_EN = { '장르': 'en.meta-genre', '기간': 'en.meta-duration', '개발 기간': 'en.meta-duration', '인원': 'en.meta-team', '팀': 'en.meta-team', '팀 구성': 'en.meta-team',
                     '환경': 'en.meta-env', '개발 환경': 'en.meta-env', '엔진': 'en.meta-engine', '플랫폼': 'en.meta-platform' };
   const metaEn = (label) => { const k = META_EN[String(label || '').replace(/\s+/g, ' ').trim()]; return k ? PF.t(k) : ''; };
@@ -418,9 +418,9 @@
     return shrinkOrClip(make(true, true), window.PFScene.refUrl(id), stats);
   }
 
-  // 원문 절(section 글자) → 발표 덱 장면 id는 PF.deckSceneFor(common.js — 포트폴리오 문서의 기능 링크도 씀)
-  // 덱에 없는 장면 주소(#s=d-<key>·d-<key>-2·ch-<key>: 숨겼거나 다시 빌드로 없어짐) → 가장 가까운 장면(결정 G3 정신):
-  //   나뉜 장면의 앞 장면 → 같은 절의 남은 장면 → 그 장 표지 → ''(목차는 부르는 쪽이 정함). has(id) = 그 장면이 덱에 있는가
+  // 원문 절(section 글자) → 슬라이드 장면 id는 PF.deckSceneFor(common.js — 포트폴리오 페이지의 기능 링크도 씀)
+  // 슬라이드에 없는 장면 주소(#s=d-<key>·d-<key>-2·ch-<key>: 숨겼거나 다시 빌드로 없어짐) → 가장 가까운 장면(결정 G3 정신):
+  //   나뉜 장면의 앞 장면 → 같은 절의 남은 장면 → 그 장 표지 → ''(목차는 부르는 쪽이 정함). has(id) = 그 장면이 슬라이드에 있는가
   function deckSceneNear(p, want, has) {
     const m = /^d-(.+)$/.exec(want);
     if (!m) return '';

@@ -1,11 +1,11 @@
 // ════════════════════════════════════════════════════════════════════════════
-// 덱 키트 JS (assets/deck-kit.js) — 덱 페이지(project.html — 발표 덱)의 <head>에서 동기 로드, 가장 먼저
+// 슬라이드 키트 JS (assets/deck-kit.js) — 슬라이드 페이지(project.html — 슬라이드)의 <head>에서 동기 로드, 가장 먼저
 //   출처: spikes/deck/kit/deck-kit.js(블록 A는 spikes/r0/kit/scene-kit.js 그대로)
 //   주석의 설계 근거(docs/design/…의 portfolio-structure·deck-vs-scroll·01 §, R0, 결정 F·Q·# 번호)와 원본 시안(spikes/…)은 템플릿 유지관리용 maintainer 브랜치에 있습니다. 이 레포에 없어도 정상입니다.
 //   블록 A: docs/design/01 §8-2 준비 게이트(R0 【시험대 1~5】 포함)
-//   블록 B: 덱 키트 — 덱 보기(기본)·한 번에 보기, 배율 k = min(vw/1280, (vh−HUD)/720), HUD 띠, 키보드·휠·터치·가장자리 클릭,
+//   블록 B: 슬라이드 키트 — 한 장씩 보기(기본)·한 번에 보기, 배율 k = min(vw/1280, (vh−HUD)/720), HUD 띠, 키보드·휠·터치·가장자리 클릭,
 //           주소(#s=<장면 id> · #n · #s-n), 개요 격자, 포커스·aria-live, 세로 화면 안내, [PDF로 저장], [PPTX로 저장](opts.pptx — 만드는 일은 deck-pptx.js), 감사(audit·outside-deck)
-//   deck-vs-scroll §3 알려진 결함 중 덱 보기에 해당하는 것을 고침:
+//   deck-vs-scroll §3 알려진 결함 중 한 장씩 보기에 해당하는 것을 고침:
 //     휠·트랙패드 넘기기 기본 켬(몸짓 하나 = 한 장) · 데스크톱 장면 클릭 넘기기 없앰(HUD·가장자리·터치만) · 세로 스와이프 + 회전 안내 ·
 //     보기 선택이 페이지를 넘어 유지 · 공유 주소는 장면 id(#s=hl-2) · HUD 번호 "NN / NN" · 한 번에 보기의 링크 첫 클릭 삼켜짐
 // 시험 훅(쿼리): ?pf-timeout=<ms> · ?pf-k=<수> · ?pf-audit=1 · ?view=deck|scroll · ?wheel=0
@@ -49,13 +49,13 @@
   window.PFScene = Object.assign(window.PFScene || {}, {
     track(p) { jobs.push(Promise.resolve(p).catch((e) => console.warn('[pf-scene] 작업 실패:', e))); schedule(); return p; },
     _mounted() { isMounted = true; mounted(); schedule(); },
-    printAnyway() { if (isMounted) root.dataset.pfPrintAnyway = ''; print(); },   // mount 전이면 그릴 덱이 없으므로 안내 쪽 그대로
+    printAnyway() { if (isMounted) root.dataset.pfPrintAnyway = ''; print(); },   // mount 전이면 그릴 슬라이드가 없으므로 안내 쪽 그대로
   });
   Object.defineProperty(window.PFScene, 'ready', { get() { return root.dataset.pfReady; }, configurable: true });
   window.PFScene._eager = EAGER;
 })();
 
-// ── 블록 B: 덱 키트 ─────────────────────────────────────────────────────────
+// ── 블록 B: 슬라이드 키트 ─────────────────────────────────────────────────────────
 (() => {
   const W = 1280, H = 720, GAP = 16, KMAX = 1.5, HUD_H = 44;
   const root = document.documentElement;
@@ -88,7 +88,7 @@
   new MutationObserver(onReadyChange).observe(root, { attributes: true, attributeFilter: ['data-pf-ready'] });
   const whenReady = () => (root.dataset.pfReady === 'yes' ? Promise.resolve() : new Promise((r) => readyWaiters.push(r)));
 
-  // ── 배율 ── 덱 보기: k = min(vw/1280, (vh − HUD)/720), 상한 없음 / 한 번에 보기: 간격·HUD 몫을 빼고 상한 1.5
+  // ── 배율 ── 한 장씩 보기: k = min(vw/1280, (vh − HUD)/720), 상한 없음 / 한 번에 보기: 간격·HUD 몫을 빼고 상한 1.5
   function fit() {
     const vw = root.clientWidth, vh = innerHeight;
     let k = view === 'deck' ? Math.min(vw / W, (vh - HUD_H) / H) : Math.min(vw / W, (vh - HUD_H - 2 * GAP) / H, KMAX);
@@ -193,7 +193,7 @@
     return scrollY + r.top - off;
   }
   const scrollToScene = (s, behavior = 'auto') => { if (s) scrollTo({ top: sceneTop(s), behavior }); };
-  function paint() {                                          // 덱 보기: 지금 장면만 보이고(visibility), 나머지는 inert
+  function paint() {                                          // 한 장씩 보기: 지금 장면만 보이고(visibility), 나머지는 inert
     scenes.forEach((s, j) => {
       const on = view !== 'deck' || j === cur;
       s.classList.toggle('pf-cur', j === cur);
@@ -252,7 +252,7 @@
     const r = s.getBoundingClientRect();
     if (r.top < -1 || r.bottom > innerHeight - HUD_H + 1) scrollToScene(s);
   }
-  // 덱 보기에서 어떤 경로로든(앵커·찾기·포커스) 덱·장면 상자가 스크롤되면 되돌림
+  // 한 장씩 보기에서 어떤 경로로든(앵커·찾기·포커스) 슬라이드·장면 상자가 스크롤되면 되돌림
   function guardScroll(e) {
     if (view !== 'deck') return;
     const t = e.target;
@@ -260,7 +260,7 @@
     if (t.nodeType === 1 && deck && (t === deck || deck.contains(t)) && (t.scrollTop || t.scrollLeft)) { t.scrollTop = 0; t.scrollLeft = 0; }
   }
 
-  // 덱 보기 클릭: 데스크톱(마우스)에서는 장면을 눌러도 넘기지 않음(글자 고르기·더블클릭 보호).
+  // 한 장씩 보기 클릭: 데스크톱(마우스)에서는 장면을 눌러도 넘기지 않음(글자 고르기·더블클릭 보호).
   //   넘기는 길 = HUD ‹ ›, 키보드, 휠, 레터박스(장면 바깥 가장자리) 클릭, 터치(탭 구역: 왼쪽 30% 이전 · 나머지 다음, 스와이프)
   let swallowClickUntil = 0, tch = null, lastTouch = null;
   const CONTROL = 'a, button, input, select, textarea, summary, label, video, audio, [contenteditable], [data-pf-noclick]';
@@ -355,7 +355,7 @@
     try { if (document.fullscreenElement) document.exitFullscreen(); else root.requestFullscreen?.(); } catch { /* 지원 안 함 */ }
   }
 
-  // ── 세로 화면 안내: 돌렸을 때 장면이 1.2배 이상 커지면 띄움(덱 보기만). 닫으면 이 탭에서는 다시 띄우지 않음 ──
+  // ── 세로 화면 안내: 돌렸을 때 장면이 1.2배 이상 커지면 띄움(한 장씩 보기만). 닫으면 이 탭에서는 다시 띄우지 않음 ──
   const HINT_KEY = 'pf-rotate-closed';
   try { hintClosed = sessionStorage.getItem(HINT_KEY) === '1'; } catch { /* */ }
   function buildHint() {
@@ -392,7 +392,7 @@
   const HELP_PPTX = `<p><b>PPTX로 저장하기 — PowerPoint에서 고쳐 쓰는 파일</b></p>
     <p>글·카드·표·코드는 PowerPoint에서 바로 고칠 수 있는 글상자·도형·표로, 그림은 원본 그림으로 들어갑니다. 다이어그램은 SVG 그림이라 PowerPoint 365에서 오른쪽 클릭 → <b>[도형으로 변환]</b>하면 상자와 글자를 하나씩 고칠 수 있습니다.</p>
     <p>글꼴은 화면과 같은 이름(Pretendard 등)으로 들어갑니다. PC에 그 글꼴이 없으면 PowerPoint가 다른 글꼴로 보여 줘 줄바꿈이 달라질 수 있습니다. 글꼴을 설치하거나 <b>[홈 → 바꾸기 → 글꼴 바꾸기]</b>로 한 번에 바꾸세요.</p>
-    <p>PPTX에서 고친 내용은 발표 덱(웹)에 돌아오지 않습니다. 내용이 틀렸으면 기술 문서를 고치고 다시 빌드하세요.</p>`;
+    <p>PPTX에서 고친 내용은 슬라이드(웹)에 돌아오지 않습니다. 내용이 틀렸으면 프로젝트 문서를 고치고 다시 빌드하세요.</p>`;
   const HELP_LOCAL = (pptx) => (isLocal ? `<p class="warn">지금은 미리보기(로컬 서버)입니다. 여기서 저장한 PDF${pptx ? '·PPTX' : ''}의 링크는 이 컴퓨터 주소를 가리키므로, 제출용은 배포된 주소에서 저장하세요.</p>` : '');
   const helpOpen = () => !!hud && !hud.querySelector('.pf-hud-help').hidden;
   function toggleHelp(on) {
@@ -421,7 +421,7 @@
       <button type="button" data-a="help" aria-expanded="false" aria-controls="pf-hud-help" aria-label="저장 안내" title="저장 안내(PDF${opts.pptx ? '·PPTX' : ''})">?</button>
       <button type="button" data-a="view"><span class="l"></span><span class="s"></span></button>
       <button type="button" data-a="anyway" hidden>${LH('ui.print-anyway')}</button>
-      ${isLocal ? '<span class="pf-hud-badge" role="img" hidden title="미리보기에서만 보이는 장면 배치 점검 결과(찾은 항목 수). 배포된 페이지·PDF에는 나오지 않습니다. 슬라이드에 &quot;내용이 잘렸습니다&quot; 띠가 있으면 그 장면의 글이 나온 파일(src/의 기술 문서)을 줄이거나 /portfolio-edit로 장면을 나누고 /portfolio-build를 다시 실행하세요."></span>' : ''}
+      ${isLocal ? '<span class="pf-hud-badge" role="img" hidden title="미리보기에서만 보이는 장면 배치 점검 결과(찾은 항목 수). 배포된 페이지·PDF에는 나오지 않습니다. 슬라이드에 &quot;내용이 잘렸습니다&quot; 띠가 있으면 그 장면의 글이 나온 파일(src/의 프로젝트 문서)을 줄이거나 /portfolio-edit로 장면을 나누고 /portfolio-build를 다시 실행하세요."></span>' : ''}
       <span class="pf-hud-msg" role="status" aria-live="polite"></span>
       <div class="pf-hud-help" id="pf-hud-help" hidden>${HELP}${opts.pptx ? HELP_PPTX : ''}${HELP_LOCAL(!!opts.pptx)}</div>
       <span class="pf-sr" aria-live="polite" aria-atomic="true"></span>`;
@@ -438,7 +438,7 @@
       else if (a === 'view') setView(view === 'deck' ? 'scroll' : 'deck');
       else if (a === 'anyway') PF.printAnyway();
     });
-    deck.before(skip, hud);                                   // DOM 순서: 건너뛰기 → HUD → 덱
+    deck.before(skip, hud);                                   // DOM 순서: 건너뛰기 → HUD → 슬라이드
   }
   let msg = '';
   function hudMsg(t) { msg = t || ''; hudSync(); }                    // 아래 띠 알림(PPTX 만드는 중 등). 빈 글자 = 지움
@@ -578,7 +578,7 @@
     window.print();
   }
 
-  // ── 감사(장면 단위 + 덱 밖). 배율과 무관하게 동작(허용오차 0.5 논리 px × 배율) — R0·spikes/deck 그대로 ──
+  // ── 감사(장면 단위 + 슬라이드 밖). 배율과 무관하게 동작(허용오차 0.5 논리 px × 배율) — R0·spikes/deck 그대로 ──
   const desc = (e) => `<${e.tagName.toLowerCase()}${e.getAttribute('class') ? '.' + String(e.getAttribute('class')).trim().split(/\s+/)[0] : ''}>`;
   function sceneIssues(s, { layoutOnly = false } = {}) {
     const out = [];
@@ -629,12 +629,12 @@
         else if (!i.naturalWidth) add('img-broken', i.getAttribute('src'));
       });
       s.querySelectorAll('.pf-clipped').forEach((c) => add('clipped', c.textContent.trim().slice(0, 80)));
-      s.querySelectorAll('[data-pf-visual-err]').forEach((c) => add(c.dataset.pfVisualErr, c.textContent.trim().slice(0, 120)));   // 원문 블록 0곳·여러 곳·바뀜(발표 덱)
+      s.querySelectorAll('[data-pf-visual-err]').forEach((c) => add(c.dataset.pfVisualErr, c.textContent.trim().slice(0, 120)));   // 원문 블록 0곳·여러 곳·바뀜(슬라이드)
       if (s.dataset.pfErr) add(s.dataset.pfErr.split(':')[0], s.dataset.pfErr);                                                       // key-invalid 등 장면 자체 문제
     }
     return out;
   }
-  // 【R0 결정 #14】 화면 매체 감사 "덱 밖에 보이는 요소"(outside-deck). 인쇄 CSS가 덱 밖·덱 안 비장면 요소를 PDF에서 빼므로, 화면에 보이는 그런 내용을 대신 알림
+  // 【R0 결정 #14】 화면 매체 감사 "슬라이드 밖에 보이는 요소"(outside-deck). 인쇄 CSS가 슬라이드 밖·슬라이드 안 비장면 요소를 PDF에서 빼므로, 화면에 보이는 그런 내용을 대신 알림
   const OD_TAGS = /^(script|style|link|meta|template|noscript|head|title|base)$/i;
   const OD_EXEMPT = '[data-pf-ui], .pf-screen-only, .pf-hud, .pf-skiplink, #pf-audit, .pf-measure, dialog.lightbox, .pf-lightbox';
   const OD_REPLACED = /^(img|svg|canvas|video|iframe|object|embed|input|textarea|select|button|progress|meter|hr|picture|audio|math)$/i;
@@ -704,7 +704,7 @@
     const conts = [];
     for (let a = deck.parentElement; a; a = a.parentElement) conts.push(a);
     conts.push(deck, ...wraps);
-    const where = (n) => { if (deck.contains(n)) return '덱 안'; return (deck.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_PRECEDING) ? '덱 앞' : '덱 뒤'; };
+    const where = (n) => { if (deck.contains(n)) return '슬라이드 안'; return (deck.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_PRECEDING) ? '슬라이드 앞' : '슬라이드 뒤'; };
     for (const c of conts) {
       const inDeck = c === deck || deck.contains(c);
       for (const n of c.childNodes) {
@@ -719,7 +719,7 @@
       }
       if (c === document.documentElement) continue;
       const ps = odPseudo(c);
-      if (ps) out.push({ scene: null, type: 'outside-deck', el: `${descFull(c)}${ps.why}`, text: ps.text, why: ps.why, pos: inDeck ? '덱 안' : '덱 조상',
+      if (ps) out.push({ scene: null, type: 'outside-deck', el: `${descFull(c)}${ps.why}`, text: ps.text, why: ps.why, pos: inDeck ? '슬라이드 안' : '슬라이드 조상',
                          detail: `<${descFull(c)}>${ps.why} 생성 글자가 보임 "${ps.text}"` });
     }
     return out;
@@ -756,7 +756,7 @@
   function mount(o = {}) {
     opts = Object.assign({ deck: '#deck', hud: true, scope: false, hint: '' }, o);
     deck = typeof opts.deck === 'string' ? document.querySelector(opts.deck) : opts.deck;
-    deck.setAttribute('aria-roledescription', '슬라이드 덱');
+    deck.setAttribute('aria-roledescription', '슬라이드');
     if (!deck.hasAttribute('aria-label')) deck.setAttribute('aria-label', document.title);
     document.querySelectorAll('[data-pf-loading]').forEach((e) => e.remove());
     collect();

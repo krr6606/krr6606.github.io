@@ -1,9 +1,9 @@
-// 포트폴리오 문서(index.html) — 아래로 읽는 한 페이지 + A4 인쇄(제출 PDF)
+// 포트폴리오 페이지(index.html) — 아래로 읽는 한 페이지 + A4 인쇄(제출 PDF)
 //   순서: 머리(이름·정체성·연락처) → 자기소개 → 기술 스택 → 프로젝트마다 소개 + 기능 소개 → 한눈에 보기 → 연락처
-//   기능 소개: 화면(그 기능 절의 이미지 highlights[].image만)은 왼쪽에 모으고, 기능 설명과 [발표 덱에서 보기]는 오른쪽 목록에 한 열로 맞춤
+//   기능 소개: 화면(그 기능 절의 이미지 highlights[].image만)은 왼쪽에 모으고, 기능 설명과 [슬라이드 열기]는 오른쪽 목록에 한 열로 맞춤
 //   모든 글은 data/portfolio.json·data/projects/*.json 값 그대로입니다. 절 이름·버튼 같은 UI 문구는 문구 표(PF.t, assets/strings.js + theme/strings.tsv)에서 옵니다.
-//   주소: #<절 id>(cover · intro · stack · p-<폴더> · p-<폴더>-core · glance · contact). 예전 포트폴리오 덱 주소(#s=<장면 id> · #<번호>)는 같은 절로 넘깁니다.
-//   점검: PFPage.whenReady() → PFPage.report() · ?pf-audit=1이면 #pf-audit에 report()의 base64 JSON(headless용, 발표 덱과 같은 형식)
+//   주소: #<절 id>(cover · intro · stack · p-<폴더> · p-<폴더>-core · glance · contact). 예전 포트폴리오 슬라이드 주소(#s=<장면 id> · #<번호>)는 같은 절로 넘깁니다.
+//   점검: PFPage.whenReady() → PFPage.report() · ?pf-audit=1이면 #pf-audit에 report()의 base64 JSON(headless용, 슬라이드와 같은 형식)
 (() => {
   const root = document.getElementById('app');
   const html = document.documentElement;
@@ -60,8 +60,8 @@
     return want;
   }
 
-  // 예전 포트폴리오 덱의 주소(#s=<장면 id> · #<번호> · #s-<번호> · 옛 랜딩 #skills 등) → 이 페이지의 절 id. 지금 주소가 절 id 그대로여도 돌려줌(그리고 나서 그 절로 스크롤)
-  //   번호는 실제로 그린 절의 차례(예전 덱도 그린 장면만 셈. 나뉜 장면 stack-2·glance-2는 이제 한 절). #0·#-3 → 첫 절, #99 → 마지막 절(덱 키트와 같은 규칙)
+  // 예전 포트폴리오 슬라이드의 주소(#s=<장면 id> · #<번호> · #s-<번호> · 옛 랜딩 #skills 등) → 이 페이지의 절 id. 지금 주소가 절 id 그대로여도 돌려줌(그리고 나서 그 절로 스크롤)
+  //   번호는 실제로 그린 절의 차례(예전 슬라이드도 그린 장면만 셈. 나뉜 장면 stack-2·glance-2는 이제 한 절). #0·#-3 → 첫 절, #99 → 마지막 절(슬라이드 키트와 같은 규칙)
   function legacyTarget(projects) {
     let h = location.hash.slice(1);
     try { h = decodeURIComponent(h); } catch { /* 그대로 */ }
@@ -170,7 +170,7 @@
     return sec(`p-${p.id}`, no, p.title, PF.teamLabel(p.team), body, 'proj');
   }
 
-  // 기능 소개: 화면은 왼쪽(기능 번호와 함께), 기능 설명과 [발표 덱에서 보기]는 오른쪽 목록. 화면이 하나도 없으면 목록이 폭 전체
+  // 기능 소개: 화면은 왼쪽(기능 번호와 함께), 기능 설명과 [슬라이드 열기]는 오른쪽 목록. 화면이 하나도 없으면 목록이 폭 전체
   function features(p, no, sec, btn) {
     const hl = (p.highlights || []).slice(0, 4);
     if (!hl.length) return '';
@@ -218,7 +218,7 @@
   }
 
   const eager = () => document.querySelectorAll('img[loading="lazy"]').forEach((i) => { i.loading = 'eager'; });
-  const loaded = (i) => (i.complete ? null : new Promise((r) => {     // decode()·rAF는 쓰지 않음: 가려진 창에서 끝나지 않음(발표 덱 키트와 같은 이유)
+  const loaded = (i) => (i.complete ? null : new Promise((r) => {     // decode()·rAF는 쓰지 않음: 가려진 창에서 끝나지 않음(슬라이드 키트와 같은 이유)
     i.addEventListener('load', r, { once: true }); i.addEventListener('error', r, { once: true }); }));
   async function loadAll(ms) {
     eager();

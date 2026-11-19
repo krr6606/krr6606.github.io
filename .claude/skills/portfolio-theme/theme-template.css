@@ -36,7 +36,7 @@
   --t-grad: {그러데이션};        /* 영문 라벨 글자색 — 2색: linear-gradient(90deg, var(--accent-ink), var(--accent-2-ink)) · 단색: linear-gradient(var(--accent-ink), var(--accent-ink)) */
   --t-badge: {칠};              /* 번호 배지 칠 — 광채: linear-gradient(160deg, var(--accent-fill) 0%, var(--accent-2-fill) 62%, var(--accent-3) 130%) · 단색: var(--accent-fill) */
   --t-glow: {0~1};              /* 배경에 번지는 빛 — 0 없음 · .5 은은 · 1 기본 */
-  --t-mark: {0~1};              /* 포트폴리오 문서 머리 뒤 큰 영문 이름 — 0 숨김 · 1 보임 */
+  --t-mark: {0~1};              /* 포트폴리오 페이지 머리 뒤 큰 영문 이름 — 0 숨김 · 1 보임 */
 
   /* ⑥ 다이어그램 판 — 밝은 바탕이면 카드 색과 같게, 어두운 바탕이면 이 줄을 지움(기본 #F4F5FA). 판은 늘 밝게 */
   --t-diagram: #RRGGBB;

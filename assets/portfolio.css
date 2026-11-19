@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────────
-   포트폴리오 문서 — index.html 전용(아래로 읽는 한 페이지 + A4 인쇄 = 제출 PDF)
+   포트폴리오 페이지 — index.html 전용(아래로 읽는 한 페이지 + A4 인쇄 = 제출 PDF)
    화면은 어두운 테마: 검은 바탕(--paper) · 한 단 밝은 카드(--surface) · 흰 글자(--ink, 회색은 --body·--muted)
    · 강조(profile.md 강조색 → PF.applyTheme가 --accent·--accent-ink·--accent-fill·--accent-soft와 짝 색 --accent-2·--accent-3을 맞춤)
    · 강조 그러데이션(--grad: 글자, --glow: 번호 배지·광채). 영문 라벨·영문 이름은 Montserrat(--display), 한글은 Pretendard
@@ -139,7 +139,7 @@ code { font-family: var(--mono); font-size: .88em; background: var(--accent-soft
 .tags li { padding: 4px 12px; border-radius: var(--pill); border: 1px solid var(--line-2); color: var(--ink); font-size: 12.5px; font-weight: 600; }
 .pi-r .btns { margin-top: 28px; }
 
-/* ④-2 기능 소개: 화면 왼쪽 · 설명과 [발표 덱에서 보기] 오른쪽 */
+/* ④-2 기능 소개: 화면 왼쪽 · 설명과 [슬라이드 열기] 오른쪽 */
 .fe { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-items: start; }
 .shots { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 .shot { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: box-shadow .15s, border-color .15s; }

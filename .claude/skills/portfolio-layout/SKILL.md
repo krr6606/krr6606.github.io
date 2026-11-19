@@ -13,7 +13,7 @@ argument-hint: "<레퍼런스 주소 | (스크린샷 첨부)> [덧붙일 요청]
 그 파일은 `/portfolio-custom`(직접 생성 모드)이 읽어 `custom/index.html`을 그 배치로 그립니다.
 
 - **쓰는 파일은 `theme/layout.json` 하나뿐입니다.** 렌더러(`index.html`·`project.html`·`doc.html`·`assets/`)·`src/`·`profile.md`·`data/`·`custom/`은 고치지 않습니다.
-  포트폴리오 문서(`index.html`)와 제출 PDF의 배치는 그대로입니다(A4 인쇄와 발표 덱 측정이 고정 배치에 맞춰져 있음). 배치를 바꾼 페이지는 `custom/` 쪽에 따로 생깁니다.
+  포트폴리오 페이지(`index.html`)와 제출 PDF의 배치는 그대로입니다(A4 인쇄와 슬라이드 측정이 고정 배치에 맞춰져 있음). 배치를 바꾼 페이지는 `custom/` 쪽에 따로 생깁니다.
 - **글·그림·로고·회사/서비스 이름·주소는 가져오지 않습니다.** 측정 스크립트는 상자의 위치·크기·배경 유무·글자 크기 같은 숫자만 잽니다. 남의 페이지를 베낀 포트폴리오가 되면 안 됩니다.
 - 색·모양·영문 글꼴은 이 명령이 아니라 `/portfolio-theme`입니다. 둘은 함께 써도 됩니다.
 
@@ -52,7 +52,7 @@ argument-hint: "<레퍼런스 주소 | (스크린샷 첨부)> [덧붙일 요청]
 
 ## 3. 내 포트폴리오의 절에 맞추기
 
-포트폴리오의 절과 순서는 **바꾸지 않습니다**(`format/04-layout-patterns.md` 「포트폴리오 문서 절」): 머리 → 자기소개 → 기술 스택 → 프로젝트마다 [프로젝트 소개 → 기능 소개] → 한눈에 보기 → 연락처.
+포트폴리오의 절과 순서는 **바꾸지 않습니다**(`format/04-layout-patterns.md` 「포트폴리오 페이지 절」): 머리 → 자기소개 → 기술 스택 → 프로젝트마다 [프로젝트 소개 → 기능 소개] → 한눈에 보기 → 연락처.
 레퍼런스의 띠 순서를 옮기는 것이 아니라, **내 절마다 어울리는 레퍼런스 띠의 배치를 빌려 옵니다.**
 
 | 내 절 (`layout.json` 키) | 무엇이 들어가나 | 어울리는 레퍼런스 띠(제안) |
@@ -89,7 +89,7 @@ argument-hint: "<레퍼런스 주소 | (스크린샷 첨부)> [덧붙일 요청]
 
 - 쓰지 않는 띠: 7(로고가 줄지어 있는 띠) …
 - 가져오지 않는 것: 글·그림·로고·색. 색과 글꼴은 /portfolio-theme 또는 /portfolio-custom의 디자인 요청으로 정합니다.
-- 포트폴리오 문서(index.html)와 제출 PDF는 바뀌지 않습니다. 이 배치는 /portfolio-custom으로 만드는 custom/index.html에 쓰입니다.
+- 포트폴리오 페이지(index.html)와 제출 PDF는 바뀌지 않습니다. 이 배치는 /portfolio-custom으로 만드는 custom/index.html에 쓰입니다.
 ````
 
 ## 5. 쓰기 — `theme/layout.json`
@@ -146,7 +146,7 @@ python -c "import json,sys; d=json.load(open('theme/layout.json',encoding='utf-8
 다음 할 일
 1. /portfolio-custom 을 직접 입력하면 이 배치로 custom/index.html을 만듭니다. 색·분위기는 뒤에 덧붙여 말하세요(예: /portfolio-custom 다크 톤, 강조색은 내 색).
 2. 결과를 미리보기(…/custom/)로 보고, 마음에 들면 theme/layout.json과 custom/index.html을 커밋·push하세요.
-- 포트폴리오 문서(index.html)와 제출 PDF는 그대로입니다. 배치를 바꾼 페이지는 …/custom/ 주소에 따로 생깁니다.
+- 포트폴리오 페이지(index.html)와 제출 PDF는 그대로입니다. 배치를 바꾼 페이지는 …/custom/ 주소에 따로 생깁니다.
 - 배치를 다시 뽑으려면 다른 주소나 스크린샷으로 /portfolio-layout, 지우려면 /portfolio-layout 되돌리기
 ```
 

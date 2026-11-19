@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-12",
+  "generatedAt": "2026-11-19",
   "profile": {
     "name": "김민성",
     "nameEn": "Kim Min seong",
@@ -35,7 +35,7 @@
           "project": "1-nyanko-defense"
         },
         {
-          "text": "appsettings.json(GameConfig)과 TSV 표를 서버 시작 때 읽어 방마다 넘김",
+          "text": "appsettings.json(GameConfig)·TSV 표를 서버 시작 때 한 번 읽고, 클라이언트엔 ID만 보냄",
           "project": "2-sh-server"
         }
       ]
@@ -62,7 +62,7 @@
       "name": "FSM(상태 패턴)",
       "evidence": [
         {
-          "text": "유닛 상태 5개(Idle·Walk·Attack·HitBack·Die)",
+          "text": "유닛 상태 5개(Idle·Walk·Attack·HitBack·Die)를 상태 머신으로 전환",
           "project": "1-nyanko-defense"
         },
         {

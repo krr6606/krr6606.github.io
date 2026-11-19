@@ -11,35 +11,16 @@
     "role": "플레이어 · 두 번째 보스 · 총기 · 해금 · 인트로/엔딩 · 맵 분위기와 라이팅"
   },
   "meta": [
-    {
-      "label": "장르",
-      "value": "3D 슈팅 생존 게임"
-    },
-    {
-      "label": "기간",
-      "value": "2026.10.19 ~ 2026.11.03 (2주 1일)"
-    },
-    {
-      "label": "인원",
-      "value": "4인 팀"
-    },
-    {
-      "label": "환경",
-      "value": "Unity 6000.3.15f1 · URP · Final IK"
-    }
+    { "label": "장르", "value": "3D 슈팅 생존 게임" },
+    { "label": "기간", "value": "2026.10.19 ~ 2026.11.03 (2주 1일)" },
+    { "label": "인원", "value": "4인 팀" },
+    { "label": "환경", "value": "Unity 6000.3.15f1 · URP · Final IK" }
   ],
-  "tags": [
-    "Unity 6.3",
-    "URP",
-    "Final IK",
-    "애니메이션",
-    "테스트 자동화",
-    "Claude Code"
-  ],
+  "tags": ["Unity 6.3", "URP", "Final IK", "애니메이션", "반자동 측정", "Claude Code"],
   "links": {
     "github": "https://github.com/KooHoo-Dev/3rd_3D_1-3D-Project-team_even",
     "video": "https://youtu.be/h8nFAuI8KAY",
-    "extra": [{"label": "숏츠", "url": "https://youtube.com/shorts/cJZfjStR3s0"}]
+    "extra": [{ "label": "숏츠", "url": "https://youtube.com/shorts/cJZfjStR3s0" }]
   },
   "intent": {
     "text": "IK와 애니메이션은 제가 약한 분야라, 테스트 과정을 코드로 자동화해 데이터를 뽑고 그 데이터로 원인을 좁히는 방식으로 바꿨습니다.",
@@ -71,15 +52,36 @@
       "image": null
     }
   ],
-  "troubleshooting": [],
-  "screenshots": [
+  "troubleshooting": [
     {
-      "src": "images/main_menu.jpg",
-      "w": 1923,
-      "h": 1090,
-      "caption": "메인 메뉴 화면"
+      "title": "이동·조준 중 상체가 떨림",
+      "problem": "이동·조준 중 상체가 떨림",
+      "cause": "이동·전력질주 루프 클립의 이음새가 튐(애니메이션 단계)",
+      "solution": "루프 클립 이음새 보정, 전력질주 상체 커브 평활화, 상체 자세 가중치를 IK와 분리",
+      "result": "루프 클립 이음새를 보정한 뒤 같은 메뉴로 다시 잰 상체 튐이 301회(10초당 36.1회)에서 121회(10초당 14.5회)로 줄고, 루프 이음새 순간과 겹친 튐(41%)은 뚜렷하게 겹치는 이벤트가 없어졌습니다.",
+      "lesson": "",
+      "section": "고친 문제"
+    },
+    {
+      "title": "1인칭으로 위·아래를 보면 조준이 어긋남",
+      "problem": "1인칭으로 위·아래를 보면 조준이 어긋남",
+      "cause": "총 자리가 팔 길이 밖으로 나가면 전신 IK가 어깨·목을 앞으로 끌고, 목 보호가 다시 밀어내는 순환",
+      "solution": "손이 닿도록 총을 시선 축을 따라 당김, 위를 볼 때 척추 가중치를 따로 둠",
+      "result": "",
+      "lesson": "",
+      "section": "고친 문제"
+    },
+    {
+      "title": "1인칭으로 아래를 보면 팔이 안쪽으로 꺾임",
+      "problem": "1인칭으로 아래를 보면 팔이 안쪽으로 꺾임",
+      "cause": "팔꿈치 방향 기준이 없음",
+      "solution": "팔꿈치 방향을 몸 기준으로 고정, 1인칭 아래 보기 각도 제한(55°)",
+      "result": "",
+      "lesson": "",
+      "section": "고친 문제"
     }
   ],
+  "screenshots": [],
   "retro": {
     "achieved": [
       "모르는 분야도 AI의 도움을 받아 풀 수 있었습니다.",
@@ -138,8 +140,12 @@
         "lead": {"text": "IK와 애니메이션은 제가 약한 분야였습니다.", "verbatim": true},
         "sectionPath": ["1. 개요", "왜 측정부터 했나"],
         "points": [
-          {"label": "문제", "text": "어디가 원인인지 어떤 데이터를 봐야 하는지 시간 안에 알 수 없다고 판단했습니다.", "verbatim": true},
-          {"label": "해결", "text": "테스트 과정을 코드로 자동화해 데이터를 뽑고, 그 데이터로 원인을 좁히는 방식으로 바꿨습니다.", "verbatim": true},
+          {
+            "label": "문제",
+            "text": "총을 든 손이 떨리거나, 1인칭으로 위·아래를 보면 조준이 어긋나는 문제가 생겼는데, 어디가 원인인지 어떤 데이터를 봐야 하는지 시간 안에 알 수 없다고 판단했습니다.",
+            "verbatim": true
+          },
+          {"label": "해결", "text": "그래서 테스트 과정을 코드로 자동화해 데이터를 뽑고, 그 데이터로 원인을 좁히는 방식으로 바꿨습니다.", "verbatim": true},
           {"label": "이유", "text": "모르는 분야는 AI로 보충하되, 무엇을 어떻게 잴지는 제가 정했습니다.", "verbatim": true}
         ],
         "visuals": []
@@ -284,8 +290,8 @@
       {
         "key": "fixed",
         "chapter": "results",
-        "layout": "full",
-        "tab": "결과",
+        "layout": "problem",
+        "tab": "문제 해결",
         "title": {"text": "고친 문제", "verbatim": true},
         "lead": null,
         "sectionPath": ["5. 결과와 배운 점", "고친 문제"],
@@ -349,8 +355,12 @@
         "lead": {"text": "IK와 애니메이션은 제가 약한 분야였습니다.", "verbatim": true},
         "sectionPath": ["1. 개요", "왜 측정부터 했나"],
         "points": [
-          {"label": "문제", "text": "어디가 원인인지 어떤 데이터를 봐야 하는지 시간 안에 알 수 없다고 판단했습니다.", "verbatim": true},
-          {"label": "해결", "text": "테스트 과정을 코드로 자동화해 데이터를 뽑고, 그 데이터로 원인을 좁히는 방식으로 바꿨습니다.", "verbatim": true},
+          {
+            "label": "문제",
+            "text": "총을 든 손이 떨리거나, 1인칭으로 위·아래를 보면 조준이 어긋나는 문제가 생겼는데, 어디가 원인인지 어떤 데이터를 봐야 하는지 시간 안에 알 수 없다고 판단했습니다.",
+            "verbatim": true
+          },
+          {"label": "해결", "text": "그래서 테스트 과정을 코드로 자동화해 데이터를 뽑고, 그 데이터로 원인을 좁히는 방식으로 바꿨습니다.", "verbatim": true},
           {"label": "이유", "text": "모르는 분야는 AI로 보충하되, 무엇을 어떻게 잴지는 제가 정했습니다.", "verbatim": true}
         ],
         "visuals": []
@@ -393,7 +403,7 @@
         "sectionPath": ["2. 시스템 구조", "한 프레임 안의 IK 순서"],
         "points": [
           {"label": "", "text": "그래서 순서가 곧 결과입니다.", "verbatim": true},
-          {"label": "", "text": "괄호 안 숫자는 Unity 실행 순서([DefaultExecutionOrder])입니다.", "verbatim": false}
+          {"label": "", "text": "괄호 안 숫자는 Unity 실행 순서(`[DefaultExecutionOrder]`)입니다.", "verbatim": true}
         ],
         "visuals": [{"kind": "mermaid", "n": 1, "fp": "flowchart LR"}]
       },
@@ -448,7 +458,7 @@
         "chapter": "features",
         "layout": "code",
         "tab": "구현",
-        "title": {"text": "3.2 원인 단계 판정", "verbatim": false},
+        "title": {"text": "3.2 단계별 기록 — 어느 단계에서 튀었는지 가르기", "verbatim": true},
         "lead": null,
         "sectionPath": ["3. 핵심 기능", "3.2 단계별 기록 — 어느 단계에서 튀었는지 가르기"],
         "points": [
@@ -526,8 +536,8 @@
       {
         "key": "fixed",
         "chapter": "results",
-        "layout": "full",
-        "tab": "결과",
+        "layout": "problem",
+        "tab": "문제 해결",
         "title": {"text": "고친 문제", "verbatim": true},
         "lead": null,
         "sectionPath": ["5. 결과와 배운 점", "고친 문제"],
@@ -561,6 +571,6 @@
         "visuals": []
       }
     ],
-    "applied": "1849f7a081fef9ba"
+    "applied": "ed69f5cb3c6f94eb"
   }
 }

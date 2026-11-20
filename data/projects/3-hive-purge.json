@@ -11,16 +11,40 @@
     "role": "플레이어 · 두 번째 보스 · 총기 · 해금 · 인트로/엔딩 · 맵 분위기와 라이팅"
   },
   "meta": [
-    { "label": "장르", "value": "3D 슈팅 생존 게임" },
-    { "label": "기간", "value": "2026.10.19 ~ 2026.11.03 (2주 1일)" },
-    { "label": "인원", "value": "4인 팀" },
-    { "label": "환경", "value": "Unity 6000.3.15f1 · URP · Final IK" }
+    {
+      "label": "장르",
+      "value": "3D 슈팅 생존 게임"
+    },
+    {
+      "label": "기간",
+      "value": "2026.10.19 ~ 2026.11.03 (2주 1일)"
+    },
+    {
+      "label": "인원",
+      "value": "4인 팀"
+    },
+    {
+      "label": "환경",
+      "value": "Unity 6000.3.15f1 · URP · Final IK"
+    }
   ],
-  "tags": ["Unity 6.3", "URP", "Final IK", "애니메이션", "반자동 측정", "Claude Code"],
+  "tags": [
+    "Unity 6.3",
+    "URP",
+    "Final IK",
+    "애니메이션",
+    "반자동 측정",
+    "Claude Code"
+  ],
   "links": {
     "github": "https://github.com/KooHoo-Dev/3rd_3D_1-3D-Project-team_even",
     "video": "https://youtu.be/h8nFAuI8KAY",
-    "extra": [{ "label": "숏츠", "url": "https://youtube.com/shorts/cJZfjStR3s0" }]
+    "extra": [
+      {
+        "label": "숏츠",
+        "url": "https://youtube.com/shorts/cJZfjStR3s0"
+      }
+    ]
   },
   "intent": {
     "text": "IK와 애니메이션은 제가 약한 분야라, 테스트 과정을 코드로 자동화해 데이터를 뽑고 그 데이터로 원인을 좁히는 방식으로 바꿨습니다.",
@@ -84,6 +108,8 @@
   "screenshots": [],
   "retro": {
     "achieved": [
+      "많은 적들이 어렵고 까다로운 상황을 연출하고, 플레이어는 강력한 광역 무기로 그 상황을 벗어나게 하는 시스템을 만들어서 경험을 어느 정도 충족시켰고, 재미있게 나온 것 같습니다.",
+      "초기 기획과는 약간 달라졌다는 것을 느꼈고, 꼭 초심을 지키는 게 좋은 것은 아니구나라는 것을 느꼈습니다.",
       "모르는 분야도 AI의 도움을 받아 풀 수 있었습니다.",
       "AI에게 바로 고치게 하기보다 재고, 비교하고, 벗어난 데이터만 다시 묻는 순서가 원인을 좁히는 데 효과적이었습니다."
     ],
@@ -118,7 +144,8 @@
             "label": "",
             "text": "제가 맡은 것은 플레이어(이동·애니메이션·IK·1인칭/3인칭 시점), 두 번째 보스, 총기와 해금 시스템, 인트로·엔딩, 맵 분위기와 라이팅입니다.",
             "verbatim": true
-          }
+          },
+          {"label": "", "text": "압도적인 적들을 물리쳤을 때의 쾌감", "verbatim": true}
         ],
         "visuals": [
           {
@@ -333,7 +360,8 @@
             "label": "",
             "text": "제가 맡은 것은 플레이어(이동·애니메이션·IK·1인칭/3인칭 시점), 두 번째 보스, 총기와 해금 시스템, 인트로·엔딩, 맵 분위기와 라이팅입니다.",
             "verbatim": true
-          }
+          },
+          {"label": "", "text": "압도적인 적들을 물리쳤을 때의 쾌감", "verbatim": true}
         ],
         "visuals": [
           {
@@ -571,6 +599,6 @@
         "visuals": []
       }
     ],
-    "applied": "ed69f5cb3c6f94eb"
+    "applied": "00d9d1bde48365eb"
   }
 }

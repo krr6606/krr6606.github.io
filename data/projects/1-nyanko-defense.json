@@ -78,7 +78,7 @@
       "title": "캐릭터 편성",
       "what": "드래그 앤 드롭으로 편성 슬롯과 보유 캐릭터 사이를 옮깁니다.",
       "how": "드래그를 시작하면 시작 슬롯의 고양이를 복제한 임시 '커서 슬롯'만 마우스를 따라다니고, 실제 편성 데이터(`CatSlotArray`)는 손을 뗀 시점(`OnPointerUp`)에 놓인 위치에 따라 반영됩니다.",
-      "why": "",
+      "why": "사용자가 언제든 드래그를 언제든 취소하거나 데이터 이동을 안 할 수 있기 때문에, 원본 데이터를 이동하다가 복구시키는것보다 언제든 쉽게 버릴 수 있는 데이터를 복사하는게 더 값이 싸다고 판단하였습니다.",
       "section": "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯",
       "image": {
         "src": "images/party.jpg",
@@ -148,41 +148,11 @@
   },
   "deck": {
     "chapters": [
-      {
-        "key": "overview",
-        "title": "개요",
-        "sectionPath": [
-          "1. 개요"
-        ]
-      },
-      {
-        "key": "arch",
-        "title": "시스템 구조",
-        "sectionPath": [
-          "2. 시스템 구조"
-        ]
-      },
-      {
-        "key": "features",
-        "title": "핵심 기능",
-        "sectionPath": [
-          "3. 핵심 기능"
-        ]
-      },
-      {
-        "key": "spawn",
-        "title": "적 스폰 구조",
-        "sectionPath": [
-          "4. 적 스폰 구조"
-        ]
-      },
-      {
-        "key": "results",
-        "title": "결과와 배운 점",
-        "sectionPath": [
-          "5. 결과와 배운 점"
-        ]
-      }
+      {"key": "overview", "title": "개요", "sectionPath": ["1. 개요"]},
+      {"key": "arch", "title": "시스템 구조", "sectionPath": ["2. 시스템 구조"]},
+      {"key": "features", "title": "핵심 기능", "sectionPath": ["3. 핵심 기능"]},
+      {"key": "spawn", "title": "적 스폰 구조", "sectionPath": ["4. 적 스폰 구조"]},
+      {"key": "results", "title": "결과와 배운 점", "sectionPath": ["5. 결과와 배운 점"]}
     ],
     "slides": [
       {
@@ -190,39 +160,18 @@
         "chapter": "overview",
         "layout": "overview",
         "tab": "개요",
-        "title": {
-          "text": "무엇을 만들었나",
-          "verbatim": true
-        },
-        "lead": {
-          "text": "스테이지마다 정해진 적이 정해진 방식으로 소환되는 디펜스 게임입니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "1. 개요",
-          "무엇을 만들었나"
-        ],
+        "title": {"text": "무엇을 만들었나", "verbatim": true},
+        "lead": {"text": "스테이지마다 정해진 적이 정해진 방식으로 소환되는 디펜스 게임입니다.", "verbatim": true},
+        "sectionPath": ["1. 개요", "무엇을 만들었나"],
         "points": [
-          {
-            "label": "",
-            "text": "조작 가능한 플레이어블 요소 한 가지를 추가해 보았습니다.",
-            "verbatim": true
-          },
+          {"label": "", "text": "조작 가능한 플레이어블 요소 한 가지를 추가해 보았습니다.", "verbatim": true},
           {
             "label": "",
             "text": "적 기지를 파괴하면 스테이지가 클리어되며, 획득한 경험치로 신규 캐릭터가 해금되고 보유 전투 요소를 레벨업·편성해 다음 스테이지에 대비합니다.",
             "verbatim": true
           },
-          {
-            "label": "",
-            "text": "정립된 디펜스 장르의 설계를 배워 보려고 만든 학습용 프로젝트입니다.",
-            "verbatim": false
-          },
-          {
-            "label": "",
-            "text": "적 데이터를 어떻게 정의하고, 그 적을 언제·어떻게 스폰하는지의 구조",
-            "verbatim": false
-          }
+          {"label": "", "text": "정립된 디펜스 장르의 설계를 배워 보려고 만든 학습용 프로젝트입니다.", "verbatim": false},
+          {"label": "", "text": "적 데이터를 어떻게 정의하고, 그 적을 언제·어떻게 스폰하는지의 구조", "verbatim": false}
         ],
         "visuals": [
           {
@@ -230,13 +179,8 @@
             "src": "images/ingame.jpg",
             "w": 760,
             "h": 428,
-            "caption": {
-              "text": "인게임 플레이 화면",
-              "verbatim": true
-            },
-            "sectionPath": [
-              "냥코 디펜스 — 2D 소환 디펜스"
-            ]
+            "caption": {"text": "인게임 플레이 화면", "verbatim": true},
+            "sectionPath": ["냥코 디펜스 — 2D 소환 디펜스"]
           }
         ],
         "edited": true
@@ -246,54 +190,28 @@
         "chapter": "overview",
         "layout": "full",
         "tab": "개요",
-        "title": {
-          "text": "개발 환경",
-          "verbatim": true
-        },
+        "title": {"text": "개발 환경", "verbatim": true},
         "lead": null,
-        "sectionPath": [
-          "1. 개요",
-          "개발 환경"
-        ],
+        "sectionPath": ["1. 개요", "개발 환경"],
         "points": [],
-        "visuals": [
-          {
-            "kind": "table",
-            "n": 1,
-            "fp": "항목|내용"
-          }
-        ]
+        "visuals": [{"kind": "table", "n": 1, "fp": "항목|내용"}]
       },
       {
         "key": "loop",
         "chapter": "overview",
         "layout": "overview",
         "tab": "개요",
-        "title": {
-          "text": "원작과 다른 점 · 핵심 루프 · 조작법",
-          "verbatim": true
-        },
+        "title": {"text": "원작과 다른 점 · 핵심 루프 · 조작법", "verbatim": true},
         "lead": null,
-        "sectionPath": [
-          "1. 개요",
-          "원작과 다른 점 · 핵심 루프 · 조작법"
-        ],
+        "sectionPath": ["1. 개요", "원작과 다른 점 · 핵심 루프 · 조작법"],
         "points": [
-          {
-            "label": "원작과 다른 점",
-            "text": "조작 가능한 플레이어블 냥코 한 명을 더했습니다.",
-            "verbatim": true
-          },
+          {"label": "원작과 다른 점", "text": "조작 가능한 플레이어블 냥코 한 명을 더했습니다.", "verbatim": true},
           {
             "label": "핵심 루프",
             "text": "아군 소환 → 적 저지 → 적 기지 파괴(클리어) → 경험치 획득 → 신규 캐릭터 해금 · 레벨업 · 편성 → 다음 스테이지",
             "verbatim": true
           },
-          {
-            "label": "조작법",
-            "text": "플레이어블 냥코는 A·D(또는 ←·→)로 이동, Z로 공격합니다.",
-            "verbatim": true
-          }
+          {"label": "조작법", "text": "플레이어블 냥코는 A·D(또는 ←·→)로 이동, Z로 공격합니다.", "verbatim": true}
         ],
         "visuals": [
           {
@@ -301,10 +219,7 @@
             "src": "images/title.jpg",
             "w": 760,
             "h": 430,
-            "caption": {
-              "text": "시작 화면",
-              "verbatim": true
-            }
+            "caption": {"text": "시작 화면", "verbatim": true}
           }
         ]
       },
@@ -313,78 +228,34 @@
         "chapter": "arch",
         "layout": "visual",
         "tab": "구조",
-        "title": {
-          "text": "클래스 구조",
-          "verbatim": true
-        },
-        "lead": {
-          "text": "유닛은 상태 머신으로 움직이고, 두 스포너는 같은 오브젝트 풀을 쓰며 데이터는 두 매니저에서만 받아 옵니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "2. 시스템 구조",
-          "클래스 구조"
-        ],
+        "title": {"text": "클래스 구조", "verbatim": true},
+        "lead": {"text": "유닛은 상태 머신으로 움직이고, 두 스포너는 같은 오브젝트 풀을 쓰며 데이터는 두 매니저에서만 받아 옵니다.", "verbatim": true},
+        "sectionPath": ["2. 시스템 구조", "클래스 구조"],
         "points": [],
-        "visuals": [
-          {
-            "kind": "mermaid",
-            "n": 1,
-            "fp": "classDiagram"
-          }
-        ]
+        "visuals": [{"kind": "mermaid", "n": 1, "fp": "classDiagram"}]
       },
       {
         "key": "roles",
         "chapter": "arch",
         "layout": "full",
         "tab": "구조",
-        "title": {
-          "text": "클래스 구조 — 맡은 일",
-          "verbatim": false
-        },
+        "title": {"text": "클래스 구조 — 맡은 일", "verbatim": false},
         "lead": null,
-        "sectionPath": [
-          "2. 시스템 구조",
-          "클래스 구조"
-        ],
+        "sectionPath": ["2. 시스템 구조", "클래스 구조"],
         "points": [],
-        "visuals": [
-          {
-            "kind": "table",
-            "n": 1,
-            "fp": "클래스|맡은 일"
-          }
-        ]
+        "visuals": [{"kind": "table", "n": 1, "fp": "클래스|맡은 일"}]
       },
       {
         "key": "why-split",
         "chapter": "arch",
         "layout": "visual",
         "tab": "구조",
-        "title": {
-          "text": "왜 이렇게 나눴나",
-          "verbatim": true
-        },
-        "lead": {
-          "text": "데이터를 제 나름대로 정리해서 규격과 체계를 구현해보려고 했습니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "2. 시스템 구조",
-          "왜 이렇게 나눴나"
-        ],
+        "title": {"text": "왜 이렇게 나눴나", "verbatim": true},
+        "lead": {"text": "데이터를 제 나름대로 정리해서 규격과 체계를 구현해보려고 했습니다.", "verbatim": true},
+        "sectionPath": ["2. 시스템 구조", "왜 이렇게 나눴나"],
         "points": [
-          {
-            "label": "",
-            "text": "플레이어에 의해 바뀔 수 있는 데이터를 관리하는 매니저 — GameDataManager",
-            "verbatim": false
-          },
-          {
-            "label": "",
-            "text": "개발자가 미리 정해 놓은, 바뀌지 않는 데이터를 관리하는 매니저 — StageDataManager",
-            "verbatim": false
-          },
+          {"label": "", "text": "플레이어에 의해 바뀔 수 있는 데이터를 관리하는 매니저 — GameDataManager", "verbatim": false},
+          {"label": "", "text": "개발자가 미리 정해 놓은, 바뀌지 않는 데이터를 관리하는 매니저 — StageDataManager", "verbatim": false},
           {
             "label": "이유",
             "text": "데이터가 오가는 길이 너무 여러 갈래로 나뉘면 일관성이 깨지거나 참조가 꼬일 수 있다고 생각해서, 다른 시스템은 이 두 매니저만 거쳐서 데이터에 접근하도록 했습니다.",
@@ -397,10 +268,7 @@
             "src": "images/user_data_so.jpg",
             "w": 550,
             "h": 160,
-            "caption": {
-              "text": "UserGameDataSO 인스펙터 — 레벨 데이터 · 최대 클리어 스테이지 · 경험치 · 해금 목록 · 편성 슬롯",
-              "verbatim": true
-            }
+            "caption": {"text": "UserGameDataSO 인스펙터 — 레벨 데이터 · 최대 클리어 스테이지 · 경험치 · 해금 목록 · 편성 슬롯", "verbatim": true}
           }
         ]
       },
@@ -409,53 +277,23 @@
         "chapter": "features",
         "layout": "code",
         "tab": "구현",
-        "title": {
-          "text": "3.1 AI 자동 공격 — 사거리 판정",
-          "verbatim": false
-        },
+        "title": {"text": "3.1 AI 자동 공격 — 사거리 판정", "verbatim": false},
         "lead": null,
-        "sectionPath": [
-          "3. 핵심 기능",
-          "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지"
-        ],
+        "sectionPath": ["3. 핵심 기능", "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지"],
         "points": [
-          {
-            "label": "구현",
-            "text": "적이 사거리에 들어오고 대기 시간(stateTimer)이 끝나면 Idle이 Attack 상태로 전환됩니다.",
-            "verbatim": true
-          },
-          {
-            "label": "구현",
-            "text": "사거리 안에 적이 없으면 바로 Walk로 돌아갑니다.",
-            "verbatim": true
-          }
+          {"label": "구현", "text": "적이 사거리에 들어오고 대기 시간(stateTimer)이 끝나면 Idle이 Attack 상태로 전환됩니다.", "verbatim": true},
+          {"label": "구현", "text": "사거리 안에 적이 없으면 바로 Walk로 돌아갑니다.", "verbatim": true}
         ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 1,
-            "fp": "public override void Update()",
-            "lines": [
-              1,
-              16
-            ]
-          }
-        ]
+        "visuals": [{"kind": "code", "n": 1, "fp": "public override void Update()", "lines": [1, 16]}]
       },
       {
         "key": "attack-hit",
         "chapter": "features",
         "layout": "code",
         "tab": "구현",
-        "title": {
-          "text": "3.1 AI 자동 공격 — 애니메이션 이벤트 타격",
-          "verbatim": false
-        },
+        "title": {"text": "3.1 AI 자동 공격 — 애니메이션 이벤트 타격", "verbatim": false},
         "lead": null,
-        "sectionPath": [
-          "3. 핵심 기능",
-          "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지"
-        ],
+        "sectionPath": ["3. 핵심 기능", "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지"],
         "points": [
           {
             "label": "구현",
@@ -468,76 +306,79 @@
             "verbatim": true
           }
         ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 2,
-            "fp": "public void OnAttackTrigger()",
-            "lines": [
-              1,
-              5
-            ]
-          }
-        ]
+        "visuals": [{"kind": "code", "n": 2, "fp": "public void OnAttackTrigger()", "lines": [1, 5]}]
+      },
+      {
+        "key": "attack-func",
+        "chapter": "features",
+        "layout": "code",
+        "tab": "구현",
+        "title": {"text": "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지", "verbatim": true},
+        "lead": {"text": "Attack()을 호출하면 각 유닛의 수치와 방식(단일 대상 / 범위)에 맞는 공격이 나갑니다.", "verbatim": true},
+        "sectionPath": ["3. 핵심 기능", "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지"],
+        "points": [],
+        "visuals": [{"kind": "code", "n": 2, "fp": "public void OnAttackTrigger()", "lines": [10, 29]}]
       },
       {
         "key": "party",
         "chapter": "features",
         "layout": "code",
         "tab": "구현",
-        "title": {
-          "text": "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯",
-          "verbatim": true
-        },
+        "title": {"text": "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯", "verbatim": true},
         "lead": null,
-        "sectionPath": [
-          "3. 핵심 기능",
-          "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯"
-        ],
+        "sectionPath": ["3. 핵심 기능", "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯"],
         "points": [
           {
             "label": "구현",
-            "text": "드래그를 시작하면 시작 슬롯의 고양이를 복제해 '커서 슬롯'이라는 임시 슬롯 하나를 켜고, 이후로는 이 임시 슬롯만 마우스를 따라다니게 합니다.",
+            "text": "슬롯을 클릭하면 시작 슬롯의 고양이 데이터를 복제해 '커서 슬롯'이라는 임시 슬롯 하나를 켜서 그 안에 복제한 데이터를 집어넣고, 이후로는 드래그 함수를 이용해 이 임시 슬롯만 마우스를 따라다니게 합니다.",
             "verbatim": true
           },
           {
-            "label": "결과",
-            "text": "놓칠 곳에 놓으면 원래 슬롯에 되돌려서 원래 편성이 흐트러지지 않습니다.",
-            "verbatim": false
+            "label": "이유",
+            "text": "사용자가 언제든 드래그를 언제든 취소하거나 데이터 이동을 안 할 수 있기 때문에, 원본 데이터를 이동하다가 복구시키는것보다 언제든 쉽게 버릴 수 있는 데이터를 복사하는게 더 값이 싸다고 판단하였습니다.",
+            "verbatim": true
           }
         ],
-        "visuals": [
+        "visuals": [{"kind": "code", "n": 1, "fp": "public void OnPointerDown(PointerEventData eventData)", "lines": [1, 20]}]
+      },
+      {
+        "key": "party-drop",
+        "chapter": "features",
+        "layout": "code",
+        "tab": "구현",
+        "title": {"text": "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯", "verbatim": true},
+        "lead": {"text": "실제 편성 데이터(CatSlotArray)는 손을 뗀 시점(OnPointerUp)에 놓인 위치에 따라 반영됩니다.", "verbatim": true},
+        "sectionPath": ["3. 핵심 기능", "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯"],
+        "points": [],
+        "visuals": [{"kind": "code", "n": 2, "fp": "public void OnPointerUp(PointerEventData eventData)", "lines": [3, 21]}]
+      },
+      {
+        "key": "stage-load",
+        "chapter": "spawn",
+        "layout": "code",
+        "tab": "구현",
+        "title": {"text": "4. 적 스폰 구조", "verbatim": true},
+        "lead": {"text": "이 프로젝트의 목표였던 \"적을 언제·어떻게 스폰하는지\"를 만든 부분입니다.", "verbatim": true},
+        "sectionPath": ["4. 적 스폰 구조"],
+        "points": [
           {
-            "kind": "code",
-            "n": 1,
-            "fp": "public void OnPointerDown(PointerEventData eventData)",
-            "lines": [
-              1,
-              20
-            ]
+            "label": "",
+            "text": "스테이지 스크립터블 오브젝트에(_Stage)에 웨이브 데이터 목록을 적어 두면, EnemySpawner가 스테이지 매니저에서 현재 스테이지에 따른 정보를 받아오고, 그 정보를 따라 적을 소환합니다.",
+            "verbatim": true
           }
-        ]
+        ],
+        "visuals": [{"kind": "code", "n": 1, "fp": "StageName currentStageName = StageManager.Instance.CurrentSt"}]
       },
       {
         "key": "wave-data",
         "chapter": "spawn",
         "layout": "code",
         "tab": "구현",
-        "title": {
-          "text": "4.1 웨이브 데이터 내용",
-          "verbatim": true
-        },
+        "title": {"text": "4.1 웨이브 데이터 내용", "verbatim": true},
         "lead": null,
-        "sectionPath": [
-          "4. 적 스폰 구조",
-          "4.1 웨이브 데이터 내용"
-        ],
+        "sectionPath": ["4. 적 스폰 구조", "4.1 웨이브 데이터 내용"],
         "points": [
-          {
-            "label": "내용",
-            "text": "스테이지 SO의 인스펙터에서 웨이브를 배열로 입력되어 있습니다.",
-            "verbatim": true
-          },
+          {"label": "내용", "text": "스테이지 SO의 인스펙터에서 웨이브를 배열로 입력되어 있습니다.", "verbatim": true},
           {
             "label": "",
             "text": "각 웨이브에는 어떤 적을, 몇 초 뒤에, 몇 마리 소환할지와 다음에 갈 웨이브 번호(NextWaveIndex)를 적습니다.",
@@ -549,51 +390,23 @@
             "verbatim": true
           }
         ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 1,
-            "fp": "[Serializable]"
-          }
-        ]
+        "visuals": [{"kind": "code", "n": 1, "fp": "[Serializable]"}]
       },
       {
         "key": "wave-loop",
         "chapter": "spawn",
         "layout": "code",
         "tab": "흐름",
-        "title": {
-          "text": "4.1 스테이지 1의 웨이브",
-          "verbatim": false
-        },
+        "title": {"text": "4.1 스테이지 1의 웨이브", "verbatim": false},
         "lead": null,
-        "sectionPath": [
-          "4. 적 스폰 구조",
-          "4.1 웨이브 데이터 내용"
-        ],
+        "sectionPath": ["4. 적 스폰 구조", "4.1 웨이브 데이터 내용"],
         "points": [
-          {
-            "label": "동작 원리",
-            "text": "웨이브가 끝나면 순서대로 다음 칸으로 가는 것이 아니라, NextWaveIndex가 가리키는 칸으로 갑니다.",
-            "verbatim": true
-          },
-          {
-            "label": "",
-            "text": "그래서 2번과 3번이 서로를 가리키게 해 두면 그 구간이 스테이지가 끝날 때까지 반복됩니다.",
-            "verbatim": true
-          }
+          {"label": "동작 원리", "text": "웨이브가 끝나면 순서대로 다음 칸으로 가는 것이 아니라, NextWaveIndex가 가리키는 칸으로 갑니다.", "verbatim": true},
+          {"label": "", "text": "그래서 2번과 3번이 서로를 가리키게 해 두면 그 구간이 스테이지가 끝날 때까지 반복됩니다.", "verbatim": true}
         ],
         "visuals": [
-          {
-            "kind": "table",
-            "n": 1,
-            "fp": "번호|적|대기 시간|소환 수|다음 웨이브"
-          },
-          {
-            "kind": "code",
-            "n": 2,
-            "fp": "for (int i = 0; i < waveList[currentWaveIndex].SpawnCount; i"
-          }
+          {"kind": "table", "n": 1, "fp": "번호|적|대기 시간|소환 수|다음 웨이브"},
+          {"kind": "code", "n": 2, "fp": "for (int i = 0; i < waveList[currentWaveIndex].SpawnCount; i"}
         ]
       },
       {
@@ -601,29 +414,19 @@
         "chapter": "spawn",
         "layout": "code",
         "tab": "구현",
-        "title": {
-          "text": "4.2 보스 등장 트리거",
-          "verbatim": true
-        },
+        "title": {"text": "4.2 보스 등장 트리거", "verbatim": true},
         "lead": {
           "text": "스테이지 SO에 BossTriggerHealthPercentage와 BossName을 적으면, 적 기지 체력이 그 비율 아래로 떨어질 때 보스가 등장합니다.",
           "verbatim": true
         },
-        "sectionPath": [
-          "4. 적 스폰 구조",
-          "4.2 보스 등장 트리거"
-        ],
+        "sectionPath": ["4. 적 스폰 구조", "4.2 보스 등장 트리거"],
         "points": [
           {
             "label": "동작 원리",
             "text": "보스가 나오는 순간 필드의 아군과 플레이어블 냥코를 모두 뒤로 밀쳐 내고(HitBack), 효과음과 배경음을 바꿔 분위기가 달라졌다는 것을 알립니다.",
             "verbatim": true
           },
-          {
-            "label": "이유",
-            "text": "보스는 소환 방식만 일반 몬스터와 다르게 하면, 보스 자체는 기본 몬스터와 같은 구조를 써도 된다고 생각했습니다.",
-            "verbatim": true
-          },
+          {"label": "이유", "text": "보스는 소환 방식만 일반 몬스터와 다르게 하면, 보스 자체는 기본 몬스터와 같은 구조를 써도 된다고 생각했습니다.", "verbatim": true},
           {
             "label": "",
             "text": "그래서 소환 데이터 구조에 보스를 소환하는 특수 트리거(기지 체력)를 넣고, 소환 방식과 연출에는 변주를 주되 능력치는 수치만 다르게 했습니다.",
@@ -635,139 +438,74 @@
             "kind": "code",
             "n": 1,
             "fp": "if (BossTriggerHealthPercentage > 0 && isBossSpawned == fals",
-            "lines": [
-              14,
-              27
-            ]
+            "lines": [14, 27]
           }
         ]
+      },
+      {
+        "key": "spawn-cap",
+        "chapter": "spawn",
+        "layout": "code",
+        "tab": "구현",
+        "title": {"text": "4.3 동시 출현 수 제한과 겹침 정리", "verbatim": true},
+        "lead": {"text": "필드에 살아 있는 적이 MaxSpawnCount(50) 이상이면 소환을 잠시 멈춥니다.", "verbatim": true},
+        "sectionPath": ["4. 적 스폰 구조", "4.3 동시 출현 수 제한과 겹침 정리"],
+        "points": [],
+        "visuals": [{"kind": "code", "n": 1, "fp": "int activeCount = 0;"}, {"kind": "code", "n": 2, "fp": "// 웨이브 스폰이 중지되었는지 확인"}]
       },
       {
         "key": "spawn-limit",
         "chapter": "spawn",
         "layout": "code",
         "tab": "구현",
-        "title": {
-          "text": "4.3 동시 출현 수 제한과 겹침 정리",
-          "verbatim": true
-        },
+        "title": {"text": "4.3 동시 출현 수 제한과 겹침 정리", "verbatim": true},
         "lead": null,
-        "sectionPath": [
-          "4. 적 스폰 구조",
-          "4.3 동시 출현 수 제한과 겹침 정리"
-        ],
+        "sectionPath": ["4. 적 스폰 구조", "4.3 동시 출현 수 제한과 겹침 정리"],
         "points": [
-          {
-            "label": "",
-            "text": "필드에 살아 있는 적이 MaxSpawnCount(50) 이상이면 소환을 잠시 멈춥니다.",
-            "verbatim": true
-          },
-          {
-            "label": "",
-            "text": "그리고 소환할 때마다 빈 자리 번호를 하나 받아, 그 번호만큼 y값을 조금씩 내리고 sortingOrder를 올립니다.",
-            "verbatim": true
-          },
+          {"label": "", "text": "그리고 소환할 때마다 빈 자리 번호를 하나 받아, 그 번호만큼 y값을 조금씩 내리고 sortingOrder를 올립니다.", "verbatim": true},
           {
             "label": "이유",
             "text": "횡스크롤에서 같은 적이 같은 높이로 나오면 한 마리처럼 겹쳐 보이기 때문에, 높이를 아주 조금씩 다르게 하고 그리는 순서도 함께 정해 여러 마리가 나란히 보이게 했습니다.",
             "verbatim": true
           }
         ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 1,
-            "fp": "private void SetPositionY(GameObject enemy)"
-          }
-        ]
+        "visuals": [{"kind": "code", "n": 3, "fp": "private void SetPositionY(GameObject enemy)"}]
       },
       {
         "key": "pool-collider",
         "chapter": "results",
         "layout": "problem",
         "tab": "문제 해결",
-        "title": {
-          "text": "문제 해결 1 — 풀에서 다시 꺼낸 유닛이 공격받지 않음",
-          "verbatim": true
-        },
+        "title": {"text": "문제 해결 1 — 풀에서 다시 꺼낸 유닛이 공격받지 않음", "verbatim": true},
         "lead": null,
-        "sectionPath": [
-          "5. 결과와 배운 점",
-          "문제 해결 1 — 풀에서 다시 꺼낸 유닛이 공격받지 않음"
-        ],
+        "sectionPath": ["5. 결과와 배운 점", "문제 해결 1 — 풀에서 다시 꺼낸 유닛이 공격받지 않음"],
         "points": [
-          {
-            "label": "문제",
-            "text": "오브젝트 풀에서 다시 꺼내 쓴 유닛의 콜라이더가 꺼진 채로 나왔습니다.",
-            "verbatim": true
-          },
+          {"label": "문제", "text": "오브젝트 풀에서 다시 꺼내 쓴 유닛의 콜라이더가 꺼진 채로 나왔습니다.", "verbatim": true},
           {
             "label": "원인",
             "text": "유닛이 죽을 때 Die 상태에서 콜라이더를 끄는데, 풀은 오브젝트를 비활성화했다가 다시 켜서 쓰기 때문에 꺼 둔 콜라이더가 그대로 남아 있었습니다.",
             "verbatim": true
           },
-          {
-            "label": "해결",
-            "text": "유닛이 다시 켜질 때(OnEnable) 상태·체력과 함께 콜라이더를 켜도록 했습니다.",
-            "verbatim": true
-          },
-          {
-            "label": "배운 점",
-            "text": "풀링을 쓰면 \"죽을 때 바꾼 값\"을 \"다시 꺼낼 때\" 되돌려야 합니다.",
-            "verbatim": true
-          }
+          {"label": "해결", "text": "유닛이 다시 켜질 때(OnEnable) 상태·체력과 함께 콜라이더를 켜도록 했습니다.", "verbatim": true},
+          {"label": "배운 점", "text": "풀링을 쓰면 \"죽을 때 바꾼 값\"을 \"다시 꺼낼 때\" 되돌려야 합니다.", "verbatim": true}
         ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 1,
-            "fp": "private void OnEnable()"
-          }
-        ]
+        "visuals": [{"kind": "code", "n": 1, "fp": "private void OnEnable()"}]
       },
       {
         "key": "assign",
         "chapter": "results",
         "layout": "problem",
         "tab": "문제 해결",
-        "title": {
-          "text": "문제 해결 2 — 씬마다 빠지는 인스펙터 할당",
-          "verbatim": true
-        },
+        "title": {"text": "문제 해결 2 — 씬마다 빠지는 인스펙터 할당", "verbatim": true},
         "lead": null,
-        "sectionPath": [
-          "5. 결과와 배운 점",
-          "문제 해결 2 — 씬마다 빠지는 인스펙터 할당"
-        ],
+        "sectionPath": ["5. 결과와 배운 점", "문제 해결 2 — 씬마다 빠지는 인스펙터 할당"],
         "points": [
-          {
-            "label": "문제",
-            "text": "스테이지 씬마다 버튼·스포너에 연결해야 할 참조가 빠져 있었습니다.",
-            "verbatim": true
-          },
-          {
-            "label": "원인",
-            "text": "스테이지마다 같은 연결을 인스펙터에서 손으로 반복해야 하는 구조였습니다.",
-            "verbatim": true
-          },
-          {
-            "label": "해결",
-            "text": "아군 풀의 부모를 인스펙터 대신 코드에서 직접 찾아 연결했습니다.",
-            "verbatim": true
-          },
-          {
-            "label": "남은 점",
-            "text": "GameObject.Find는 이름 문자열에 기대므로, 오브젝트 이름이 바뀌면 다시 깨집니다.",
-            "verbatim": true
-          }
+          {"label": "문제", "text": "스테이지 씬마다 버튼·스포너에 연결해야 할 참조가 빠져 있었습니다.", "verbatim": true},
+          {"label": "원인", "text": "스테이지마다 같은 연결을 인스펙터에서 손으로 반복해야 하는 구조였습니다.", "verbatim": true},
+          {"label": "해결", "text": "아군 풀의 부모를 인스펙터 대신 코드에서 직접 찾아 연결했습니다.", "verbatim": true},
+          {"label": "남은 점", "text": "GameObject.Find는 이름 문자열에 기대므로, 오브젝트 이름이 바뀌면 다시 깨집니다.", "verbatim": true}
         ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 1,
-            "fp": "void Awake()"
-          }
-        ]
+        "visuals": [{"kind": "code", "n": 1, "fp": "void Awake()"}]
       }
     ],
     "base": [
@@ -776,24 +514,11 @@
         "chapter": "overview",
         "layout": "overview",
         "tab": "개요",
-        "title": {
-          "text": "무엇을 만들었나",
-          "verbatim": true
-        },
-        "lead": {
-          "text": "스테이지마다 정해진 적이 정해진 방식으로 소환되는 디펜스 게임입니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "1. 개요",
-          "무엇을 만들었나"
-        ],
+        "title": {"text": "무엇을 만들었나", "verbatim": true},
+        "lead": {"text": "스테이지마다 정해진 적이 정해진 방식으로 소환되는 디펜스 게임입니다.", "verbatim": true},
+        "sectionPath": ["1. 개요", "무엇을 만들었나"],
         "points": [
-          {
-            "label": "",
-            "text": "조작 가능한 플레이어블 요소 한 가지를 추가해 보았습니다.",
-            "verbatim": false
-          },
+          {"label": "", "text": "조작 가능한 플레이어블 요소 한 가지를 추가해 보았습니다.", "verbatim": false},
           {
             "label": "",
             "text": "적 기지를 파괴하면 스테이지가 클리어되며, 획득한 경험치로 신규 캐릭터가 해금되고 보유 전투 요소를 레벨업·편성해 다음 스테이지에 대비합니다.",
@@ -806,13 +531,8 @@
             "src": "images/ingame.jpg",
             "w": 760,
             "h": 428,
-            "caption": {
-              "text": "인게임 플레이 화면",
-              "verbatim": true
-            },
-            "sectionPath": [
-              "냥코 디펜스 — 2D 소환 디펜스"
-            ]
+            "caption": {"text": "인게임 플레이 화면", "verbatim": true},
+            "sectionPath": ["냥코 디펜스 — 2D 소환 디펜스"]
           }
         ]
       },
@@ -821,25 +541,10 @@
         "chapter": "overview",
         "layout": "overview",
         "tab": "개요",
-        "title": {
-          "text": "왜 만들었나",
-          "verbatim": true
-        },
-        "lead": {
-          "text": "정립된 디펜스 장르의 설계를 배워 보려고 만든 학습용 프로젝트입니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "1. 개요",
-          "왜 만들었나"
-        ],
-        "points": [
-          {
-            "label": "",
-            "text": "특히 적 데이터를 어떻게 정의하고, 그 적을 언제·어떻게 스폰하는지의 구조를 직접 만들어 보는 것이 목표였습니다.",
-            "verbatim": true
-          }
-        ],
+        "title": {"text": "왜 만들었나", "verbatim": true},
+        "lead": {"text": "정립된 디펜스 장르의 설계를 배워 보려고 만든 학습용 프로젝트입니다.", "verbatim": true},
+        "sectionPath": ["1. 개요", "왜 만들었나"],
+        "points": [{"label": "", "text": "특히 적 데이터를 어떻게 정의하고, 그 적을 언제·어떻게 스폰하는지의 구조를 직접 만들어 보는 것이 목표였습니다.", "verbatim": true}],
         "visuals": []
       },
       {
@@ -847,54 +552,28 @@
         "chapter": "overview",
         "layout": "full",
         "tab": "개요",
-        "title": {
-          "text": "개발 환경",
-          "verbatim": true
-        },
+        "title": {"text": "개발 환경", "verbatim": true},
         "lead": null,
-        "sectionPath": [
-          "1. 개요",
-          "개발 환경"
-        ],
+        "sectionPath": ["1. 개요", "개발 환경"],
         "points": [],
-        "visuals": [
-          {
-            "kind": "table",
-            "n": 1,
-            "fp": "항목|내용"
-          }
-        ]
+        "visuals": [{"kind": "table", "n": 1, "fp": "항목|내용"}]
       },
       {
         "key": "loop",
         "chapter": "overview",
         "layout": "overview",
         "tab": "개요",
-        "title": {
-          "text": "원작과 다른 점 · 핵심 루프 · 조작법",
-          "verbatim": true
-        },
+        "title": {"text": "원작과 다른 점 · 핵심 루프 · 조작법", "verbatim": true},
         "lead": null,
-        "sectionPath": [
-          "1. 개요",
-          "원작과 다른 점 · 핵심 루프 · 조작법"
-        ],
+        "sectionPath": ["1. 개요", "원작과 다른 점 · 핵심 루프 · 조작법"],
         "points": [
-          {
-            "label": "원작과 다른 점",
-            "text": "조작 가능한 플레이어블 냥코 한 명을 더했습니다.",
-            "verbatim": true
-          },
+          {"label": "원작과 다른 점", "text": "조작 가능한 플레이어블 냥코 한 명을 더했습니다.", "verbatim": true},
           {
             "label": "핵심 루프",
             "text": "아군 소환 → 적 저지 → 적 기지 파괴(클리어) → 경험치 획득 → 신규 캐릭터 해금 · 레벨업 · 편성 → 다음 스테이지",
             "verbatim": true
           },
-          {
-            "label": "조작법",
-            "text": "플레이어블 냥코는 A·D(또는 ←·→)로 이동, Z로 공격합니다.",
-            "verbatim": true
-          }
+          {"label": "조작법", "text": "플레이어블 냥코는 A·D(또는 ←·→)로 이동, Z로 공격합니다.", "verbatim": true}
         ],
         "visuals": [
           {
@@ -902,10 +581,7 @@
             "src": "images/title.jpg",
             "w": 760,
             "h": 430,
-            "caption": {
-              "text": "시작 화면",
-              "verbatim": true
-            }
+            "caption": {"text": "시작 화면", "verbatim": true}
           }
         ]
       },
@@ -914,78 +590,34 @@
         "chapter": "arch",
         "layout": "visual",
         "tab": "구조",
-        "title": {
-          "text": "클래스 구조",
-          "verbatim": true
-        },
-        "lead": {
-          "text": "유닛은 상태 머신으로 움직이고, 두 스포너는 같은 오브젝트 풀을 쓰며 데이터는 두 매니저에서만 받아 옵니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "2. 시스템 구조",
-          "클래스 구조"
-        ],
+        "title": {"text": "클래스 구조", "verbatim": true},
+        "lead": {"text": "유닛은 상태 머신으로 움직이고, 두 스포너는 같은 오브젝트 풀을 쓰며 데이터는 두 매니저에서만 받아 옵니다.", "verbatim": true},
+        "sectionPath": ["2. 시스템 구조", "클래스 구조"],
         "points": [],
-        "visuals": [
-          {
-            "kind": "mermaid",
-            "n": 1,
-            "fp": "classDiagram"
-          }
-        ]
+        "visuals": [{"kind": "mermaid", "n": 1, "fp": "classDiagram"}]
       },
       {
         "key": "roles",
         "chapter": "arch",
         "layout": "full",
         "tab": "구조",
-        "title": {
-          "text": "클래스 구조 — 맡은 일",
-          "verbatim": false
-        },
+        "title": {"text": "클래스 구조 — 맡은 일", "verbatim": false},
         "lead": null,
-        "sectionPath": [
-          "2. 시스템 구조",
-          "클래스 구조"
-        ],
+        "sectionPath": ["2. 시스템 구조", "클래스 구조"],
         "points": [],
-        "visuals": [
-          {
-            "kind": "table",
-            "n": 1,
-            "fp": "클래스|맡은 일"
-          }
-        ]
+        "visuals": [{"kind": "table", "n": 1, "fp": "클래스|맡은 일"}]
       },
       {
         "key": "why-split",
         "chapter": "arch",
         "layout": "visual",
         "tab": "구조",
-        "title": {
-          "text": "왜 이렇게 나눴나",
-          "verbatim": true
-        },
-        "lead": {
-          "text": "데이터를 제 나름대로 정리해서 규격과 체계를 구현해보려고 했습니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "2. 시스템 구조",
-          "왜 이렇게 나눴나"
-        ],
+        "title": {"text": "왜 이렇게 나눴나", "verbatim": true},
+        "lead": {"text": "데이터를 제 나름대로 정리해서 규격과 체계를 구현해보려고 했습니다.", "verbatim": true},
+        "sectionPath": ["2. 시스템 구조", "왜 이렇게 나눴나"],
         "points": [
-          {
-            "label": "",
-            "text": "플레이어에 의해 바뀔 수 있는 데이터를 관리하는 매니저 — GameDataManager",
-            "verbatim": false
-          },
-          {
-            "label": "",
-            "text": "개발자가 미리 정해 놓은, 바뀌지 않는 데이터를 관리하는 매니저 — StageDataManager",
-            "verbatim": false
-          },
+          {"label": "", "text": "플레이어에 의해 바뀔 수 있는 데이터를 관리하는 매니저 — GameDataManager", "verbatim": false},
+          {"label": "", "text": "개발자가 미리 정해 놓은, 바뀌지 않는 데이터를 관리하는 매니저 — StageDataManager", "verbatim": false},
           {
             "label": "이유",
             "text": "데이터가 오가는 길이 너무 여러 갈래로 나뉘면 일관성이 깨지거나 참조가 꼬일 수 있다고 생각해서, 다른 시스템은 이 두 매니저만 거쳐서 데이터에 접근하도록 했습니다.",
@@ -998,10 +630,7 @@
             "src": "images/user_data_so.jpg",
             "w": 550,
             "h": 160,
-            "caption": {
-              "text": "UserGameDataSO 인스펙터 — 레벨 데이터 · 최대 클리어 스테이지 · 경험치 · 해금 목록 · 편성 슬롯",
-              "verbatim": true
-            }
+            "caption": {"text": "UserGameDataSO 인스펙터 — 레벨 데이터 · 최대 클리어 스테이지 · 경험치 · 해금 목록 · 편성 슬롯", "verbatim": true}
           }
         ]
       },
@@ -1010,53 +639,23 @@
         "chapter": "features",
         "layout": "code",
         "tab": "구현",
-        "title": {
-          "text": "3.1 AI 자동 공격 — 사거리 판정",
-          "verbatim": false
-        },
+        "title": {"text": "3.1 AI 자동 공격 — 사거리 판정", "verbatim": false},
         "lead": null,
-        "sectionPath": [
-          "3. 핵심 기능",
-          "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지"
-        ],
+        "sectionPath": ["3. 핵심 기능", "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지"],
         "points": [
-          {
-            "label": "구현",
-            "text": "적이 사거리에 들어오고 대기 시간(stateTimer)이 끝나면 Idle이 Attack 상태로 전환됩니다.",
-            "verbatim": true
-          },
-          {
-            "label": "구현",
-            "text": "사거리 안에 적이 없으면 바로 Walk로 돌아갑니다.",
-            "verbatim": true
-          }
+          {"label": "구현", "text": "적이 사거리에 들어오고 대기 시간(stateTimer)이 끝나면 Idle이 Attack 상태로 전환됩니다.", "verbatim": true},
+          {"label": "구현", "text": "사거리 안에 적이 없으면 바로 Walk로 돌아갑니다.", "verbatim": true}
         ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 1,
-            "fp": "public override void Update()",
-            "lines": [
-              1,
-              16
-            ]
-          }
-        ]
+        "visuals": [{"kind": "code", "n": 1, "fp": "public override void Update()", "lines": [1, 16]}]
       },
       {
         "key": "attack-hit",
         "chapter": "features",
         "layout": "code",
         "tab": "구현",
-        "title": {
-          "text": "3.1 AI 자동 공격 — 애니메이션 이벤트 타격",
-          "verbatim": false
-        },
+        "title": {"text": "3.1 AI 자동 공격 — 애니메이션 이벤트 타격", "verbatim": false},
         "lead": null,
-        "sectionPath": [
-          "3. 핵심 기능",
-          "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지"
-        ],
+        "sectionPath": ["3. 핵심 기능", "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지"],
         "points": [
           {
             "label": "구현",
@@ -1069,76 +668,79 @@
             "verbatim": true
           }
         ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 2,
-            "fp": "public void OnAttackTrigger()",
-            "lines": [
-              1,
-              5
-            ]
-          }
-        ]
+        "visuals": [{"kind": "code", "n": 2, "fp": "public void OnAttackTrigger()", "lines": [1, 5]}]
+      },
+      {
+        "key": "attack-func",
+        "chapter": "features",
+        "layout": "code",
+        "tab": "구현",
+        "title": {"text": "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지", "verbatim": true},
+        "lead": {"text": "Attack()을 호출하면 각 유닛의 수치와 방식(단일 대상 / 범위)에 맞는 공격이 나갑니다.", "verbatim": true},
+        "sectionPath": ["3. 핵심 기능", "3.1 AI 자동 공격 — 사거리 판정부터 애니메이션 이벤트 타격까지"],
+        "points": [],
+        "visuals": [{"kind": "code", "n": 2, "fp": "public void OnAttackTrigger()", "lines": [10, 29]}]
       },
       {
         "key": "party",
         "chapter": "features",
         "layout": "code",
         "tab": "구현",
-        "title": {
-          "text": "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯",
-          "verbatim": true
-        },
+        "title": {"text": "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯", "verbatim": true},
         "lead": null,
-        "sectionPath": [
-          "3. 핵심 기능",
-          "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯"
-        ],
+        "sectionPath": ["3. 핵심 기능", "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯"],
         "points": [
           {
             "label": "구현",
-            "text": "드래그를 시작하면 시작 슬롯의 고양이를 복제해 '커서 슬롯'이라는 임시 슬롯 하나를 켜고, 이후로는 이 임시 슬롯만 마우스를 따라다니게 합니다.",
+            "text": "슬롯을 클릭하면 시작 슬롯의 고양이 데이터를 복제해 '커서 슬롯'이라는 임시 슬롯 하나를 켜서 그 안에 복제한 데이터를 집어넣고, 이후로는 드래그 함수를 이용해 이 임시 슬롯만 마우스를 따라다니게 합니다.",
             "verbatim": true
           },
           {
-            "label": "결과",
-            "text": "놓칠 곳에 놓으면 원래 슬롯에 되돌려서 원래 편성이 흐트러지지 않습니다.",
-            "verbatim": false
+            "label": "이유",
+            "text": "사용자가 언제든 드래그를 언제든 취소하거나 데이터 이동을 안 할 수 있기 때문에, 원본 데이터를 이동하다가 복구시키는것보다 언제든 쉽게 버릴 수 있는 데이터를 복사하는게 더 값이 싸다고 판단하였습니다.",
+            "verbatim": true
           }
         ],
-        "visuals": [
+        "visuals": [{"kind": "code", "n": 1, "fp": "public void OnPointerDown(PointerEventData eventData)", "lines": [1, 20]}]
+      },
+      {
+        "key": "party-drop",
+        "chapter": "features",
+        "layout": "code",
+        "tab": "구현",
+        "title": {"text": "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯", "verbatim": true},
+        "lead": {"text": "실제 편성 데이터(CatSlotArray)는 손을 뗀 시점(OnPointerUp)에 놓인 위치에 따라 반영됩니다.", "verbatim": true},
+        "sectionPath": ["3. 핵심 기능", "3.2 캐릭터 편성 — 드래그 앤 드롭과 임시 커서 슬롯"],
+        "points": [],
+        "visuals": [{"kind": "code", "n": 2, "fp": "public void OnPointerUp(PointerEventData eventData)", "lines": [3, 21]}]
+      },
+      {
+        "key": "stage-load",
+        "chapter": "spawn",
+        "layout": "code",
+        "tab": "구현",
+        "title": {"text": "4. 적 스폰 구조", "verbatim": true},
+        "lead": {"text": "이 프로젝트의 목표였던 \"적을 언제·어떻게 스폰하는지\"를 만든 부분입니다.", "verbatim": true},
+        "sectionPath": ["4. 적 스폰 구조"],
+        "points": [
           {
-            "kind": "code",
-            "n": 1,
-            "fp": "public void OnPointerDown(PointerEventData eventData)",
-            "lines": [
-              1,
-              20
-            ]
+            "label": "",
+            "text": "스테이지 스크립터블 오브젝트에(_Stage)에 웨이브 데이터 목록을 적어 두면, EnemySpawner가 스테이지 매니저에서 현재 스테이지에 따른 정보를 받아오고, 그 정보를 따라 적을 소환합니다.",
+            "verbatim": true
           }
-        ]
+        ],
+        "visuals": [{"kind": "code", "n": 1, "fp": "StageName currentStageName = StageManager.Instance.CurrentSt"}]
       },
       {
         "key": "wave-data",
         "chapter": "spawn",
         "layout": "code",
         "tab": "구현",
-        "title": {
-          "text": "4.1 웨이브 데이터 내용",
-          "verbatim": true
-        },
+        "title": {"text": "4.1 웨이브 데이터 내용", "verbatim": true},
         "lead": null,
-        "sectionPath": [
-          "4. 적 스폰 구조",
-          "4.1 웨이브 데이터 내용"
-        ],
+        "sectionPath": ["4. 적 스폰 구조", "4.1 웨이브 데이터 내용"],
         "points": [
-          {
-            "label": "내용",
-            "text": "스테이지 SO의 인스펙터에서 웨이브를 배열로 입력되어 있습니다.",
-            "verbatim": true
-          },
+          {"label": "내용", "text": "스테이지 SO의 인스펙터에서 웨이브를 배열로 입력되어 있습니다.", "verbatim": true},
           {
             "label": "",
             "text": "각 웨이브에는 어떤 적을, 몇 초 뒤에, 몇 마리 소환할지와 다음에 갈 웨이브 번호(NextWaveIndex)를 적습니다.",
@@ -1150,51 +752,23 @@
             "verbatim": true
           }
         ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 1,
-            "fp": "[Serializable]"
-          }
-        ]
+        "visuals": [{"kind": "code", "n": 1, "fp": "[Serializable]"}]
       },
       {
         "key": "wave-loop",
         "chapter": "spawn",
         "layout": "code",
         "tab": "흐름",
-        "title": {
-          "text": "4.1 스테이지 1의 웨이브",
-          "verbatim": false
-        },
+        "title": {"text": "4.1 스테이지 1의 웨이브", "verbatim": false},
         "lead": null,
-        "sectionPath": [
-          "4. 적 스폰 구조",
-          "4.1 웨이브 데이터 내용"
-        ],
+        "sectionPath": ["4. 적 스폰 구조", "4.1 웨이브 데이터 내용"],
         "points": [
-          {
-            "label": "동작 원리",
-            "text": "웨이브가 끝나면 순서대로 다음 칸으로 가는 것이 아니라, NextWaveIndex가 가리키는 칸으로 갑니다.",
-            "verbatim": true
-          },
-          {
-            "label": "",
-            "text": "그래서 2번과 3번이 서로를 가리키게 해 두면 그 구간이 스테이지가 끝날 때까지 반복됩니다.",
-            "verbatim": true
-          }
+          {"label": "동작 원리", "text": "웨이브가 끝나면 순서대로 다음 칸으로 가는 것이 아니라, NextWaveIndex가 가리키는 칸으로 갑니다.", "verbatim": true},
+          {"label": "", "text": "그래서 2번과 3번이 서로를 가리키게 해 두면 그 구간이 스테이지가 끝날 때까지 반복됩니다.", "verbatim": true}
         ],
         "visuals": [
-          {
-            "kind": "table",
-            "n": 1,
-            "fp": "번호|적|대기 시간|소환 수|다음 웨이브"
-          },
-          {
-            "kind": "code",
-            "n": 2,
-            "fp": "for (int i = 0; i < waveList[currentWaveIndex].SpawnCount; i"
-          }
+          {"kind": "table", "n": 1, "fp": "번호|적|대기 시간|소환 수|다음 웨이브"},
+          {"kind": "code", "n": 2, "fp": "for (int i = 0; i < waveList[currentWaveIndex].SpawnCount; i"}
         ]
       },
       {
@@ -1202,29 +776,19 @@
         "chapter": "spawn",
         "layout": "code",
         "tab": "구현",
-        "title": {
-          "text": "4.2 보스 등장 트리거",
-          "verbatim": true
-        },
+        "title": {"text": "4.2 보스 등장 트리거", "verbatim": true},
         "lead": {
           "text": "스테이지 SO에 BossTriggerHealthPercentage와 BossName을 적으면, 적 기지 체력이 그 비율 아래로 떨어질 때 보스가 등장합니다.",
           "verbatim": true
         },
-        "sectionPath": [
-          "4. 적 스폰 구조",
-          "4.2 보스 등장 트리거"
-        ],
+        "sectionPath": ["4. 적 스폰 구조", "4.2 보스 등장 트리거"],
         "points": [
           {
             "label": "동작 원리",
             "text": "보스가 나오는 순간 필드의 아군과 플레이어블 냥코를 모두 뒤로 밀쳐 내고(HitBack), 효과음과 배경음을 바꿔 분위기가 달라졌다는 것을 알립니다.",
             "verbatim": true
           },
-          {
-            "label": "이유",
-            "text": "보스는 소환 방식만 일반 몬스터와 다르게 하면, 보스 자체는 기본 몬스터와 같은 구조를 써도 된다고 생각했습니다.",
-            "verbatim": true
-          },
+          {"label": "이유", "text": "보스는 소환 방식만 일반 몬스터와 다르게 하면, 보스 자체는 기본 몬스터와 같은 구조를 써도 된다고 생각했습니다.", "verbatim": true},
           {
             "label": "",
             "text": "그래서 소환 데이터 구조에 보스를 소환하는 특수 트리거(기지 체력)를 넣고, 소환 방식과 연출에는 변주를 주되 능력치는 수치만 다르게 했습니다.",
@@ -1236,141 +800,76 @@
             "kind": "code",
             "n": 1,
             "fp": "if (BossTriggerHealthPercentage > 0 && isBossSpawned == fals",
-            "lines": [
-              14,
-              27
-            ]
+            "lines": [14, 27]
           }
         ]
+      },
+      {
+        "key": "spawn-cap",
+        "chapter": "spawn",
+        "layout": "code",
+        "tab": "구현",
+        "title": {"text": "4.3 동시 출현 수 제한과 겹침 정리", "verbatim": true},
+        "lead": {"text": "필드에 살아 있는 적이 MaxSpawnCount(50) 이상이면 소환을 잠시 멈춥니다.", "verbatim": true},
+        "sectionPath": ["4. 적 스폰 구조", "4.3 동시 출현 수 제한과 겹침 정리"],
+        "points": [],
+        "visuals": [{"kind": "code", "n": 1, "fp": "int activeCount = 0;"}, {"kind": "code", "n": 2, "fp": "// 웨이브 스폰이 중지되었는지 확인"}]
       },
       {
         "key": "spawn-limit",
         "chapter": "spawn",
         "layout": "code",
         "tab": "구현",
-        "title": {
-          "text": "4.3 동시 출현 수 제한과 겹침 정리",
-          "verbatim": true
-        },
+        "title": {"text": "4.3 동시 출현 수 제한과 겹침 정리", "verbatim": true},
         "lead": null,
-        "sectionPath": [
-          "4. 적 스폰 구조",
-          "4.3 동시 출현 수 제한과 겹침 정리"
-        ],
+        "sectionPath": ["4. 적 스폰 구조", "4.3 동시 출현 수 제한과 겹침 정리"],
         "points": [
-          {
-            "label": "",
-            "text": "필드에 살아 있는 적이 MaxSpawnCount(50) 이상이면 소환을 잠시 멈춥니다.",
-            "verbatim": true
-          },
-          {
-            "label": "",
-            "text": "그리고 소환할 때마다 빈 자리 번호를 하나 받아, 그 번호만큼 y값을 조금씩 내리고 sortingOrder를 올립니다.",
-            "verbatim": true
-          },
+          {"label": "", "text": "그리고 소환할 때마다 빈 자리 번호를 하나 받아, 그 번호만큼 y값을 조금씩 내리고 sortingOrder를 올립니다.", "verbatim": true},
           {
             "label": "이유",
             "text": "횡스크롤에서 같은 적이 같은 높이로 나오면 한 마리처럼 겹쳐 보이기 때문에, 높이를 아주 조금씩 다르게 하고 그리는 순서도 함께 정해 여러 마리가 나란히 보이게 했습니다.",
             "verbatim": true
           }
         ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 1,
-            "fp": "private void SetPositionY(GameObject enemy)"
-          }
-        ]
+        "visuals": [{"kind": "code", "n": 3, "fp": "private void SetPositionY(GameObject enemy)"}]
       },
       {
         "key": "pool-collider",
         "chapter": "results",
         "layout": "problem",
         "tab": "문제 해결",
-        "title": {
-          "text": "문제 해결 1 — 풀에서 다시 꺼낸 유닛이 공격받지 않음",
-          "verbatim": true
-        },
+        "title": {"text": "문제 해결 1 — 풀에서 다시 꺼낸 유닛이 공격받지 않음", "verbatim": true},
         "lead": null,
-        "sectionPath": [
-          "5. 결과와 배운 점",
-          "문제 해결 1 — 풀에서 다시 꺼낸 유닛이 공격받지 않음"
-        ],
+        "sectionPath": ["5. 결과와 배운 점", "문제 해결 1 — 풀에서 다시 꺼낸 유닛이 공격받지 않음"],
         "points": [
-          {
-            "label": "문제",
-            "text": "오브젝트 풀에서 다시 꺼내 쓴 유닛의 콜라이더가 꺼진 채로 나왔습니다.",
-            "verbatim": true
-          },
+          {"label": "문제", "text": "오브젝트 풀에서 다시 꺼내 쓴 유닛의 콜라이더가 꺼진 채로 나왔습니다.", "verbatim": true},
           {
             "label": "원인",
             "text": "유닛이 죽을 때 Die 상태에서 콜라이더를 끄는데, 풀은 오브젝트를 비활성화했다가 다시 켜서 쓰기 때문에 꺼 둔 콜라이더가 그대로 남아 있었습니다.",
             "verbatim": true
           },
-          {
-            "label": "해결",
-            "text": "유닛이 다시 켜질 때(OnEnable) 상태·체력과 함께 콜라이더를 켜도록 했습니다.",
-            "verbatim": true
-          },
-          {
-            "label": "배운 점",
-            "text": "풀링을 쓰면 \"죽을 때 바꾼 값\"을 \"다시 꺼낼 때\" 되돌려야 합니다.",
-            "verbatim": true
-          }
+          {"label": "해결", "text": "유닛이 다시 켜질 때(OnEnable) 상태·체력과 함께 콜라이더를 켜도록 했습니다.", "verbatim": true},
+          {"label": "배운 점", "text": "풀링을 쓰면 \"죽을 때 바꾼 값\"을 \"다시 꺼낼 때\" 되돌려야 합니다.", "verbatim": true}
         ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 1,
-            "fp": "private void OnEnable()"
-          }
-        ]
+        "visuals": [{"kind": "code", "n": 1, "fp": "private void OnEnable()"}]
       },
       {
         "key": "assign",
         "chapter": "results",
         "layout": "problem",
         "tab": "문제 해결",
-        "title": {
-          "text": "문제 해결 2 — 씬마다 빠지는 인스펙터 할당",
-          "verbatim": true
-        },
+        "title": {"text": "문제 해결 2 — 씬마다 빠지는 인스펙터 할당", "verbatim": true},
         "lead": null,
-        "sectionPath": [
-          "5. 결과와 배운 점",
-          "문제 해결 2 — 씬마다 빠지는 인스펙터 할당"
-        ],
+        "sectionPath": ["5. 결과와 배운 점", "문제 해결 2 — 씬마다 빠지는 인스펙터 할당"],
         "points": [
-          {
-            "label": "문제",
-            "text": "스테이지 씬마다 버튼·스포너에 연결해야 할 참조가 빠져 있었습니다.",
-            "verbatim": true
-          },
-          {
-            "label": "원인",
-            "text": "스테이지마다 같은 연결을 인스펙터에서 손으로 반복해야 하는 구조였습니다.",
-            "verbatim": true
-          },
-          {
-            "label": "해결",
-            "text": "아군 풀의 부모를 인스펙터 대신 코드에서 직접 찾아 연결했습니다.",
-            "verbatim": true
-          },
-          {
-            "label": "남은 점",
-            "text": "GameObject.Find는 이름 문자열에 기대므로, 오브젝트 이름이 바뀌면 다시 깨집니다.",
-            "verbatim": true
-          }
+          {"label": "문제", "text": "스테이지 씬마다 버튼·스포너에 연결해야 할 참조가 빠져 있었습니다.", "verbatim": true},
+          {"label": "원인", "text": "스테이지마다 같은 연결을 인스펙터에서 손으로 반복해야 하는 구조였습니다.", "verbatim": true},
+          {"label": "해결", "text": "아군 풀의 부모를 인스펙터 대신 코드에서 직접 찾아 연결했습니다.", "verbatim": true},
+          {"label": "남은 점", "text": "GameObject.Find는 이름 문자열에 기대므로, 오브젝트 이름이 바뀌면 다시 깨집니다.", "verbatim": true}
         ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 1,
-            "fp": "void Awake()"
-          }
-        ]
+        "visuals": [{"kind": "code", "n": 1, "fp": "void Awake()"}]
       }
     ],
-    "applied": "335edcf66368fdc1"
+    "applied": "946c6ce76812f7eb"
   }
 }

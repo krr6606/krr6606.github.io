@@ -22,7 +22,7 @@
           "project": "1-nyanko-defense"
         },
         {
-          "text": "Final IK 위에서 플레이어 IK의 실행 순서와 값을 정하고 에디터 메뉴로 반자동 측정",
+          "text": "Final IK 위에서 플레이어 IK의 실행 순서와 값을 정하고 에디터 메뉴로 같은 조건을 반복 측정",
           "project": "3-hive-purge"
         }
       ]

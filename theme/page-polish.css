@@ -15,3 +15,4 @@
   .pm-badges span { font-size: 8.5pt; padding: 1pt 7pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .flist .fr-t p.fl-lead { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
+.pm-badges .pm-note { border: 1.5px dashed var(--muted); color: var(--muted); font-weight: 700; }

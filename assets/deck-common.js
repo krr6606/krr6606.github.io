@@ -408,7 +408,7 @@
     const cover = p.cover ? `<div class="media pi-cover"${ar ? ` style="aspect-ratio:${ar.toFixed(4)}"` : ''}>${imgTag(PF.srcPath(p.id, p.cover), p.title, d)}</div>` : '';
     // 프로젝트 표시(theme/project-marks.js — 다듬기, theme/RENDERER-CHANGES.md): 띠 + AI 사용 여부
     const pm = (window.PF_MARKS || {})[p.id] || {};
-    const badges = (pm.mark || typeof pm.ai === 'boolean') ? `<p class="pi-badges">${pm.mark ? `<span class="pi-mark">${esc(pm.mark)}</span>` : ''}${typeof pm.ai === 'boolean' ? `<span class="pi-ai ${pm.ai ? 'yes' : 'no'}">${esc(pm.ai ? (pm.aiLabel || 'AI 활용') : (pm.noAiLabel || 'AI 없이 직접 작성'))}</span>` : ''}</p>` : '';
+    const badges = (pm.mark || pm.note || typeof pm.ai === 'boolean') ? `<p class="pi-badges">${pm.mark ? `<span class="pi-mark">${esc(pm.mark)}</span>` : ''}${typeof pm.ai === 'boolean' ? `<span class="pi-ai ${pm.ai ? 'yes' : 'no'}">${esc(pm.ai ? (pm.aiLabel || 'AI 활용') : (pm.noAiLabel || 'AI 없이 직접 작성'))}</span>` : ''}${pm.note ? `<span class="pi-note">${esc(pm.note)}</span>` : ''}</p>` : '';
     const head = `<div class="pi-head"><${titleTag} class="pi-t">${esc(p.title)}</${titleTag}>${p.tagline ? `<p class="tagline">${inline(p.tagline)}</p>` : ''}${badges}</div>`;
     const make = (tight, linksLeft) => {
       const s = scene({ id, tpl, kind: 'bare', cls: `${variant}${tight ? ' pi-tight' : ''}`, foot, sec, group, stitle: p.title });

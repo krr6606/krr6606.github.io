@@ -54,3 +54,4 @@
 .pi-mark { background: var(--accent-fill); color: #fff; }
 .pi-ai.no { border: 1.5px solid var(--ink); color: var(--ink); }
 .pi-ai.yes { background: var(--accent-soft); color: var(--accent-ink); border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent); }
+.pi-badges .pi-note { border: 1.5px dashed var(--muted); color: var(--muted); font-weight: 700; }

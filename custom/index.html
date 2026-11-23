@@ -77,6 +77,7 @@
   /* AI 사용 표시: 직접 작성 = 테두리만, AI 활용 = 옅은 칠 */
   .ai-chip { display: inline-flex; align-items: center; gap: 5px; padding: 1px 9px; border-radius: var(--pill); font-size: 12px; font-weight: 800; white-space: nowrap; }
   .ai-chip.no { border: 1.5px solid var(--ink); color: var(--ink); }
+  .ai-chip.note { border: 1.5px dashed var(--muted); color: var(--muted); white-space: normal; }
   .ai-chip.yes { background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent-ink); border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent); }
   .kind { display: inline-block; padding: 1px 8px; border-radius: var(--pill); border: 1px solid var(--line); font-size: 12px; font-weight: 700; color: var(--muted); }
 
@@ -319,9 +320,12 @@ const PM = window.PF_MARKS || {};   // ../theme/project-marks.js (슬라이드 �
 const MARK = Object.fromEntries(Object.entries(PM).filter(([, v]) => v.mark).map(([k, v]) => [k, v.mark]));
 /* AI 사용 여부 — 수강생이 밝힌 사실(냥코 문서 첫머리 "AI를 쓰지 않은", 하이브 퍼지 4.2 AI와 일을 나눈 방식) */
 const AI_USE = Object.fromEntries(Object.entries(PM).filter(([, v]) => typeof v.ai === 'boolean').map(([k, v]) => [k, v.ai]));
-const AiChip = ({ id }) => (id in AI_USE ? (AI_USE[id]
-  ? <span className="ai-chip yes">{PM[id].aiLabel || 'AI 활용'}</span>
-  : <span className="ai-chip no">AI 없이 직접 작성</span>) : null);
+const AiChip = ({ id }) => (<>
+  {id in AI_USE ? (AI_USE[id]
+    ? <span className="ai-chip yes">{PM[id].aiLabel || 'AI 활용'}</span>
+    : <span className="ai-chip no">AI 없이 직접 작성</span>) : null}
+  {PM[id] && PM[id].note ? <span className="ai-chip note">{PM[id].note}</span> : null}
+</>);
 const kindOf = (p, t) => { const tm = p.team || {}; return tm.type === 'team' ? [t('name.team'), tm.size].filter(Boolean).join(' ') : tm.type === 'solo' ? t('name.solo') : ''; };
 function Works({ projects, colors, t }) {
   if (!projects.length) return null;

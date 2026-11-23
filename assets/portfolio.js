@@ -163,7 +163,7 @@
     const cover = p.cover ? `<figure class="cover"><img src="${esc(PF.srcPath(p.id, p.cover))}" alt="${esc(p.title)} 대표 화면"></figure>` : '';
     // 프로젝트 표시(theme/project-marks.js — 다듬기, theme/RENDERER-CHANGES.md): 띠 + AI 사용 여부
     const pm = (window.PF_MARKS || {})[p.id] || {};
-    const badges = (pm.mark || typeof pm.ai === 'boolean') ? `<p class="pm-badges">${pm.mark ? `<span class="pm-mark">${esc(pm.mark)}</span>` : ''}${typeof pm.ai === 'boolean' ? `<span class="pm-ai ${pm.ai ? 'yes' : 'no'}">${esc(pm.ai ? (pm.aiLabel || 'AI 활용') : (pm.noAiLabel || 'AI 없이 직접 작성'))}</span>` : ''}</p>` : '';
+    const badges = (pm.mark || pm.note || typeof pm.ai === 'boolean') ? `<p class="pm-badges">${pm.mark ? `<span class="pm-mark">${esc(pm.mark)}</span>` : ''}${typeof pm.ai === 'boolean' ? `<span class="pm-ai ${pm.ai ? 'yes' : 'no'}">${esc(pm.ai ? (pm.aiLabel || 'AI 활용') : (pm.noAiLabel || 'AI 없이 직접 작성'))}</span>` : ''}${pm.note ? `<span class="pm-note">${esc(pm.note)}</span>` : ''}</p>` : '';
     const body = `${p.tagline ? `<p class="tagline">${inline(p.tagline)}</p>` : ''}${badges}
       <div class="pi${cover ? '' : ' nocover'}">${cover}<div class="pi-r">
         ${meta.length ? `<dl class="meta">${meta.join('')}</dl>` : ''}

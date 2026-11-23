@@ -1,0 +1,56 @@
+{
+  "_설명": "스크롤해서 프로젝트 절에 들어가면 페이지가 이 색으로 바뀝니다(custom/index.html). 대표 이미지에서 뽑은 값이며, 값을 직접 고쳐도 됩니다. check는 바탕과의 글자 대비(본문 4.5 이상 권장)입니다.",
+  "projects": {
+    "1-nyanko-defense": {
+      "scheme": "light",
+      "bg": "#F3F7E6",
+      "surface": "#FAFBF6",
+      "ink": "#1C1D16",
+      "body": "#434639",
+      "muted": "#6B6E5E",
+      "line": "#D9DFC3",
+      "accent": "#607514",
+      "check": {
+        "ink": 15.5,
+        "body": 8.8,
+        "muted": 4.8,
+        "accent": 4.7
+      },
+      "from": "images/ingame.jpg"
+    },
+    "2-sh-server": {
+      "scheme": "light",
+      "bg": "#F7EDE6",
+      "surface": "#FBF8F6",
+      "ink": "#1D1916",
+      "body": "#463F39",
+      "muted": "#6E645E",
+      "line": "#DFCEC3",
+      "accent": "#A04F18",
+      "check": {
+        "ink": 15.1,
+        "body": 9.0,
+        "muted": 5.0,
+        "accent": 5.0
+      },
+      "from": "images/main_title.jpg"
+    },
+    "3-hive-purge": {
+      "scheme": "dark",
+      "bg": "#130D19",
+      "surface": "#1F1429",
+      "ink": "#F5F3F6",
+      "body": "#D6D2DA",
+      "muted": "#A8A1AF",
+      "line": "#382947",
+      "accent": "#69A3D3",
+      "check": {
+        "ink": 17.4,
+        "body": 12.8,
+        "muted": 7.7,
+        "accent": 7.1
+      },
+      "from": "images/gameplay_fp.jpg"
+    }
+  }
+}

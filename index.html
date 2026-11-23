@@ -4,6 +4,16 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>포트폴리오</title>
+<script>
+  /* 첫 화면은 custom/ 페이지(스크롤 색 전환 · 프로젝트 모음)로 보냄. 이 페이지(인쇄용 · 제출 PDF)는 ?classic=1로 열림.
+     예전 주소 #s=…·#번호와 점검용 ?pf-audit=1은 이 페이지에 그대로 둠. /portfolio-update로 이 파일이 바뀌면 이 블록을 다시 넣어야 함 */
+  (function () {
+    var q = location.search, h = location.hash;
+    if (/[?&](classic|pf-audit)=/.test(q)) return;
+    if (h && !/^#(cover|intro|stack|glance|contact|works|p-[^/]+)$/.test(h)) return;
+    location.replace('custom/' + h);
+  })();
+</script>
 <link rel="icon" href="data:," /><!-- 아이콘 파일 없음: 브라우저가 /favicon.ico를 요청해 404가 나지 않게 -->
 <!-- 고정 렌더러 — 포트폴리오 페이지(아래로 읽는 한 페이지, A4 인쇄 = 제출 PDF). 내용은 data/portfolio.json · data/projects/*.json에서 읽습니다. 이 파일은 고치지 않아도 됩니다.
      주소: #<절 id>(cover · intro · stack · p-<폴더> · p-<폴더>-core · glance · contact). 예전 포트폴리오 슬라이드 주소(#s=<장면 id> · #<번호>)는 같은 절로 넘어갑니다.

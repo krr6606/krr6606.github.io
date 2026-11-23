@@ -47,3 +47,10 @@
 .en-links .lcard.primary .url { font-size: 13px; margin-top: 3px; }
 .en-links .lcard:not(.primary) a { padding: 7px 30px 8px 14px; }
 .en-links .lcard:not(.primary) .lc-t { font-size: 14px; }
+
+/* ⑦ 표지 표시(theme/project-marks.js): 프로젝트 띠 + AI 사용 여부 */
+.pi-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px !important; }
+.pi-badges span { display: inline-flex; align-items: center; padding: 3px 12px; border-radius: var(--pill); font-size: 13.5px; font-weight: 800; white-space: nowrap; }
+.pi-mark { background: var(--accent-fill); color: #fff; }
+.pi-ai.no { border: 1.5px solid var(--ink); color: var(--ink); }
+.pi-ai.yes { background: var(--accent-soft); color: var(--accent-ink); border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent); }

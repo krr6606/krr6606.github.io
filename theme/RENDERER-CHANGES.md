@@ -14,3 +14,7 @@
    ```
    를 두고, `ncards`와 `flowHtml` 안의 `<p>${inline(txt(pt))}</p>`를 `${paras(txt(pt))}`로 바꿉니다.
    이것이 없으면 카드 글 안의 빈 줄이 한 문단으로 붙어 보일 뿐, 내용은 그대로입니다.
+3. **프로젝트 표시(슬라이드 표지)** — `theme/project-marks.js`가 띠·AI 사용 여부를 정합니다.
+   - `project.html`: `assets/deck-kit.js`를 싣는 줄 위에 `<script src="theme/project-marks.js"></script>`
+   - `assets/deck-common.js`의 `projectIntro`: `const head = …` 줄 앞에 `pm`·`badges`를 만들고, `head`의 tagline 뒤에 `${badges}`를 넣습니다.
+   이것이 없으면 슬라이드 표지에 표시만 빠집니다(포트폴리오 페이지는 그대로 보임).

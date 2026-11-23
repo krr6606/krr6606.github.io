@@ -230,10 +230,10 @@
         "title": {"text": "개발 환경", "verbatim": true},
         "lead": null,
         "sectionPath": ["1. 개요", "개발 환경"],
-        "points": [{"label": "", "text": "서버는 수업에서 제공된 WebSocket 기반 코드 위에 만들었고, 제가 만들거나 고친 부분은 다음과 같습니다.", "verbatim": false}],
+        "points": [{"label": "", "text": "서버 저장소 커밋 219개 중 215개가 제 커밋이고, 서버에서 맡아 만든 부분은 다음과 같습니다.", "verbatim": false}],
         "visuals": [
           {"kind": "table", "n": 1, "fp": "항목|내용"},
-          {"kind": "table", "n": 2, "fp": "영역|수업 기반 코드|내가 만들거나 고친 것", "sectionPath": ["1. 개요", "팀과 내 역할"]}
+          {"kind": "table", "n": 2, "fp": "영역|내가 만든 것", "sectionPath": ["1. 개요", "팀과 내 역할"]}
         ],
         "edited": true
       },
@@ -336,12 +336,24 @@
         "points": [
           {
             "label": "",
-            "text": "FSM 뼈대(StateMachine·IState)는 수업 코드이고, 그 위의 BaseGameTurnState와 상태 22개를 제가 만들었습니다.",
+            "text": "상태마다 반복되는 시간 재기와 다음 상태로 넘기기는 부모 BaseGameTurnState 한 곳에 모으고, 상태 22개는 자기 할 일과 다음 상태만 선언하게 만들었습니다.",
             "verbatim": true
           },
           {"label": "동작 원리", "text": "투표 결과나 사이클 수에 따라 갈라지는 상태만 Tick()을 다시 씁니다.", "verbatim": true}
         ],
         "visuals": [{"kind": "mermaid", "n": 2, "fp": "flowchart LR"}]
+      },
+      {
+        "key": "rules",
+        "chapter": "sync",
+        "layout": "full",
+        "tab": "구현",
+        "title": {"text": "3.4 규칙의 빈틈을 서버에서 막기", "verbatim": true},
+        "lead": {"text": "이런 경우를 하나씩 찾아 서버가 정한 규칙대로 처리했습니다.", "verbatim": true},
+        "sectionPath": ["서버와 클라간의 데이터 동기화 및 소통", "3.4 규칙의 빈틈을 서버에서 막기"],
+        "points": [],
+        "visuals": [{"kind": "table", "n": 1, "fp": "생기는 경우|서버의 처리|커밋 · 위치"}],
+        "edited": true
       },
       {
         "key": "ref1-before",
@@ -392,7 +404,7 @@
         "layout": "full",
         "tab": "선택",
         "title": {"text": "4.2 2차 — 코드 리뷰를 하루이틀 만에 반영 (09-09 ~ 09-10)", "verbatim": true},
-        "lead": {"text": "09-08에 강사님께 서버 코드 리뷰를 받았고, 지적된 내용을 이틀 동안 거의 모두 고쳤습니다.", "verbatim": true},
+        "lead": {"text": "09-08에 서버 코드 리뷰를 받았고, 지적된 내용을 이틀 동안 거의 모두 고쳤습니다.", "verbatim": true},
         "sectionPath": ["4. 고민과 선택 — 리팩토링 두 번", "4.2 2차 — 코드 리뷰를 하루이틀 만에 반영 (09-09 ~ 09-10)"],
         "points": [],
         "visuals": [{"kind": "table", "n": 1, "fp": "지적된 문제|고친 방법|커밋"}]
@@ -432,7 +444,7 @@
         "points": [
           {
             "label": "",
-            "text": "리뷰에서는 다음 단계에서 배울 내용으로 권했지만, 플레이 테스트에서 채팅이 약 3초 늦게 도착하는 문제(→ 5장)가 나와 직접 적용했습니다.",
+            "text": "플레이 테스트에서 채팅이 약 3초 늦게 도착하는 문제(→ 5장)를 로그로 추적해 원인을 송신 단계로 좁힌 뒤, 같은 날 멤버별 보낼 함 구조로 바꿨습니다.",
             "verbatim": true
           },
           {"label": "배운 점", "text": "서버에서는 실패를 조용히 넘기지 않는 것과 클라이언트를 믿지 않는 것이 기본이라는 것을 배웠습니다.", "verbatim": false}
@@ -589,10 +601,10 @@
         "layout": "full",
         "tab": "개요",
         "title": {"text": "팀과 내 역할", "verbatim": true},
-        "lead": {"text": "서버는 수업에서 제공된 WebSocket 기반 코드 위에 만들었고, 제가 만들거나 고친 부분은 다음과 같습니다.", "verbatim": true},
+        "lead": {"text": "서버 저장소의 커밋 219개 중 215개가 제 커밋입니다(08-25 ~ 09-10, 17일).", "verbatim": true},
         "sectionPath": ["1. 개요", "팀과 내 역할"],
         "points": [],
-        "visuals": [{"kind": "table", "n": 2, "fp": "영역|수업 기반 코드|내가 만들거나 고친 것"}]
+        "visuals": [{"kind": "table", "n": 2, "fp": "영역|내가 만든 것"}]
       },
       {
         "key": "system",
@@ -693,7 +705,7 @@
         "points": [
           {
             "label": "",
-            "text": "FSM 뼈대(StateMachine·IState)는 수업 코드이고, 그 위의 BaseGameTurnState와 상태 22개를 제가 만들었습니다.",
+            "text": "상태마다 반복되는 시간 재기와 다음 상태로 넘기기는 부모 BaseGameTurnState 한 곳에 모으고, 상태 22개는 자기 할 일과 다음 상태만 선언하게 만들었습니다.",
             "verbatim": true
           },
           {"label": "동작 원리", "text": "투표 결과나 사이클 수에 따라 갈라지는 상태만 Tick()을 다시 씁니다.", "verbatim": true}
@@ -754,7 +766,7 @@
         "layout": "full",
         "tab": "선택",
         "title": {"text": "4.2 2차 — 코드 리뷰를 하루이틀 만에 반영 (09-09 ~ 09-10)", "verbatim": true},
-        "lead": {"text": "09-08에 강사님께 서버 코드 리뷰를 받았고, 지적된 내용을 이틀 동안 거의 모두 고쳤습니다.", "verbatim": true},
+        "lead": {"text": "09-08에 서버 코드 리뷰를 받았고, 지적된 내용을 이틀 동안 거의 모두 고쳤습니다.", "verbatim": true},
         "sectionPath": ["4. 고민과 선택 — 리팩토링 두 번", "4.2 2차 — 코드 리뷰를 하루이틀 만에 반영 (09-09 ~ 09-10)"],
         "points": [],
         "visuals": [{"kind": "table", "n": 1, "fp": "지적된 문제|고친 방법|커밋"}]
@@ -787,7 +799,7 @@
         "points": [
           {
             "label": "",
-            "text": "리뷰에서는 다음 단계에서 배울 내용으로 권했지만, 플레이 테스트에서 채팅이 약 3초 늦게 도착하는 문제(→ 5장)가 나와 직접 적용했습니다.",
+            "text": "플레이 테스트에서 채팅이 약 3초 늦게 도착하는 문제(→ 5장)를 로그로 추적해 원인을 송신 단계로 좁힌 뒤, 같은 날 멤버별 보낼 함 구조로 바꿨습니다.",
             "verbatim": true
           },
           {"label": "배운 점", "text": "서버에서는 실패를 조용히 넘기지 않는 것과 클라이언트를 믿지 않는 것이 기본이라는 것을 배웠습니다.", "verbatim": false}
@@ -872,6 +884,6 @@
         "visuals": [{"kind": "code", "n": 1, "fp": "members.TryRemove(member.User.Id, out _);"}]
       }
     ],
-    "applied": "653ea62fdc6d0dad"
+    "applied": "be000fef370dfc8e"
   }
 }

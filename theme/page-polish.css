@@ -1,0 +1,17 @@
+/* ─────────────────────────────────────────────────────────────
+   인쇄용 페이지 다듬기 (theme/page-polish.css) — index.html(제출 PDF)이 theme.css 다음에 싣습니다.
+   슬라이드·화면용 페이지와 같은 읽는 순서: 결론 한 줄(진한 글씨 + 강조색 선) → 근거. 프로젝트 표시 칩.
+   /portfolio-update 뒤 다시 넣을 곳은 theme/RENDERER-CHANGES.md
+   ───────────────────────────────────────────────────────────── */
+.pm-badges { display: flex; flex-wrap: wrap; gap: 8px; margin: -20px 0 28px; }
+.pm-badges span { display: inline-flex; align-items: center; padding: 3px 12px; border-radius: var(--pill, 999px); font-size: 13px; font-weight: 800; white-space: nowrap; }
+.pm-mark { background: var(--accent); color: #fff; }
+.pm-ai.no { border: 1.5px solid var(--ink); color: var(--ink); }
+.pm-ai.yes { background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent); }
+.flist .fr-t p.fl-lead { font-weight: 600; color: var(--ink); padding-left: 10px; border-left: 3px solid var(--accent); }
+
+@media print {
+  .pm-badges { margin: -8pt 0 10pt; gap: 5pt; }
+  .pm-badges span { font-size: 8.5pt; padding: 1pt 7pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .flist .fr-t p.fl-lead { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

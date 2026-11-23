@@ -161,7 +161,10 @@
       isUrl(p.links?.github) && ['GitHub', shortUrl(p.links.github), p.links.github, 'external'], isUrl(p.links?.video) && [t('name.video'), shortUrl(p.links.video), p.links.video, 'external'],
       ...extra.map((l) => [l.label, shortUrl(l.url), l.url, 'external'])].filter(Boolean);
     const cover = p.cover ? `<figure class="cover"><img src="${esc(PF.srcPath(p.id, p.cover))}" alt="${esc(p.title)} 대표 화면"></figure>` : '';
-    const body = `${p.tagline ? `<p class="tagline">${inline(p.tagline)}</p>` : ''}
+    // 프로젝트 표시(theme/project-marks.js — 다듬기, theme/RENDERER-CHANGES.md): 띠 + AI 사용 여부
+    const pm = (window.PF_MARKS || {})[p.id] || {};
+    const badges = (pm.mark || typeof pm.ai === 'boolean') ? `<p class="pm-badges">${pm.mark ? `<span class="pm-mark">${esc(pm.mark)}</span>` : ''}${typeof pm.ai === 'boolean' ? `<span class="pm-ai ${pm.ai ? 'yes' : 'no'}">${esc(pm.ai ? (pm.aiLabel || 'AI 활용') : (pm.noAiLabel || 'AI 없이 직접 작성'))}</span>` : ''}</p>` : '';
+    const body = `${p.tagline ? `<p class="tagline">${inline(p.tagline)}</p>` : ''}${badges}
       <div class="pi${cover ? '' : ' nocover'}">${cover}<div class="pi-r">
         ${meta.length ? `<dl class="meta">${meta.join('')}</dl>` : ''}
         ${p.intent?.text ? `<div class="intent"><p class="k">${T('name.intent')}</p><p>${inline(p.intent.text)}</p></div>` : ''}
@@ -172,7 +175,7 @@
 
   // 기능 소개: 화면은 왼쪽(기능 번호와 함께), 기능 설명과 [슬라이드 열기]는 오른쪽 목록. 화면이 하나도 없으면 목록이 폭 전체
   function features(p, no, sec, btn) {
-    const hl = (p.highlights || []).slice(0, 4);
+    const hl = (p.highlights || []).slice(0, 6);   // 다듬기: 기능 소개 5개까지 싣기 (theme/RENDERER-CHANGES.md)
     if (!hl.length) return '';
     const capText = (c) => (typeof c === 'string' ? c : c?.text || '');      // 그림 설명은 글 조각 또는 글자
     const shots = hl.map((h, i) => ({ h, i })).filter(({ h }) => h.image?.src);
@@ -181,7 +184,7 @@
       return `<figure class="shot" data-fi="${i}"><div class="shot-m"><img src="${esc(PF.srcPath(p.id, h.image.src))}" alt="${esc(capText(h.image.caption) || h.title)}"${d}></div>
         <figcaption><span class="n">${pad2(i + 1)}</span><span>${inline(capText(h.image.caption) || h.title)}</span></figcaption></figure>`;
     }).join('');
-    const rows = hl.map((h, i) => `<li data-fi="${i}"><div class="fr-t"><p class="fk">${T('en.feature')} ${pad2(i + 1)}</p><h3>${inline(h.title)}</h3>${h.what ? `<p>${inline(h.what)}</p>` : ''}</div>
+    const rows = hl.map((h, i) => `<li data-fi="${i}"><div class="fr-t"><p class="fk">${T('en.feature')} ${pad2(i + 1)}</p><h3>${inline(h.title)}</h3>${h.what ? `<p class="fl-lead">${inline(h.what)}</p>` : ''}</div>
       <div class="fr-a">${link({ href: PF.projectUrl(p.id, PF.deckSceneFor(p, h.section)), label: T('page.see-in-deck'), kind: 'page', cls: 'pill',
         attrs: `aria-label="${esc(PF.normTitle(h.title))} — ${T('page.see-in-deck')} (새 탭)"` })}</div></li>`).join('');
     const body = `<div class="fe${shots.length ? '' : ' noshot'}" style="--shots:${shots.length}">${shots.length ? `<div class="shots">${tiles}</div>` : ''}

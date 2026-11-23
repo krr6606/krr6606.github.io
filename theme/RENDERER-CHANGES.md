@@ -18,3 +18,7 @@
    - `project.html`: `assets/deck-kit.js`를 싣는 줄 위에 `<script src="theme/project-marks.js"></script>`
    - `assets/deck-common.js`의 `projectIntro`: `const head = …` 줄 앞에 `pm`·`badges`를 만들고, `head`의 tagline 뒤에 `${badges}`를 넣습니다.
    이것이 없으면 슬라이드 표지에 표시만 빠집니다(포트폴리오 페이지는 그대로 보임).
+4. **인쇄용 페이지(제출 PDF)** — `index.html`과 `assets/portfolio.js`
+   - `index.html`: `theme/theme.css` 줄 아래에 `<link rel="stylesheet" href="theme/page-polish.css" />`, `assets/common.js` 줄 위에 `<script src="theme/project-marks.js"></script>`
+   - `assets/portfolio.js`의 `projectIntro`: tagline 뒤에 `pm`·`badges`(슬라이드 표지와 같은 모양, 클래스 `pm-badges`)
+   - `features`: `slice(0, 4)` → `slice(0, 6)` (기능 소개를 5개까지 싣기), 기능 설명 `<p>`에 `class="fl-lead"`

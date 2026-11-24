@@ -255,19 +255,13 @@
         },
         "lead": {
           "text": "IK 계산 자체는 Final IK 에셋이 하고, 저는 그 위에서 IK들을 어떤 순서로, 어떤 값으로 돌릴지를 정했습니다.",
-          "verbatim": true
+          "verbatim": false
         },
         "sectionPath": [
           "1. 개요",
           "개발 환경"
         ],
-        "points": [
-          {
-            "label": "Claude Code",
-            "text": "플레이어 IK 스크립트와 측정 도구는 Claude Code에 맡겨 만든 코드이고, 저는 무엇을 어떻게 잴지와 결과를 보고 다음에 무엇을 할지를 정했습니다.",
-            "verbatim": false
-          }
-        ],
+        "points": [],
         "visuals": [
           {
             "kind": "table",
@@ -545,7 +539,7 @@
           },
           {
             "label": "벗어난 데이터만 다시 준다",
-            "text": "결과 전체를 다시 주면 분석이 흐려지기 때문에, 기준에서 크게 벗어난 부분만 골라 원인 분석을 맡겼습니다.",
+            "text": "결과 전체를 다시 주면 분석이 흐려지기 때문입니다.",
             "verbatim": true
           }
         ],

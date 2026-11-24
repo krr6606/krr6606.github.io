@@ -1,7 +1,9 @@
-# 이 레포만의 점검 기준을 함께 읽기
+# 이 레포만의 방향과 점검 기준을 함께 읽기
 
-`/portfolio-check`, `/portfolio-build`, `/portfolio-edit`를 실행할 때, 그리고 `src/`의 프로젝트 문서나 슬라이드를 쓰거나 고치거나 리뷰할 때는
-**`local/check-criteria.md`를 먼저 읽고** 그 기준을 `format/`에 더해 적용합니다. 두 기준이 부딪히면 `local/check-criteria.md`가 이깁니다.
-점검 결과는 그 파일 §3대로 `report.md`의 `## 이 레포 기준 점검` 절에 씁니다.
+포트폴리오 작업(프로젝트 문서·슬라이드·포트폴리오 페이지를 쓰기, 고치기, 리뷰하기, 방향 토론하기)을 할 때와
+`/portfolio-check`, `/portfolio-build`, `/portfolio-edit`를 실행할 때는 아래 두 파일을 **먼저 읽습니다.**
 
-(이 파일과 `local/`은 템플릿에 없어서 `/portfolio-update`가 덮어쓰지 않습니다.)
+- `local/portfolio-direction.md`: 수강생과 합의한 방향(정체성, 독자, 문서 구조, 작업 태도)과 프로젝트별 진행 상태. 새로 합의한 것이 생기면 이 파일을 고치고 커밋합니다.
+- `local/check-criteria.md`: `format/`에 더해 적용하는 점검 기준. 두 기준이 부딪히면 이 파일이 이깁니다. 점검 결과는 그 파일 §3대로 `report.md`의 `## 이 레포 기준 점검` 절에 씁니다.
+
+(이 파일과 `local/`은 템플릿에 없어서 `/portfolio-update`가 덮어쓰지 않습니다. Claude의 메모리는 컴퓨터마다 따로라서, 컴퓨터를 옮겨도 남아야 하는 것은 여기에 둡니다.)

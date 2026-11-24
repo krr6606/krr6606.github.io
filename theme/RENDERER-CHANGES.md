@@ -27,3 +27,8 @@
    - `assets/`의 JS는 고치지 않습니다(`PF.md.parse`를 감싸고, 그려진 그림을 지켜보다가 덮개를 붙임).
    이것이 없으면 그림에 번호만 빠지고, 프로젝트 문서의 번호 목록은 보통 목록으로 보입니다.
    좌표 따기: `doc.html?p=<폴더>&pf-mark=1`. 목록 글에 `~`를 쓰면 GFM 취소선이 되니 피합니다.
+6. **다이어그램 ELK 배치** — `theme/mermaid-elk.js`가 `@mermaid-js/layout-elk@0.1.7`을 불러와 flowchart·stateDiagram을 ELK로 배치합니다(선이 직각으로 정리되고 덜 겹침).
+   - `doc.html`·`project.html`: mermaid CDN `<script>` 줄 바로 아래에 `<script src="theme/mermaid-elk.js"></script>`
+   - `assets/`의 JS는 고치지 않습니다(`mermaid.initialize`·`render`·`run`을 감쌈). ELK를 받지 못하면 기본 배치로 그립니다.
+   - 그림마다: 블록 안에 `%% pf-elk: model-order`(적은 순서대로 배치 — 순환이 많은 상태도) 또는 `%% pf-elk: off`(예전 배치).
+   이것이 없으면 다이어그램이 예전 배치(dagre)로 돌아갈 뿐, 내용은 그대로입니다.

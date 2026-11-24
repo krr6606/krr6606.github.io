@@ -352,7 +352,7 @@
       {
         "key": "config-flow",
         "chapter": "features",
-        "layout": "visual",
+        "layout": "full",
         "tab": "흐름",
         "title": {
           "text": "3.1 설정 파일과 데이터 표",
@@ -366,28 +366,12 @@
           "3. 핵심 기능",
           "3.1 설정 파일과 데이터 표 — 서버가 읽고 클라이언트로 보낸다"
         ],
-        "points": [
-          {
-            "label": "",
-            "text": "게임 규칙을 바꿀 때 코드를 고치지 않고 appsettings.json의 값만 바꿉니다. 상태마다의 제한 시간, 라운드·사이클 수, 점수 변화량이 여기에 있습니다.",
-            "verbatim": true
-          },
-          {
-            "label": "",
-            "text": "장르·키워드·아이템은 TSV 표로 두고, 서버가 켜질 때 한 번 읽습니다.",
-            "verbatim": true
-          },
-          {
-            "label": "결과",
-            "text": "시간·라운드 같은 규칙 값은 서버만 갖고 있다가 필요한 때에 보내므로, 규칙을 바꿔도 클라이언트를 다시 빌드할 필요가 없습니다.",
-            "verbatim": true
-          }
-        ],
+        "points": [],
         "visuals": [
           {
             "kind": "mermaid",
             "n": 1,
-            "fp": "flowchart LR"
+            "fp": "sequenceDiagram"
           }
         ]
       },
@@ -584,7 +568,7 @@
         "layout": "code",
         "tab": "선택",
         "title": {
-          "text": "4.1 상태 메시지를 봉투 하나로 — 바꾸기 전",
+          "text": "4.1 바꾸기 전 — 상태마다 메시지 클래스",
           "verbatim": false
         },
         "lead": {
@@ -606,22 +590,22 @@
           {
             "kind": "code",
             "n": 1,
-            "fp": "// Protocol.cs (61447ab 이전) — 이런 클래스가 상태마다 있었음"
+            "fp": "// Protocol.cs (61447ab 이전) — 22개 중 세 개"
           }
         ]
       },
       {
         "key": "ref1-after",
         "chapter": "refactor",
-        "layout": "full",
-        "tab": "선택",
+        "layout": "code",
+        "tab": "구현",
         "title": {
-          "text": "4.1 공통 봉투를 고른 이유",
+          "text": "4.1 바꾼 뒤 — 봉투 하나와 팩토리",
           "verbatim": false
         },
         "lead": {
-          "text": "상태마다 클래스를 두는 방식과 큰 클래스 하나를 비교해, 공통 필드는 한 곳에 두고 상태별 데이터만 따로 담는 공통 봉투 + Parameter JSON을 골랐습니다.",
-          "verbatim": false
+          "text": "공통 필드는 봉투(TurnMessage, 3.2) 하나에 두고, 상태마다 다른 값만 파라미터 클래스로 따로 담습니다.",
+          "verbatim": true
         },
         "sectionPath": [
           "4. 고민과 선택",
@@ -629,21 +613,42 @@
         ],
         "points": [
           {
-            "label": "결과",
-            "text": "파일 30개를 바꿨고 새 상태를 추가하는 일이 TurnMessageType에 값을 하나 더하고, 필요할 때만 파라미터 클래스를 더하고, 팩토리 메서드를 하나 더하는 세 단계로 정리됐습니다.",
+            "label": "",
+            "text": "같은 세 상태가 팩토리 한 줄씩이 됐습니다.",
             "verbatim": true
           }
         ],
         "visuals": [
           {
-            "kind": "table",
-            "n": 1,
-            "fp": "방법|장점|이 게임에서의 문제"
-          },
-          {
             "kind": "code",
+            "n": 3,
+            "fp": "// 61447ab 이후 — 세 상태 모두 TurnMessage 하나로"
+          }
+        ]
+      },
+      {
+        "key": "ref1-compare",
+        "chapter": "refactor",
+        "layout": "full",
+        "tab": "선택",
+        "title": {
+          "text": "4.1 바꾸기 전과 바꾼 뒤",
+          "verbatim": false
+        },
+        "lead": {
+          "text": "이 변경으로 파일 30개를 바꿨고, 새 상태를 추가하는 일이 위 표의 세 단계로 정리됐습니다.",
+          "verbatim": false
+        },
+        "sectionPath": [
+          "4. 고민과 선택",
+          "4.1 상태 메시지를 봉투 하나로 정리"
+        ],
+        "points": [],
+        "visuals": [
+          {
+            "kind": "table",
             "n": 2,
-            "fp": "// DebateTimeState.cs (61447ab)"
+            "fp": "|바꾸기 전|바꾼 뒤"
           }
         ]
       },

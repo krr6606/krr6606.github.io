@@ -64,7 +64,12 @@
       "how": "웨이브가 끝나면 순서대로 다음 칸으로 가는 것이 아니라, `NextWaveIndex`가 가리키는 칸으로 갑니다. 그래서 2번과 3번이 서로를 가리키게 해 두면 그 구간이 스테이지가 끝날 때까지 반복됩니다.",
       "why": "코드 수정 없이 데이터만으로 수정할 수 있도록 하고 싶어서 이런 구조로 작성했습니다.",
       "section": "4.1 웨이브 데이터 내용",
-      "image": null
+      "image": {
+        "src": "images/stage1_waves.png",
+        "w": 430,
+        "h": 618,
+        "caption": "Stage 1 SO 인스펙터 — 반복 구간인 2번과 3번 웨이브. Next Wave Index가 서로를 가리키고, Is Random Time이 켜져 있어 6~10초 사이에서 대기 시간을 뽑는다"
+      }
     },
     {
       "title": "보스 등장 트리거",
@@ -330,7 +335,18 @@
             "verbatim": true
           }
         ],
-        "visuals": []
+        "visuals": [
+          {
+            "kind": "image",
+            "src": "images/user_data_so.jpg",
+            "w": 550,
+            "h": 160,
+            "caption": {
+              "text": "UserGameDataSO 인스펙터 — 레벨 데이터 · 최대 클리어 스테이지 · 경험치 · 해금 목록 · 편성 슬롯",
+              "verbatim": true
+            }
+          }
+        ]
       },
       {
         "key": "attack-range",
@@ -526,6 +542,50 @@
         ]
       },
       {
+        "key": "wave-inspector",
+        "chapter": "spawn",
+        "layout": "visual",
+        "tab": "구현",
+        "title": {
+          "text": "4.1 웨이브 데이터 내용",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "4. 적 스폰 구조",
+          "4.1 웨이브 데이터 내용"
+        ],
+        "points": [
+          {
+            "label": "Next Wave Index = 3",
+            "text": "2번 웨이브가 끝나면 3번으로 갑니다",
+            "verbatim": true
+          },
+          {
+            "label": "Next Wave Index = 2",
+            "text": "3번 웨이브가 끝나면 다시 2번으로 가서, 2·3번이 반복됩니다",
+            "verbatim": true
+          },
+          {
+            "label": "Is Random Time",
+            "text": "켜져 있어 Min과 Max(6초와 10초) 사이에서 대기 시간을 뽑습니다",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "image",
+            "src": "images/stage1_waves.png",
+            "w": 430,
+            "h": 618,
+            "caption": {
+              "text": "Stage 1 SO 인스펙터 — 반복 구간인 2번과 3번 웨이브. Next Wave Index가 서로를 가리키고, Is Random Time이 켜져 있어 6~10초 사이에서 대기 시간을 뽑는다",
+              "verbatim": true
+            }
+          }
+        ]
+      },
+      {
         "key": "boss",
         "chapter": "spawn",
         "layout": "code",
@@ -690,6 +750,16 @@
         ],
         "visuals": [
           {
+            "kind": "image",
+            "src": "images/stage02_spawner_before_after.png",
+            "w": 876,
+            "h": 230,
+            "caption": {
+              "text": "Stage02 씬의 SpawnManager 인스펙터 — 고치기 전에는 Cat Spawner 연결이 비어 있었고(None), 고친 뒤에는 Spawner가 연결되어 있다",
+              "verbatim": true
+            }
+          },
+          {
             "kind": "code",
             "n": 1,
             "fp": "void Awake()"
@@ -698,5 +768,5 @@
       }
     ]
   },
-  "generatedAt": null
+  "generatedAt": "2026-11-24"
 }

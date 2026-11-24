@@ -22,3 +22,8 @@
    - `index.html`: `theme/theme.css` 줄 아래에 `<link rel="stylesheet" href="theme/page-polish.css" />`, `assets/common.js` 줄 위에 `<script src="theme/project-marks.js"></script>`
    - `assets/portfolio.js`의 `projectIntro`: tagline 뒤에 `pm`·`badges`(슬라이드 표지와 같은 모양, 클래스 `pm-badges`)
    - `features`: `slice(0, 4)` → `slice(0, 6)` (기능 소개를 5개까지 싣기), 기능 설명 `<p>`에 `class="fl-lead"`
+5. **그림 표시** — `theme/figure-marks.js`가 그림 뒤 주석 `<!-- pf-marks "낱말":x,y,w,h … -->`를 읽어 그림의 강조할 곳에 테두리를 그리고, 그 페이지 글 속 같은 낱말에 같은 색을 칠해 짝짓습니다(이름이 숫자면 다음 번호 목록과 짝. 쓰는 법은 그 파일 머리 주석). 슬라이드에서는 `PF.inline`도 감쌉니다(번호 짝의 캡션 짝 글).
+   - `doc.html`·`project.html`: `assets/md-blocks.js`를 싣는 줄 바로 아래에 `<script src="theme/figure-marks.js"></script>`
+   - `assets/`의 JS는 고치지 않습니다(`PF.md.parse`를 감싸고, 그려진 그림을 지켜보다가 덮개를 붙임).
+   이것이 없으면 그림에 번호만 빠지고, 프로젝트 문서의 번호 목록은 보통 목록으로 보입니다.
+   좌표 따기: `doc.html?p=<폴더>&pf-mark=1`. 목록 글에 `~`를 쓰면 GFM 취소선이 되니 피합니다.

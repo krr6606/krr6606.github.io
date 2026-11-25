@@ -136,13 +136,13 @@
       "src": "images/discord_parse_manager.png",
       "w": 2000,
       "h": 1205,
-      "caption": "09-04 클라이언트 팀에 해석 매니저(ParseNetworkManager.cs)를 전달한 메시지"
+      "caption": "클라이언트 팀에 해석 매니저(ParseNetworkManager.cs)를 전달한 메시지"
     },
     {
       "src": "images/discord_keyword_chat.png",
       "w": 1470,
       "h": 1224,
-      "caption": "첫날(08-25) 논의 — 키워드 맞춤은 서버가 판정해야 한다는 의견과 메시지 설계 (팀원 이름 가림)"
+      "caption": "첫날 논의 — 키워드 맞춤은 서버가 판정해야 한다는 의견과 메시지 설계 (팀원 이름 가림)"
     },
     {
       "src": "images/state_speak.gif",
@@ -305,7 +305,7 @@
         "points": [
           {
             "label": "",
-            "text": "서버 저장소의 커밋 219개 중 215개가 제 커밋입니다(08-25 ~ 09-10, 17일).",
+            "text": "서버 저장소의 커밋 219개 중 215개가 제 커밋입니다.",
             "verbatim": true
           }
         ],
@@ -763,7 +763,7 @@
           "verbatim": true
         },
         "lead": {
-          "text": "09-08에 서버 코드 리뷰를 받았고, 지적된 내용을 이틀 동안(09-09 ~ 09-10) 거의 모두 고쳤습니다.",
+          "text": "마감 이틀 전에 서버 코드 리뷰를 받았고, 지적된 내용을 남은 이틀 동안 거의 모두 고쳤습니다.",
           "verbatim": true
         },
         "sectionPath": [

@@ -8,7 +8,7 @@
   "team": {
     "type": "team",
     "size": "4인",
-    "role": "서버 전체(1인) — 시간으로 진행하는 게임 턴(FSM)을 중심으로 메시지 설계 · 방과 연결까지"
+    "role": "서버 전체(1인) — 시간으로 진행하는 게임 턴(FSM)을 중심으로 메시지 설계 · 방과 연결까지. 클라이언트의 마트 아이템 배치"
   },
   "meta": [
     {
@@ -25,7 +25,7 @@
     },
     {
       "label": "환경",
-      "value": "ASP.NET Core (.NET 10) · WebSocket · System.Text.Json"
+      "value": "ASP.NET Core (.NET 10) · WebSocket · System.Text.Json · Unity(클라이언트)"
     }
   ],
   "tags": [
@@ -33,8 +33,8 @@
     ".NET 10",
     "WebSocket",
     "FSM",
-    "CsvHelper",
-    "Channel"
+    "Channel",
+    "UniTask"
   ],
   "links": {
     "github": "https://github.com/KooHoo-Dev/3rd-TeamProject-SH-Server",
@@ -43,6 +43,10 @@
       {
         "label": "숏츠",
         "url": "https://youtube.com/shorts/Kq8cJ30VOf0"
+      },
+      {
+        "label": "클라이언트 GitHub",
+        "url": "https://github.com/KooHoo-Dev/3rd-TeamProject-SH"
       }
     ]
   },
@@ -52,53 +56,32 @@
   },
   "highlights": [
     {
-      "title": "설정 파일과 데이터 표",
-      "what": "게임 규칙을 바꿀 때 코드를 고치지 않고 `appsettings.json`의 값만 바꿉니다.",
-      "how": "서버 시작 때 `GameConfig`와 TSV 표를 한 번 읽어 방마다 넘기고, 클라이언트에는 라운드·사이클 수와 상태마다 필요한 ID만 보냅니다.",
-      "why": "규칙 값은 서버만 갖고 있다가 필요한 때에 보내므로, 규칙을 바꿔도 클라이언트를 다시 빌드할 필요가 없습니다.",
-      "section": "3.1 설정 파일과 데이터 표 — 서버가 읽고 클라이언트로 보낸다",
+      "title": "마트 아이템을 모두에게 똑같이",
+      "what": "서버가 랜덤으로 뽑은 마트 아이템이 네 명의 화면에서 같은 매대, 같은 자리에 놓입니다.",
+      "how": "서버는 카테고리와 아이템 ID 목록을 짝지은 묶음만 보내고, 제가 만든 클라이언트 매대 배치가 같은 TSV 표에서 아이템을 찾아 묶음의 카테고리 순서대로 구역에 놓습니다.",
+      "why": "묶음 안의 순서가 곧 구역 번호이므로, 같은 묶음을 받은 클라이언트는 모두 같은 구역에 같은 카테고리를 놓습니다.",
+      "section": "3.2 받는 쪽도 직접 만들었다",
+      "image": {
+        "src": "images/mart_items.jpg",
+        "w": 1600,
+        "h": 900,
+        "caption": "마트 화면 — 서버가 뽑아 보낸 아이템 데이터대로 바나나·수박 같은 물건이 놓이고, 다른 플레이어들이 돌아다니며 물건을 고른다"
+      }
+    },
+    {
+      "title": "같은 물건은 먼저 집은 한 명만",
+      "what": "여러 명이 같은 물건을 거의 동시에 집어도 한 명만 가져갑니다.",
+      "how": "클라이언트는 집으려 한다는 요청만 보내고, 서버가 아이템 ID를 키로 하는 ConcurrentDictionary에 TryAdd로 소유자를 등록합니다.",
+      "why": "확인과 등록을 한 번에 처리하므로 먼저 등록한 요청만 성공하고, 늦게 온 요청은 무시합니다.",
+      "section": "3.5 같은 물건은 먼저 집은 한 명만",
       "image": null
-    },
-    {
-      "title": "상태 메시지와 클라이언트용 해석 매니저",
-      "what": "상태가 바뀔 때마다 서버는 `TurnMessage` 하나를 모두에게 보냅니다.",
-      "how": "공통 필드는 봉투에, 상태마다 다른 데이터만 `Parameter`(JSON)에 담고, 해석하는 `ParseNetworkManager.cs`를 만들어 클라이언트 팀에 전달했습니다.",
-      "why": "봉투로 바꾸면 클라이언트 쪽 코드도 함께 바뀌는 일이라, 해석 쪽은 클라이언트용 매니저를 직접 만들어 전달했습니다.",
-      "section": "3.2 상태 메시지 하나와 클라이언트에 건넨 해석 매니저",
-      "image": {
-        "src": "images/discord_parse_manager.png",
-        "w": 2000,
-        "h": 1205,
-        "caption": "09-04 클라이언트 팀에 해석 매니저(ParseNetworkManager.cs)를 전달한 메시지"
-      }
-    },
-    {
-      "title": "시간으로 진행하는 FSM — 상태 22개",
-      "what": "서버가 권위를 가지는 게임 진행(시간에 따른 진행도와 분기)은 서버가 상태를 계산해서, 알맞은 때에 모든 클라이언트에게 다음으로 넘어갈 최대 시간 정보와 함께 보냅니다.",
-      "how": "상태마다 반복되는 시간 재기와 다음 상태로 넘기기는 부모 `BaseGameTurnState` 한 곳에 모으고, 상태 22개는 자기 할 일과 다음 상태만 선언하게 만들었습니다. 투표 결과나 사이클 수에 따라 갈라지는 상태만 `Tick()`을 다시 씁니다.",
-      "why": "랜덤 요소, 시간, 현재 턴은 모든 클라이언트가 똑같이 봐야 하는 동기화 요소이면서, 서버가 권위를 가져야 하는 요소라고 판단해 서버에서 진행하도록 했습니다.",
-      "section": "3.3 시간으로 진행하는 FSM — 상태 22개",
-      "image": {
-        "src": "images/ingame_speak.jpg",
-        "w": 2000,
-        "h": 1124,
-        "caption": "인게임 — 발언 상태(ShowItemAndSpeak): 서버가 보낸 남은 시간 · 현재 발언자 · 소개할 아이템 · 카테고리와 사이클을 클라이언트가 표시"
-      }
     },
     {
       "title": "상태 메시지를 봉투 하나로 정리",
-      "what": "상태마다 따로 있던 메시지 클래스를 공통 봉투 하나와 팩토리로 바꿔, 새 상태를 추가하는 일을 세 단계로 줄였습니다.",
-      "how": "공통 필드(상태 종류, 남은 시간, 사이클, 라운드)는 봉투에, 상태마다 다른 데이터만 `Parameter`(JSON)에 담고, 상태마다 팩토리 메서드 하나로 메시지를 만듭니다.",
-      "why": "상태가 22개로 늘면서 클래스와 분기가 서버와 클라이언트 양쪽에서 계속 늘어났습니다.",
+      "what": "상태마다 따로 있던 메시지 클래스 22개를 봉투 TurnMessage 하나로 바꿨습니다.",
+      "how": "공통 필드는 봉투에 한 번 두고, 상태마다 다른 값만 파라미터 클래스로 담아 팩토리 한 줄로 보냅니다.",
+      "why": "상태가 늘 때마다 서버·클라이언트 양쪽에 클래스와 분기가 늘어나서, 상태가 더 늘기 전에 바꿀 거면 빨리 바꾸는 게 낫다고 판단했습니다.",
       "section": "4.1 상태 메시지를 봉투 하나로 정리",
-      "image": null
-    },
-    {
-      "title": "코드 리뷰를 이틀 만에 반영",
-      "what": "09-08에 받은 서버 코드 리뷰의 지적을 이틀 동안 거의 모두 고쳤습니다.",
-      "how": "상태별 타이머를 없애고 10Hz 진행 루프 안에서 게임을 진행, 클라이언트가 보낸 ID를 믿지 않기, 멤버별 보낼 함(Outbox)으로 송수신 분리 등.",
-      "why": "게임 로직이 타이머 콜백 안에서 돌아 예외가 사라지고, 클라이언트가 보낸 ID를 그대로 믿는 등 제가 보지 못한 위험을 리뷰로 알게 됐기 때문입니다.",
-      "section": "4.2 코드 리뷰를 이틀 만에 반영",
       "image": null
     }
   ],
@@ -108,7 +91,7 @@
       "problem": "데이터 매니저와 TSV 표를 넣고 빌드 서버에 올렸더니, 로컬에서는 잘 읽히던 표를 서버가 읽지 못했습니다.",
       "cause": "표는 빌드 결과 폴더(`AppContext.BaseDirectory`)를 기준으로 찾는데, 따로 지정하지 않은 `.tsv` 파일은 빌드 결과에서 빠집니다.",
       "solution": "`HelloServer.csproj`에 `Table` 폴더의 TSV를 빌드 결과로 복사하는 설정(`CopyToOutputDirectory`)을 넣었습니다.",
-      "result": "직접 배포용으로 빌드해 본 결과(`publish_test`)에 `Table/*.tsv`가 들어간 것을 확인했고, 같은 날 46분 만에 고쳤습니다.",
+      "result": "직접 배포용으로 빌드해 본 결과에 `Table/*.tsv`가 들어간 것을 확인했고, 같은 날 46분 만에 고쳤습니다.",
       "lesson": "\"내 PC에서 된다\"와 \"빌드 결과에 들어 있다\"는 다릅니다.",
       "section": "빌드 서버에서 TSV 표를 읽지 못한 문제"
     },
@@ -133,10 +116,16 @@
   ],
   "screenshots": [
     {
+      "src": "images/mart_items.jpg",
+      "w": 1600,
+      "h": 900,
+      "caption": "마트 화면 — 서버가 뽑아 보낸 아이템 데이터대로 바나나·수박 같은 물건이 놓이고, 다른 플레이어들이 돌아다니며 물건을 고른다"
+    },
+    {
       "src": "images/ingame_speak.jpg",
       "w": 2000,
       "h": 1124,
-      "caption": "인게임 — 발언 상태(ShowItemAndSpeak): 서버가 보낸 남은 시간 · 현재 발언자 · 소개할 아이템 · 카테고리와 사이클을 클라이언트가 표시"
+      "caption": "인게임 — 발언 상태: 서버가 보낸 남은 시간 · 현재 발언자 · 소개할 아이템 · 카테고리와 사이클을 클라이언트가 표시"
     },
     {
       "src": "images/discord_parse_manager.png",
@@ -154,14 +143,14 @@
   "retro": {
     "achieved": [
       "목표로 한 게임 진행을 서버에서 끝까지 동작시켰습니다.",
-      "서버를 처음 제대로 다뤄 본 프로젝트였습니다. 채팅 지연을 겪으며, 보내기를 기다리는 동안 받기까지 멈춰 있으면 한 사람의 느린 연결이 방 전체를 늦춘다는 것을 알았습니다.",
+      "서버를 처음 제대로 다뤄 본 프로젝트였습니다. 채팅이 3초씩 늦게 도착하던 문제를 겪으며, 보내기를 기다리는 동안 받기까지 멈춰 있으면 한 사람의 느린 연결이 방 전체를 늦춘다는 것을 알았습니다.",
       "클라이언트 코드까지 바뀌는 변경은 먼저 효과를 설명하고 하지 않을 수도 있다는 선택지를 드린 뒤 진행해야 한다는 것을 배웠습니다."
     ],
     "regrets": [
       "가장 아쉬운 점은 목표한 경험을 시스템으로 끌어내지 못한 것입니다. 피드백에서 라이어 게임 파트와 마트 물건 사이의 연결점과 설명할 동기가 약하다는 이야기를 들었습니다.",
       "클라이언트가 서버로 보내는 메시지 타입은 첫날 정한 문자열 그대로 남았습니다.",
       "`Room.cs`(862줄)에 책임이 몰려 있습니다.",
-      "시간을 가장 많이 쓴 버그는 여러 명이 실제로 플레이하면서 나온 기획서에 없는 경우였고, 3.4 표의 아홉 가지를 하나씩 막느라 기능을 더 넣고 완성도를 높이지 못했습니다."
+      "시간을 가장 많이 쓴 버그는 여러 명이 함께 테스트하면서 나온, 기획서에 없는 경우였습니다. 투표하지 않은 사람, 동률, 같은 버튼을 여러 번 누르는 사람 같은 아홉 가지를 하나씩 막느라 기능을 더 넣고 완성도를 높이지 못했습니다."
     ],
     "plans": [
       "다음 프로젝트에서는 '목표한 경험'을 중심으로 기획과 시스템을 먼저 짜고, 그 경험에 꼭 필요한 기능부터 넣겠습니다.",
@@ -189,9 +178,9 @@
       },
       {
         "key": "features",
-        "title": "핵심 기능",
+        "title": "마트 아이템을 모두에게 똑같이 놓기",
         "sectionPath": [
-          "3. 핵심 기능"
+          "3. 마트 아이템을 모두에게 똑같이 놓기"
         ]
       },
       {
@@ -203,9 +192,9 @@
       },
       {
         "key": "results",
-        "title": "결과와 배운 점",
+        "title": "고친 문제",
         "sectionPath": [
-          "5. 결과와 배운 점"
+          "5. 고친 문제"
         ]
       }
     ],
@@ -216,11 +205,11 @@
         "layout": "overview",
         "tab": "개요",
         "title": {
-          "text": "마트에서 고른 물건으로 하는 라이어 게임의 서버",
-          "verbatim": false
+          "text": "1. 개요",
+          "verbatim": true
         },
         "lead": {
-          "text": "물건을 고르고 설명하는 라이어 게임입니다. 마트에서 물건을 골라, 장르에 맞는 키워드(라이어는 다른 키워드)와 연관 지어 소개합니다(3~4인).",
+          "text": "고른 물건을 키워드와 연관 지어 설명할 때의 짜릿함을 플레이어에게 주는 것이 목표였습니다.",
           "verbatim": true
         },
         "sectionPath": [
@@ -228,14 +217,19 @@
         ],
         "points": [
           {
-            "label": "맡은 일",
-            "text": "서버는 게임 시작 때 라이어와 장르·키워드를 정해 모두에게 보내고, 시간에 따라 턴(상태 22개)을 진행합니다. 마트의 움직임과 채팅은 모두에게 전달하고, 아이템 줍기는 서버가 판정해 다시 보냅니다.",
-            "verbatim": false
+            "label": "",
+            "text": "물건을 고르고 설명하는 라이어 게임입니다.",
+            "verbatim": true
           },
           {
-            "label": "이유",
-            "text": "랜덤 요소, 시간, 현재 턴은 모든 클라이언트가 똑같이 봐야 하는 동기화 요소이면서, 서버가 권위를 가져야 하는 요소라고 판단해 서버에서 진행하도록 했습니다.",
-            "verbatim": false
+            "label": "",
+            "text": "제가 맡은 부분은 서버입니다.",
+            "verbatim": true
+          },
+          {
+            "label": "",
+            "text": "클라이언트에서는 서버가 보낸 마트 아이템 데이터를 받아 매대에 배치하는 부분과, 그 데이터를 읽는 구조를 만들었습니다.",
+            "verbatim": true
           }
         ],
         "visuals": [
@@ -260,13 +254,10 @@
         "layout": "full",
         "tab": "개요",
         "title": {
-          "text": "개발 환경과 서버에서 만든 것",
-          "verbatim": false
+          "text": "개발 환경",
+          "verbatim": true
         },
-        "lead": {
-          "text": "4인 팀에서 서버를 혼자 맡았고, 서버 저장소의 커밋 219개 중 215개가 제 커밋입니다(08-25 ~ 09-10, 17일).",
-          "verbatim": false
-        },
+        "lead": null,
         "sectionPath": [
           "1. 개요",
           "개발 환경"
@@ -277,15 +268,40 @@
             "kind": "table",
             "n": 1,
             "fp": "항목|내용"
+          }
+        ]
+      },
+      {
+        "key": "team",
+        "chapter": "overview",
+        "layout": "full",
+        "tab": "개요",
+        "title": {
+          "text": "팀과 내 역할",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "1. 개요",
+          "팀과 내 역할"
+        ],
+        "points": [
+          {
+            "label": "",
+            "text": "서버 저장소의 커밋 219개 중 215개가 제 커밋입니다(08-25 ~ 09-10, 17일).",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "table",
+            "n": 1,
+            "fp": "팀원|담당"
           },
           {
             "kind": "table",
             "n": 2,
-            "fp": "영역|만든 것",
-            "sectionPath": [
-              "1. 개요",
-              "팀과 내 역할"
-            ]
+            "fp": "영역|만든 것"
           }
         ]
       },
@@ -295,22 +311,24 @@
         "layout": "visual",
         "tab": "구조",
         "title": {
-          "text": "전체 구조",
+          "text": "2.1 전체 구조",
           "verbatim": true
         },
-        "lead": {
-          "text": "방 코드 하나로 매칭하고, 방마다 독립된 GameManager와 FSM을 가집니다.",
-          "verbatim": true
-        },
+        "lead": null,
         "sectionPath": [
           "2. 시스템 구조",
-          "전체 구조"
+          "2.1 전체 구조"
         ],
         "points": [
           {
-            "label": "이유",
-            "text": "방마다 하나의 게임 흐름이 존재한다고 생각했기 때문입니다. 그래서 Room(사람과 메시지)이 GameManager(그 방의 게임 상태와 점수)를 하나 갖고, GameManager가 그 방의 흐름을 진행하는 StateMachine을 하나 갖도록 나눴습니다.",
-            "verbatim": false
+            "label": "",
+            "text": "방 코드 하나로 매칭하고, 방마다 독립된 GameManager와 FSM을 가집니다.",
+            "verbatim": true
+          },
+          {
+            "label": "",
+            "text": "방마다 하나의 게임 흐름이 존재한다고 생각했기 때문에 이렇게 나눴습니다.",
+            "verbatim": true
           }
         ],
         "visuals": [
@@ -322,97 +340,39 @@
         ]
       },
       {
-        "key": "shared-state",
+        "key": "fsm",
         "chapter": "arch",
-        "layout": "full",
-        "tab": "구조",
-        "title": {
-          "text": "동시에 도는 루프와 공유 상태",
-          "verbatim": true
-        },
-        "lead": {
-          "text": "서로 다른 루프가 같은 게임 상태를 건드리는 지점마다 보호 방법을 따로 골랐습니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "2. 시스템 구조",
-          "동시에 도는 루프와 공유 상태"
-        ],
-        "points": [],
-        "visuals": [
-          {
-            "kind": "table",
-            "n": 1,
-            "fp": "공유 상태|보호 방법|이유"
-          }
-        ]
-      },
-      {
-        "key": "config-flow",
-        "chapter": "features",
-        "layout": "full",
+        "layout": "visual",
         "tab": "흐름",
         "title": {
-          "text": "3.1 설정 파일과 데이터 표",
-          "verbatim": false
-        },
-        "lead": {
-          "text": "서버와 클라이언트가 같은 TSV 표를 갖고, 서버는 ID만 보냅니다. 클라이언트는 받은 ID로 자기 표에서 이름·그림을 찾습니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "3. 핵심 기능",
-          "3.1 설정 파일과 데이터 표 — 서버가 읽고 클라이언트로 보낸다"
-        ],
-        "points": [],
-        "visuals": [
-          {
-            "kind": "mermaid",
-            "n": 1,
-            "fp": "sequenceDiagram"
-          }
-        ]
-      },
-      {
-        "key": "sync-intro",
-        "chapter": "features",
-        "layout": "visual",
-        "tab": "구현",
-        "title": {
-          "text": "마트 아이템을 모두에게 똑같이 배치하기",
+          "text": "2.2 시간으로 진행하는 상태 22개",
           "verbatim": true
         },
         "lead": null,
         "sectionPath": [
-          "3. 핵심 기능",
-          "3.1 설정 파일과 데이터 표 — 서버가 읽고 클라이언트로 보낸다",
-          "마트 아이템을 모두에게 똑같이 배치하기"
+          "2. 시스템 구조",
+          "2.2 시간으로 진행하는 상태 22개"
         ],
         "points": [
           {
-            "label": "문제",
-            "text": "마트 파트에서는 서버가 랜덤으로 아이템 데이터를 뽑아 클라이언트에게 보내고, 모든 클라이언트가 받은 데이터대로 똑같이 아이템을 배치해야 했습니다.",
+            "label": "",
+            "text": "클라이언트는 받은 상태대로 화면만 바꿉니다.",
             "verbatim": true
           },
           {
-            "label": "해결",
-            "text": "서버는 뽑은 아이템의 ID만 보내고 클라이언트가 자기 표에서 같은 데이터를 꺼내 배치하게 했습니다.",
-            "verbatim": false
-          },
-          {
-            "label": "협업",
-            "text": "이 방법은 클라이언트 쪽도 같은 표를 읽어야 동작하기 때문에, 클라이언트 마트 부분의 데이터 로드는 클라이언트 담당자와 이야기해 허락을 구한 뒤 제가 기초 구조를 짜고 직접 수정했습니다.",
+            "label": "",
+            "text": "상태마다 반복되는 시간 재기와 다음 상태로 넘기기는 부모 BaseGameTurnState 한 곳에 모으고, 상태 22개는 자기 할 일과 다음 상태만 선언하게 만들었습니다.",
             "verbatim": true
           }
         ],
         "visuals": [
           {
             "kind": "image",
-            "src": "images/mart_items.jpg",
-            "w": 1600,
-            "h": 900,
+            "src": "images/ingame_speak.jpg",
+            "w": 2000,
+            "h": 1124,
             "caption": {
-              "text": "마트 화면 — 서버가 뽑아 보낸 아이템 데이터대로 바나나·수박 같은 물건이 놓이고, 다른 플레이어들이 돌아다니며 물건을 고른다",
+              "text": "인게임 — 발언 상태: 서버가 보낸 남은 시간 · 현재 발언자 · 소개할 아이템 · 카테고리와 사이클을 클라이언트가 표시",
               "verbatim": true
             }
           }
@@ -420,26 +380,26 @@
       },
       {
         "key": "turn-message",
-        "chapter": "features",
+        "chapter": "arch",
         "layout": "code",
         "tab": "구현",
         "title": {
-          "text": "3.2 상태 메시지 하나 — TurnMessage",
-          "verbatim": false
+          "text": "2.3 클라이언트에 보내는 묶음과 해석 매니저",
+          "verbatim": true
         },
         "lead": {
           "text": "상태가 바뀔 때마다 서버는 TurnMessage 하나를 모두에게 보냅니다.",
           "verbatim": true
         },
         "sectionPath": [
-          "3. 핵심 기능",
-          "3.2 상태 메시지 하나와 클라이언트에 건넨 해석 매니저"
+          "2. 시스템 구조",
+          "2.3 클라이언트에 보내는 묶음과 해석 매니저"
         ],
         "points": [
           {
-            "label": "구현",
-            "text": "공통 필드(상태 종류, 남은 시간, 사이클, 라운드)는 봉투에, 상태마다 다른 데이터만 Parameter(JSON)에 담습니다. 서버 쪽에서는 상태마다 빌더 메서드 하나(TurnMessageFactory)로 이 봉투를 만듭니다. 파라미터가 없는 상태는 CreateSimple로, 있는 상태는 Create<T>가 파라미터를 JSON으로 바꿔 Parameter에 넣습니다.",
-            "verbatim": false
+            "label": "",
+            "text": "공통 필드(상태 종류, 남은 시간, 사이클, 라운드)는 봉투에, 상태마다 다른 데이터만 Parameter(JSON)에 담습니다.",
+            "verbatim": true
           }
         ],
         "visuals": [
@@ -452,131 +412,238 @@
       },
       {
         "key": "parser",
+        "chapter": "arch",
+        "layout": "code",
+        "tab": "구현",
+        "title": {
+          "text": "2.3 클라이언트에 보내는 묶음과 해석 매니저",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "2. 시스템 구조",
+          "2.3 클라이언트에 보내는 묶음과 해석 매니저"
+        ],
+        "points": [
+          {
+            "label": "",
+            "text": "클라이언트 쪽에서 쓰는 해석 매니저(ParseNetworkManager.cs)는 제가 만들어 클라이언트 팀에 전달했습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "",
+            "text": "그래서 클라이언트 팀은 필요한 이벤트만 구독하면 됩니다.",
+            "verbatim": true
+          },
+          {
+            "label": "",
+            "text": "전달할 때는 파일과 함께 사용법을 같이 남겼고, 서버가 새 메시지를 추가하면 이 파일을 다시 갱신해 전달했습니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 2,
+            "fp": "// 상태마다 이벤트 하나 (모두 남은 시간 · 사이클 · 라운드가 앞에)"
+          }
+        ]
+      },
+      {
+        "key": "shared-state",
+        "chapter": "arch",
+        "layout": "full",
+        "tab": "구조",
+        "title": {
+          "text": "2.4 동시에 도는 루프와 공유 상태",
+          "verbatim": true
+        },
+        "lead": {
+          "text": "서로 다른 루프가 같은 게임 상태를 건드리는 지점마다 보호 방법을 따로 골랐습니다.",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "2. 시스템 구조",
+          "2.4 동시에 도는 루프와 공유 상태"
+        ],
+        "points": [],
+        "visuals": [
+          {
+            "kind": "table",
+            "n": 1,
+            "fp": "공유 상태|보호 방법|이유"
+          }
+        ]
+      },
+      {
+        "key": "mart-bundle",
         "chapter": "features",
         "layout": "code",
         "tab": "구현",
         "title": {
-          "text": "3.2 클라이언트에 건넨 해석 매니저",
-          "verbatim": false
+          "text": "3.1 서버가 뽑고, ID 묶음만 보낸다",
+          "verbatim": true
         },
-        "lead": {
-          "text": "봉투를 받으면 상태 종류로 나눠 Parameter를 풀고 상태마다 이벤트 하나를 부르기 때문에, 클라이언트 팀은 필요한 이벤트만 구독하면 됩니다.",
-          "verbatim": false
-        },
+        "lead": null,
         "sectionPath": [
-          "3. 핵심 기능",
-          "3.2 상태 메시지 하나와 클라이언트에 건넨 해석 매니저"
+          "3. 마트 아이템을 모두에게 똑같이 놓기",
+          "3.1 서버가 뽑고, ID 묶음만 보낸다"
         ],
         "points": [
           {
-            "label": "전달",
-            "text": "전달할 때는 파일과 함께 사용법을 같이 남겼고, 서버가 새 메시지를 추가하면 이 파일을 다시 갱신해 전달했습니다(커밋 b7fc9a8·dec473f·11f750f).",
+            "label": "",
+            "text": "서버와 클라이언트가 같은 TSV 표를 갖고, 서버는 ID만 보냅니다.",
+            "verbatim": true
+          },
+          {
+            "label": "",
+            "text": "그래서 메시지가 작고, 표를 바꾸면 양쪽이 같은 데이터를 봅니다.",
+            "verbatim": true
+          },
+          {
+            "label": "",
+            "text": "마트에 들어가는 상태(MartEnterState)가 되면, 서버는 이번 라운드의 카테고리마다 아이템을 무작위로 뽑아 카테고리와 ID 목록을 짝지은 묶음으로 보냅니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 1,
+            "fp": "public class MartEnterParameter"
+          }
+        ]
+      },
+      {
+        "key": "sync-intro",
+        "chapter": "features",
+        "layout": "code",
+        "tab": "구현",
+        "title": {
+          "text": "3.2 받는 쪽도 직접 만들었다",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "3. 마트 아이템을 모두에게 똑같이 놓기",
+          "3.2 받는 쪽도 직접 만들었다"
+        ],
+        "points": [
+          {
+            "label": "",
+            "text": "클라이언트 마트 부분의 데이터 로드는 클라이언트 담당자와 이야기해 허락을 구한 뒤 제가 기초 구조를 짜고 직접 수정했습니다.",
+            "verbatim": false
+          },
+          {
+            "label": "",
+            "text": "묶음 안의 순서가 곧 구역 번호이므로, 같은 묶음을 받은 클라이언트는 모두 같은 구역에 같은 카테고리를 놓습니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 1,
+            "fp": "public void SetCategoryAllArea(CategoryType[] categoryTypes)"
+          }
+        ]
+      },
+      {
+        "key": "mart-async",
+        "chapter": "features",
+        "layout": "code",
+        "tab": "구현",
+        "title": {
+          "text": "3.3 메시지가 마트 씬보다 먼저 도착했다",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "3. 마트 아이템을 모두에게 똑같이 놓기",
+          "3.3 메시지가 마트 씬보다 먼저 도착했다"
+        ],
+        "points": [
+          {
+            "label": "문제",
+            "text": "씬 로드는 비동기라서, 처음 구조에서는 씬과 DisplayStandManager가 준비되기 전에 아이템을 놓으려 할 수 있었습니다.",
+            "verbatim": false
+          },
+          {
+            "label": "해결",
+            "text": "씬 로드를 기다리고 DisplayStandManager가 준비됐다는 표시(IsReady)가 켜질 때까지 기다린 뒤에 묶음을 넘기게 했습니다.",
             "verbatim": false
           }
         ],
         "visuals": [
           {
             "kind": "code",
-            "n": 3,
-            "fp": "// 상태마다 이벤트 하나 (모두 남은 시간 · 사이클 · 라운드가 앞에)"
+            "n": 1,
+            "fp": "private async UniTask OnMartEnterStateAsync(float timerMs, i"
           }
         ]
       },
       {
-        "key": "fsm",
+        "key": "nine-items",
         "chapter": "features",
-        "layout": "visual",
-        "tab": "구현",
+        "layout": "code",
+        "tab": "문제 해결",
         "title": {
-          "text": "3.3 시간으로 진행하는 FSM — 상태 22개",
-          "verbatim": false
+          "text": "3.4 9개만 놓이고, 클라이언트마다 다른 위치에 떴다",
+          "verbatim": true
         },
-        "lead": {
-          "text": "서버가 권위를 가지는 게임 진행(시간에 따른 진행도와 분기)은 서버가 상태를 계산해서, 알맞은 때에 모든 클라이언트에게 다음으로 넘어갈 최대 시간 정보와 함께 보냅니다. 클라이언트는 받은 상태대로 화면만 바꿉니다.",
-          "verbatim": false
-        },
+        "lead": null,
         "sectionPath": [
-          "3. 핵심 기능",
-          "3.3 시간으로 진행하는 FSM — 상태 22개"
+          "3. 마트 아이템을 모두에게 똑같이 놓기",
+          "3.4 9개만 놓이고, 클라이언트마다 다른 위치에 떴다"
         ],
         "points": [
           {
-            "label": "구현",
-            "text": "상태마다 반복되는 시간 재기와 다음 상태로 넘기기는 부모 BaseGameTurnState 한 곳에 모으고, 상태 22개는 자기 할 일과 다음 상태만 선언하게 만들었습니다.",
+            "label": "문제",
+            "text": "클라이언트마다 구역마다 아이템이 9개까지만 놓이고 나머지 매대는 비어 있었고, 같은 아이템이 클라이언트마다 다른 위치에 떴습니다.",
             "verbatim": true
           },
           {
-            "label": "구현",
-            "text": "투표 결과나 사이클 수에 따라 갈라지는 상태만 Tick()을 다시 씁니다.",
-            "verbatim": true
+            "label": "원인 (클라이언트)",
+            "text": "매대 번호 대신 매대 한 개의 칸 수(3)까지 도는 번호로 매대를 골라, 구역마다 앞의 매대 3개에만 9개가 놓였습니다.",
+            "verbatim": false
+          },
+          {
+            "label": "원인 (서버)",
+            "text": "서버가 아이템을 뽑은 카테고리와 묶음에 붙인 카테고리 이름이 엇갈린 채로 보내졌습니다.",
+            "verbatim": false
           }
         ],
         "visuals": [
           {
-            "kind": "image",
-            "src": "images/ingame_speak.jpg",
-            "w": 2000,
-            "h": 1124,
-            "caption": {
-              "text": "인게임 — 발언 상태(ShowItemAndSpeak): 서버가 보낸 남은 시간 · 현재 발언자 · 소개할 아이템 · 카테고리와 사이클을 클라이언트가 표시",
-              "verbatim": true
-            }
+            "kind": "code",
+            "n": 1,
+            "fp": "// 바꾸기 전"
           }
         ]
       },
       {
-        "key": "rules",
+        "key": "item-race",
         "chapter": "features",
-        "layout": "full",
+        "layout": "code",
         "tab": "구현",
         "title": {
-          "text": "3.4 규칙의 빈틈을 서버에서 막기",
+          "text": "3.5 같은 물건은 먼저 집은 한 명만",
           "verbatim": true
         },
-        "lead": {
-          "text": "실제로 여러 명이 플레이하면 기획서에 없는 경우가 계속 나옵니다.",
-          "verbatim": true
-        },
+        "lead": null,
         "sectionPath": [
-          "3. 핵심 기능",
-          "3.4 규칙의 빈틈을 서버에서 막기"
+          "3. 마트 아이템을 모두에게 똑같이 놓기",
+          "3.5 같은 물건은 먼저 집은 한 명만"
         ],
         "points": [
           {
             "label": "",
-            "text": "클라이언트는 버튼을 누른 사실만 보내고, 집계와 판정은 모두 서버가 합니다. 그래서 위의 경우가 생겨도 모든 클라이언트가 같은 결과를 받습니다.",
+            "text": "클라이언트는 집으려 한다는 요청만 보내고, 누가 가져갈지는 서버가 정합니다.",
             "verbatim": true
-          }
-        ],
-        "visuals": [
+          },
           {
-            "kind": "table",
-            "n": 1,
-            "fp": "생기는 경우|서버의 처리|커밋 · 위치"
-          }
-        ]
-      },
-      {
-        "key": "ref1-before",
-        "chapter": "refactor",
-        "layout": "code",
-        "tab": "선택",
-        "title": {
-          "text": "4.1 바꾸기 전 — 상태마다 메시지 클래스",
-          "verbatim": false
-        },
-        "lead": {
-          "text": "처음에는 상태마다 메시지 클래스를 따로 만들었습니다. 그런데 상태가 22개로 늘면서 클래스와 분기가 서버와 클라이언트 양쪽에서 계속 늘어났습니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "4. 고민과 선택",
-          "4.1 상태 메시지를 봉투 하나로 정리"
-        ],
-        "points": [
-          {
-            "label": "선택",
-            "text": "상태가 더 늘기 전에, 바꿀 거면 빨리 바꾸는 게 낫다고 판단했습니다. 다만 클라이언트 쪽 코드도 함께 바뀌는 일이라, 착수 전에 클라이언트 담당자에게 효과와 필요성을 설명하고 \"일정 안에 어려우면 바꾸지 않겠다\"는 선택지도 먼저 드렸고, 동의를 받은 뒤 09-02에 바꿨습니다(커밋 61447ab).",
+            "label": "",
+            "text": "먼저 등록한 요청만 성공하고, 늦게 온 요청은 무시합니다.",
             "verbatim": true
           }
         ],
@@ -584,39 +651,7 @@
           {
             "kind": "code",
             "n": 1,
-            "fp": "// Protocol.cs (61447ab 이전) — 22개 중 두 개. 나머지도 같은 네 필드를 되풀이"
-          }
-        ]
-      },
-      {
-        "key": "ref1-after",
-        "chapter": "refactor",
-        "layout": "code",
-        "tab": "구현",
-        "title": {
-          "text": "4.1 바꾼 뒤 — 봉투 하나와 팩토리",
-          "verbatim": false
-        },
-        "lead": {
-          "text": "공통 필드는 봉투(TurnMessage, 3.2) 하나에 두고, 상태마다 다른 값만 파라미터 클래스로 따로 담습니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "4. 고민과 선택",
-          "4.1 상태 메시지를 봉투 하나로 정리"
-        ],
-        "points": [
-          {
-            "label": "",
-            "text": "위 두 상태와, 다른 값이 없는 변론 시간 상태까지 보내는 코드가 팩토리 한 줄씩이 됐습니다.",
-            "verbatim": true
-          }
-        ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 3,
-            "fp": "// 61447ab 이후 — 세 상태 모두 TurnMessage 하나로"
+            "fp": "case Protocol.InteractionType.ItemHoldQuery:"
           }
         ]
       },
@@ -626,19 +661,30 @@
         "layout": "full",
         "tab": "선택",
         "title": {
-          "text": "4.1 바꾸기 전과 바꾼 뒤",
-          "verbatim": false
+          "text": "4.1 상태 메시지를 봉투 하나로 정리",
+          "verbatim": true
         },
         "lead": {
-          "text": "이 변경으로 파일 30개를 바꿨고, 새 상태를 추가하는 일이 위 표의 세 단계로 정리됐습니다.",
-          "verbatim": false
+          "text": "상태가 더 늘기 전에, 바꿀 거면 빨리 바꾸는 게 낫다고 판단했습니다.",
+          "verbatim": true
         },
         "sectionPath": [
           "4. 고민과 선택",
           "4.1 상태 메시지를 봉투 하나로 정리"
         ],
-        "points": [],
+        "points": [
+          {
+            "label": "",
+            "text": "이 변경으로 파일 30개를 바꿨고, 새 상태를 추가하는 일이 타입 값 하나, 필요할 때만 파라미터 클래스, 팩토리 메서드 하나의 세 단계로 정리됐습니다.",
+            "verbatim": true
+          }
+        ],
         "visuals": [
+          {
+            "kind": "table",
+            "n": 1,
+            "fp": "방법|장점|이 게임에서의 문제"
+          },
           {
             "kind": "table",
             "n": 2,
@@ -663,64 +709,12 @@
           "4. 고민과 선택",
           "4.2 코드 리뷰를 이틀 만에 반영"
         ],
-        "points": [
-          {
-            "label": "배운 점",
-            "text": "1차는 \"코드가 늘어나는 불편\"을 스스로 느껴서 바꿨고, 2차는 제가 보지 못한 위험(예외가 사라지는 곳, 믿으면 안 되는 입력)을 리뷰로 알게 됐습니다. 지적을 미루지 않고 바로 고치면서, 서버에서는 실패를 조용히 넘기지 않는 것과 클라이언트를 믿지 않는 것이 기본이라는 것을 배웠습니다.",
-            "verbatim": true
-          }
-        ],
+        "points": [],
         "visuals": [
           {
             "kind": "table",
             "n": 1,
-            "fp": "지적된 문제|고친 방법|커밋"
-          }
-        ]
-      },
-      {
-        "key": "ref2-code",
-        "chapter": "refactor",
-        "layout": "code",
-        "tab": "선택",
-        "title": {
-          "text": "4.2 타이머 콜백에서 10Hz 진행 루프로",
-          "verbatim": false
-        },
-        "lead": {
-          "text": "게임 로직이 타이머 콜백 안에서 돌아, 거기서 난 예외가 사라졌습니다.",
-          "verbatim": false
-        },
-        "sectionPath": [
-          "4. 고민과 선택",
-          "4.2 코드 리뷰를 이틀 만에 반영"
-        ],
-        "points": [
-          {
-            "label": "바꾸기 전",
-            "text": "상태마다 System.Timers.Timer 콜백에서 진행",
-            "verbatim": false
-          },
-          {
-            "label": "바꾼 뒤",
-            "text": "10Hz 진행 루프 한 곳에서 진행하고, 시간 판정은 부모 한 곳에서",
-            "verbatim": true
-          }
-        ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 1,
-            "fp": "gameManager.currentRoom.timer.AutoReset = true;"
-          },
-          {
-            "kind": "code",
-            "n": 2,
-            "fp": "// RoomHub.cs — 방송 루프 안에서 게임 진행",
-            "lines": [
-              1,
-              5
-            ]
+            "fp": "지적된 문제|고친 방법"
           }
         ]
       },
@@ -728,28 +722,25 @@
         "key": "outbox",
         "chapter": "refactor",
         "layout": "visual",
-        "tab": "선택",
+        "tab": "구조",
         "title": {
-          "text": "4.2 송수신 분리 (Outbox)",
-          "verbatim": false
-        },
-        "lead": {
-          "text": "리뷰에서 지적된 문제(위 표 마지막 줄)이고, 플레이 테스트의 채팅 지연으로 실제로 드러난 문제입니다(원인을 찾은 과정은 5장 「채팅이 약 3초 늦게 도착하던 문제」).",
+          "text": "4.2 코드 리뷰를 이틀 만에 반영",
           "verbatim": true
         },
+        "lead": null,
         "sectionPath": [
           "4. 고민과 선택",
           "4.2 코드 리뷰를 이틀 만에 반영"
         ],
         "points": [
           {
-            "label": "보내기",
-            "text": "직렬화는 한 번만 하고, 멤버마다 보낼 함(Outbox)에 넣은 뒤 바로 반환합니다. 락을 기다리지 않고 순서도 지켜집니다.",
-            "verbatim": false
+            "label": "",
+            "text": "보내는 쪽은 멤버마다의 보낼 함에 넣고 바로 돌아오므로, 느린 소켓 하나가 다른 멤버의 전송을 막지 않습니다.",
+            "verbatim": true
           },
           {
-            "label": "멤버별 Writer",
-            "text": "멤버마다 Writer가 함에서 꺼내 보내고, 1초 넘게 걸리면 그 연결만 끊습니다. 느린 한 명 때문에 방 전체가 기다리지 않습니다.",
+            "label": "배운 점",
+            "text": "서버에서는 실패를 조용히 넘기지 않는 것과 클라이언트를 믿지 않는 것이 기본이라는 것을 배웠습니다.",
             "verbatim": false
           }
         ],
@@ -770,20 +761,57 @@
           "text": "4.3 서버가 판정하는 것과 아닌 것",
           "verbatim": true
         },
-        "lead": {
-          "text": "대상이 교육과정 내부 사용자이고 일정이 약 2.5주라 보안은 의도적으로 뒤로 미뤘습니다. 그래도 결과에 직접 영향을 주는 판정에는 서버 권위를 적용했습니다.",
-          "verbatim": true
-        },
+        "lead": null,
         "sectionPath": [
           "4. 고민과 선택",
           "4.3 서버가 판정하는 것과 아닌 것"
         ],
-        "points": [],
+        "points": [
+          {
+            "label": "",
+            "text": "준비 수는 처음에는 클라이언트가 직접 셌습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "",
+            "text": "같은 날 서버가 준비한 인원을 세어 준비 메시지와 입장 메시지에 담아 보내도록 프로토콜을 바꾸고, 클라이언트는 그 수를 그대로 쓰게 양쪽을 함께 고쳤습니다.",
+            "verbatim": true
+          }
+        ],
         "visuals": [
           {
             "kind": "table",
             "n": 1,
             "fp": "영역|상태"
+          }
+        ]
+      },
+      {
+        "key": "rules",
+        "chapter": "refactor",
+        "layout": "full",
+        "tab": "선택",
+        "title": {
+          "text": "4.4 규칙의 빈틈을 서버에서 막기",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "4. 고민과 선택",
+          "4.4 규칙의 빈틈을 서버에서 막기"
+        ],
+        "points": [
+          {
+            "label": "",
+            "text": "클라이언트는 버튼을 누른 사실만 보내고, 집계와 판정은 모두 서버가 합니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "table",
+            "n": 1,
+            "fp": "생기는 경우|서버의 처리"
           }
         ]
       },
@@ -798,13 +826,13 @@
         },
         "lead": null,
         "sectionPath": [
-          "5. 결과와 배운 점",
+          "5. 고친 문제",
           "빌드 서버에서 TSV 표를 읽지 못한 문제"
         ],
         "points": [
           {
             "label": "문제",
-            "text": "데이터 매니저와 TSV 표를 넣고(1411dac) 빌드 서버에 올렸더니, 로컬에서는 잘 읽히던 표를 서버가 읽지 못했습니다.",
+            "text": "데이터 매니저와 TSV 표를 넣고 빌드 서버에 올렸더니, 로컬에서는 잘 읽히던 표를 서버가 읽지 못했습니다.",
             "verbatim": true
           },
           {
@@ -813,21 +841,16 @@
             "verbatim": false
           },
           {
-            "label": "해결",
-            "text": "그래서 프로젝트 설정 파일(HelloServer.csproj)에 Table 폴더의 TSV를 빌드 결과로 복사하라는 설정을 넣었습니다.",
-            "verbatim": false
-          },
-          {
             "label": "배운 점",
-            "text": "\"내 PC에서 된다\"와 \"빌드 결과에 들어 있다\"는 다릅니다.",
+            "text": "코드가 아닌 데이터 파일은 빌드 결과에 무엇이 들어가는지 직접 확인해야 한다는 것을 배웠습니다.",
             "verbatim": true
           }
         ],
         "visuals": [
           {
             "kind": "code",
-            "n": 2,
-            "fp": "<!-- 바꾸기 전 (1411dac) — 패키지만 -->"
+            "n": 1,
+            "fp": "<!-- 바꾸기 전 — 패키지만 -->"
           }
         ]
       },
@@ -842,7 +865,7 @@
         },
         "lead": null,
         "sectionPath": [
-          "5. 결과와 배운 점",
+          "5. 고친 문제",
           "채팅이 약 3초 늦게 도착하던 문제"
         ],
         "points": [
@@ -853,12 +876,12 @@
           },
           {
             "label": "원인",
-            "text": "채팅을 받은 수신 루프가 방 전원에게 보내기가 모두 끝날 때까지(Task.WhenAll) 기다렸고, 멤버마다 보내기는 상태·위치 방송과 같은 송신 락(SendLock)을 시한 없이 기다렸습니다. 그래서 한 사람에게 보내기가 늦어지면, 채팅을 보낸 사람의 수신 루프도 다음 메시지를 읽지 못하고 대기가 쌓였습니다.",
+            "text": "의심 지점에 로그를 넣어 서버 송신 시각과 클라이언트 수신 시각을 비교해 보니, 병목은 로직이 아니라 송신 단계였습니다.",
             "verbatim": true
           },
           {
             "label": "해결",
-            "text": "먼저 채팅 처리의 await를 빼서 급한 불을 끄고(8a2ac1d), 같은 날 멤버별 보낼 함과 Writer 루프로 송수신을 분리했습니다(58a86eb, 4.2).",
+            "text": "먼저 채팅 처리의 await를 빼서 급한 불을 끄고, 같은 날 멤버별 보낼 함과 Writer 루프로 송수신을 분리했습니다.",
             "verbatim": true
           },
           {
@@ -880,7 +903,7 @@
         },
         "lead": null,
         "sectionPath": [
-          "5. 결과와 배운 점",
+          "5. 고친 문제",
           "게임 중 한 명이 나가면 망가진 채 진행되던 문제"
         ],
         "points": [
@@ -890,18 +913,13 @@
             "verbatim": true
           },
           {
-            "label": "원인",
-            "text": "퇴장 처리가 멤버만 지우고 게임 흐름은 그대로 두었기 때문입니다.",
+            "label": "해결",
+            "text": "라이어 게임은 인원 구성 자체가 전제라서, 남은 인원으로 계속하지 않고 게임을 끝내도록 바꿨습니다.",
             "verbatim": true
           },
           {
-            "label": "해결",
-            "text": "라이어 게임은 인원 구성 자체가 전제라서, 남은 인원으로 계속하지 않고 게임을 끝내도록 바꿨습니다. 방을 만료로 표시하고 GameEnd()를 부른 뒤 방 전용 취소 토큰을 취소해, 연결된 모든 수신 루프가 함께 끝나고 각자 정리되게 했습니다.",
-            "verbatim": false
-          },
-          {
-            "label": "결과",
-            "text": "서버는 남은 사람들에게 퇴장 메시지를 보냈지만, 클라이언트 쪽에서 이 상황을 처리하는 부분이 구현되지 않아 모두의 화면이 그대로 멈춰 버렸습니다.",
+            "label": "배운 점",
+            "text": "서버가 게임을 끝낼 때는 끝난 이유까지 알려야, 받는 쪽이 화면을 정리할 수 있다는 것을 배웠습니다.",
             "verbatim": true
           }
         ],
@@ -915,5 +933,5 @@
       }
     ]
   },
-  "generatedAt": "2026-11-24"
+  "generatedAt": "2026-11-25"
 }

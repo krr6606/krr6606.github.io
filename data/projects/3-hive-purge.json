@@ -57,7 +57,12 @@
       "how": "AimIK가 척추와 총구를 돌린 뒤 왼손을 되돌리고, 1인칭 손 IK가 눈 기준 총 자리를 정하면 FBBIK가 두 손을 끌어옵니다.",
       "why": "뒤에 도는 것은 앞에서 움직여 놓은 뼈를 다시 움직이므로, 같은 값을 넣어도 순서가 바뀌면 자세가 달라집니다.",
       "section": "2.1 한 프레임 안에서 뼈를 움직이는 순서",
-      "image": null
+      "image": {
+        "src": "images/weapon_swap_ik.gif",
+        "w": 640,
+        "h": 360,
+        "caption": "1인칭에서 권총을 소총으로 바꾸면 두 손이 새 총을 쥐는 장면"
+      }
     },
     {
       "title": "1인칭 팔꿈치 방향 고정",
@@ -134,6 +139,18 @@
       "w": 1608,
       "h": 506,
       "caption": "1인칭 점프 중 공중에서 본 화면, 고치기 전과 고친 뒤"
+    },
+    {
+      "src": "images/weapon_swap_ik.gif",
+      "w": 640,
+      "h": 360,
+      "caption": "1인칭에서 권총을 소총으로 바꾸면 두 손이 새 총을 쥐는 장면"
+    },
+    {
+      "src": "images/fp_aim_up.gif",
+      "w": 640,
+      "h": 360,
+      "caption": "고친 뒤의 플레이 — 1인칭으로 쏘다가 위를 보며 날아오는 적을 겨누는 장면"
     }
   ],
   "retro": {
@@ -292,7 +309,7 @@
       {
         "key": "ik-order",
         "chapter": "arch",
-        "layout": "full",
+        "layout": "visual",
         "tab": "구조",
         "title": {
           "text": "2.1 한 프레임 안에서 뼈를 움직이는 순서",
@@ -318,6 +335,16 @@
             "kind": "table",
             "n": 1,
             "fp": "실행 순서|스크립트|하는 일"
+          },
+          {
+            "kind": "image",
+            "src": "images/weapon_swap_ik.gif",
+            "w": 640,
+            "h": 360,
+            "caption": {
+              "text": "1인칭에서 권총을 소총으로 바꾸면 두 손이 새 총을 쥐는 장면",
+              "verbatim": true
+            }
           }
         ]
       },
@@ -557,6 +584,16 @@
             "kind": "code",
             "n": 1,
             "fp": "// 오른손 목표가 FBBIK 전 오른 어깨에서 팔 길이 × maxReachRatio 안에 들어오도록,"
+          },
+          {
+            "kind": "image",
+            "src": "images/fp_aim_up.gif",
+            "w": 640,
+            "h": 360,
+            "caption": {
+              "text": "고친 뒤의 플레이 — 1인칭으로 쏘다가 위를 보며 날아오는 적을 겨누는 장면",
+              "verbatim": true
+            }
           }
         ]
       },

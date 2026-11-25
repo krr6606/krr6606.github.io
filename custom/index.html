@@ -115,6 +115,8 @@
   .nav a { font-size: 13.5px; font-weight: 600; color: var(--muted); text-decoration: none; white-space: nowrap; transition: color .15s; }
   .nav a:hover, .nav a.on { color: var(--ink); }
   .nav .me { font-size: 15px; font-weight: 800; color: var(--ink); }
+  .nav-scroll { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .nav-scroll::-webkit-scrollbar { display: none; }
 
   /* 카드: 그림자 대신 면 색 차이. 호버는 살짝 떠오르는 정도만 */
   .card { background: var(--surface); border: 1px solid color-mix(in srgb, var(--line) 60%, transparent); border-radius: var(--radius); }
@@ -260,18 +262,19 @@ function SecHead({ eyebrow, title, right }) {
 /* ── 머리 막대 ── */
 function Nav({ profile, t, firstProject }) {
   const items = [
-    ['#works', t('page.nav-gallery')], ['#intro', t('page.nav-intro')], ['#stack', t('page.nav-stack')],
+    ['#works', t('page.nav-glance')], ['#intro', t('page.nav-intro')], ['#stack', t('page.nav-stack')],
     firstProject ? [`#p-${firstProject}`, t('page.nav-projects')] : null,
-    ['#glance', t('page.nav-glance')], ['#contact', t('page.nav-contact')],
+    ['#contact', t('page.nav-contact')],
   ].filter(Boolean);
   return (
     <header className="nav">
       <div className="wrap h-full flex items-center gap-6">
-        <a href="#cover" className="me mr-auto truncate">{profile.name}</a>
-        <nav className="hidden md:block" aria-label={t('name.portfolio')}>
-          <ul className="flex gap-6">{items.map(([href, label]) => <li key={href}><a href={href}>{label}</a></li>)}</ul>
+        <a href="#cover" className="me mr-auto truncate hidden sm:block">{profile.name}</a>
+        {/* 좁은 화면에서도 메뉴를 숨기지 않고 옆으로 밀어 보게 함 */}
+        <nav className="nav-scroll min-w-0 flex-1 sm:flex-none" aria-label={t('name.portfolio')}>
+          <ul className="flex gap-4 md:gap-6">{items.map(([href, label]) => <li key={href}><a href={href}>{label}</a></li>)}</ul>
         </nav>
-        <a className="btn !py-1.5 !px-3.5 !text-[13px]" href="../index.html?classic=1">{t('page.classic')}</a>
+        <span className="hidden sm:block shrink-0"><a className="btn !py-1.5 !px-3.5 !text-[13px]" href="../index.html?classic=1">{t('page.classic')}</a></span>
       </div>
     </header>
   );
@@ -505,7 +508,8 @@ function Project({ p, no, total, t }) {
             ) : null}
           </Rise>
 
-          <Rise className="card wide p-5 md:p-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          {/* 개발 의도는 칸 전체 폭으로, 단추는 그 아래 한 줄 — 옆에 두면 단추가 폭을 먼저 차지해 글이 좁게 꺾임 */}
+          <Rise className="card wide p-5 md:p-6 flex flex-col gap-4">
             <div className="min-w-0">
               {p.intent && p.intent.text ? (
                 <>
@@ -517,7 +521,7 @@ function Project({ p, no, total, t }) {
                 <ul className="mt-4 flex flex-wrap gap-1.5">{p.tags.map((tag) => <li key={tag} className="tag">{tag}</li>)}</ul>
               ) : null}
             </div>
-            <div className="flex flex-wrap gap-2 md:justify-end md:flex-none">
+            <div className="flex flex-wrap gap-2">
               <a className="btn primary" href={deckUrl(p.id)}>{t('name.deck')}</a>
               <a className="btn" href={docUrl(p.id)}>{t('name.doc')}</a>
               {links.github ? <Ext className="btn" href={links.github}>GitHub</Ext> : null}
@@ -577,43 +581,6 @@ function Features({ p, no, total, t }) {
             );
           })}
         </ol>
-      </div>
-    </section>
-  );
-}
-
-/* ── ⑤ 한눈에 보기: 줄 목록 3단 25 : 50 : 25 ── */
-function Glance({ projects, t }) {
-  if (!projects.length) return null;
-  return (
-    <section id="glance" className="sec">
-      <div className="wrap">
-        <SecHead eyebrow={t('en.glance')} title={t('page.glance')} />
-        <Rise as="ul" className="card rows overflow-hidden">
-          {projects.map((p) => {
-            const period = (p.meta || []).find((m) => /기간/.test(m.label));
-            const links = p.links || {};
-            return (
-              <li key={p.id} className="grid grid-cols-1 md:grid-cols-[minmax(0,25fr)_minmax(0,50fr)_minmax(0,25fr)] gap-x-8 gap-y-2 px-5 md:px-6 py-5">
-                <div>
-                  <a className="t-h3 no-underline hover:underline underline-offset-4" style={{ color: 'var(--ink)' }} href={`#p-${p.id}`}>{p.title}</a>
-                  {period ? <p className="t-cap mt-1">{period.value}</p> : null}
-                  <p className="mt-2 flex flex-wrap gap-1.5">{MARK[p.id] ? <span className="mark-chip">{MARK[p.id]}</span> : kindOf(p, t) ? <span className="kind">{kindOf(p, t)}</span> : null}<AiChip id={p.id} /></p>
-                </div>
-                <div>
-                  {p.tagline ? <p className="t-sub">{p.tagline}</p> : null}
-                  {p.tags && p.tags.length ? <p className="t-cap mt-1.5">{p.tags.join(' · ')}</p> : null}
-                  {p.team && p.team.role ? <p className="t-cap mt-1"><b className="font-bold">{t('name.role-short')}</b> {p.team.role}</p> : null}
-                </div>
-                <div className="flex flex-wrap content-start gap-x-4 gap-y-1 md:justify-end">
-                  <a className="lk" href={deckUrl(p.id)}>{t('name.deck')}</a>
-                  <a className="lk" href={docUrl(p.id)}>{t('name.doc-short')}</a>
-                  {links.github ? <Ext className="lk" href={links.github}>GitHub</Ext> : null}
-                </div>
-              </li>
-            );
-          })}
-        </Rise>
       </div>
     </section>
   );
@@ -717,7 +684,6 @@ function App() {
             <Features p={p} no={i + 1} total={projects.length} t={t} />
           </div>
         ))}
-        <Glance projects={projects} t={t} />
         <Contact profile={profile} projects={projects} t={t} />
       </main>
     </>

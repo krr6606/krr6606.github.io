@@ -77,7 +77,12 @@
       "how": "보스가 나오는 순간 필드의 아군과 플레이어블 냥코를 모두 뒤로 밀쳐 내고(`HitBack`), 효과음과 배경음을 바꿔 분위기가 달라졌다는 것을 알립니다. 보스는 일반 적과 같은 프리팹을 쓰되 체력 2배, 공격력 1.1배로 올려서 소환합니다.",
       "why": "보스는 소환 방식만 일반 적과 다르게 하면, 보스 자체는 일반 적과 같은 구조를 써도 된다고 생각했습니다. 그래서 소환 데이터 구조에 보스를 소환하는 특수 트리거(기지 체력)를 넣고, 소환 방식과 연출에는 변주를 주되 능력치는 수치만 다르게 했습니다.",
       "section": "3.4 스테이지와 보스를 데이터에 넣었다",
-      "image": null
+      "image": {
+        "src": "images/boss_trigger.gif",
+        "w": 720,
+        "h": 405,
+        "caption": "태국 스테이지 — 적 기지 체력이 절반 아래(1972/4000)로 떨어지자 기지 앞에 보스가 나오는 장면"
+      }
     },
     {
       "title": "캐릭터 편성",
@@ -137,6 +142,18 @@
       "w": 430,
       "h": 618,
       "caption": "Stage 1 SO 인스펙터 — 반복 구간인 2번·3번 웨이브(Next Wave Index가 서로를 가리킴, Is Random Time으로 6~10초 랜덤 대기)"
+    },
+    {
+      "src": "images/boss_trigger.gif",
+      "w": 720,
+      "h": 405,
+      "caption": "태국 스테이지 — 적 기지 체력이 절반 아래(1972/4000)로 떨어지자 기지 앞에 보스가 나오는 장면"
+    },
+    {
+      "src": "images/enemy_overlap.gif",
+      "w": 720,
+      "h": 399,
+      "caption": "태국 스테이지 — 같은 적들이 높이를 조금씩 달리해 겹치지 않고 나란히 나오는 장면"
     }
   ],
   "retro": {
@@ -557,6 +574,40 @@
         ]
       },
       {
+        "key": "enemy-rows",
+        "chapter": "spawn",
+        "layout": "visual",
+        "tab": "결과",
+        "title": {
+          "text": "3.3 끝없이 나오는 적을 정리했다 — 겹침",
+          "verbatim": false
+        },
+        "lead": null,
+        "sectionPath": [
+          "3. 적 스폰 구조",
+          "3.3 끝없이 나오는 적을 정리했다"
+        ],
+        "points": [
+          {
+            "label": "",
+            "text": "그래서 소환할 때마다 빈 자리 번호를 하나 받아, 그 번호만큼 y값을 조금씩 내리고 `sortingOrder`를 올려 여러 마리가 나란히 보이게 했습니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "image",
+            "src": "images/enemy_overlap.gif",
+            "w": 720,
+            "h": 399,
+            "caption": {
+              "text": "태국 스테이지 — 같은 적들이 높이를 조금씩 달리해 겹치지 않고 나란히 나오는 장면",
+              "verbatim": true
+            }
+          }
+        ]
+      },
+      {
         "key": "spawn-cap",
         "chapter": "spawn",
         "layout": "code",
@@ -673,6 +724,40 @@
             "kind": "code",
             "n": 2,
             "fp": "if (BossTriggerHealthPercentage > 0 && isBossSpawned == fals"
+          }
+        ]
+      },
+      {
+        "key": "boss-appear",
+        "chapter": "spawn",
+        "layout": "visual",
+        "tab": "결과",
+        "title": {
+          "text": "3.4 스테이지와 보스를 데이터에 넣었다",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "3. 적 스폰 구조",
+          "3.4 스테이지와 보스를 데이터에 넣었다"
+        ],
+        "points": [
+          {
+            "label": "",
+            "text": "보스가 나오는 순간 필드의 아군과 플레이어블 냥코를 모두 뒤로 밀쳐 내고(`HitBack`), 효과음과 배경음을 바꿔 분위기가 달라졌다는 것을 알립니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "image",
+            "src": "images/boss_trigger.gif",
+            "w": 720,
+            "h": 405,
+            "caption": {
+              "text": "태국 스테이지 — 적 기지 체력이 절반 아래(1972/4000)로 떨어지자 기지 앞에 보스가 나오는 장면",
+              "verbatim": true
+            }
           }
         ]
       },

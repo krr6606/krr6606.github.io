@@ -13,3 +13,6 @@ Thumbs.db
 
 # Python 실행 캐시 (스킬의 점검 스크립트를 돌리면 생김)
 __pycache__/
+
+# 비공개 레포 krr6606/portfolio-private를 받아 두는 곳 (방향 문서·점검 기준·세션 기록 — 공개 사이트에 올리지 않음)
+private/

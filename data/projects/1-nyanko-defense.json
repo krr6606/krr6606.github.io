@@ -52,26 +52,31 @@
   "highlights": [
     {
       "title": "웨이브 데이터",
-      "what": "스테이지 SO(`_Stage`)에 웨이브 데이터 목록을 적어 두면, `EnemySpawner`가 그 정보를 따라 적을 소환합니다.",
-      "how": "웨이브가 끝나면 순서대로 다음 칸으로 가는 것이 아니라, `NextWaveIndex`가 가리키는 칸으로 갑니다. 그래서 2번과 3번이 서로를 가리키게 해 두면 그 구간이 스테이지가 끝날 때까지 반복됩니다.",
-      "why": "코드 수정 없이 데이터만으로 수정할 수 있도록 하고 싶어서 이런 구조로 작성했습니다.",
-      "section": "4.1 웨이브 데이터 내용",
+      "what": "각 웨이브에는 어떤 적을, 몇 초 뒤에, 몇 마리 소환할지와 다음에 갈 웨이브 번호(`NextWaveIndex`)를 적습니다.",
+      "how": "스테이지 SO 하나가 웨이브 목록을 갖고, 각 웨이브는 다음에 갈 웨이브를 같은 목록 안에서 가리킵니다.",
+      "why": "구체적으로 필요한 데이터의 구조를 먼저 세워야, 머릿속에 추상적으로만 있던 스포너의 구조가 확정될 것 같았기 때문입니다.",
+      "section": "3.1 스포너보다 데이터를 먼저 정했다",
       "image": null
+    },
+    {
+      "title": "데이터로 만든 반복 구간",
+      "what": "한 웨이브의 소환이 끝나면 순서대로 다음 칸으로 가는 것이 아니라, `NextWaveIndex`가 가리키는 칸으로 갑니다.",
+      "how": "2번과 3번이 서로를 가리키게 해 두면 그 구간이 스테이지가 끝날 때까지 반복됩니다.",
+      "why": "적이 끝없이 반복해서 나오는 흐름을 스포너가 아니라 데이터에서부터 조작할 수 있으면 편하겠다고 생각해 넣었습니다.",
+      "section": "3.2 스포너는 데이터가 가리키는 대로 소환한다",
+      "image": {
+        "src": "images/stage1_waves.png",
+        "w": 430,
+        "h": 618,
+        "caption": "Stage 1 SO 인스펙터 — 반복 구간인 2번·3번 웨이브(Next Wave Index가 서로를 가리킴, Is Random Time으로 6~10초 랜덤 대기)"
+      }
     },
     {
       "title": "보스 등장 트리거",
       "what": "스테이지 SO에 `BossTriggerHealthPercentage`와 `BossName`을 적으면, 적 기지 체력이 그 비율 아래로 떨어질 때 보스가 등장합니다.",
       "how": "보스가 나오는 순간 필드의 아군과 플레이어블 냥코를 모두 뒤로 밀쳐 내고(`HitBack`), 효과음과 배경음을 바꿔 분위기가 달라졌다는 것을 알립니다. 보스는 일반 적과 같은 프리팹을 쓰되 체력 2배, 공격력 1.1배로 올려서 소환합니다.",
       "why": "보스는 소환 방식만 일반 적과 다르게 하면, 보스 자체는 일반 적과 같은 구조를 써도 된다고 생각했습니다. 그래서 소환 데이터 구조에 보스를 소환하는 특수 트리거(기지 체력)를 넣고, 소환 방식과 연출에는 변주를 주되 능력치는 수치만 다르게 했습니다.",
-      "section": "4.2 보스 등장 트리거",
-      "image": null
-    },
-    {
-      "title": "유닛 자동 공격",
-      "what": "적이 사거리에 들어오고 대기 시간이 끝나면 Idle이 Attack 상태로 전환되어 자동으로 공격합니다.",
-      "how": "실제 데미지는 Update가 아니라, 공격 애니메이션 클립에 심어 둔 애니메이션 이벤트가 `OnAttackTrigger()`를 호출하는 시점에 들어갑니다.",
-      "why": "타격 프레임과 실제 판정 프레임이 어긋나지 않게 맞추기 위해서입니다.",
-      "section": "3.1 유닛 자동 공격",
+      "section": "3.4 스테이지와 보스를 데이터에 넣었다",
       "image": null
     },
     {
@@ -79,7 +84,7 @@
       "what": "편성 화면에서 고양이를 끌어다 편성 슬롯에 놓으면 편성이 바뀝니다.",
       "how": "드래그를 시작하면 시작 슬롯의 고양이를 복제한 임시 '커서 슬롯'만 마우스를 따라다니고, 실제 편성 데이터(`CatSlotArray`)는 손을 뗀 시점(`OnPointerUp`)에 놓인 위치에 따라 반영됩니다.",
       "why": "사용자가 언제든 드래그를 취소하거나 옮기지 않을 수 있어서, 원본을 옮겼다가 되돌리는 것보다 언제든 쉽게 버릴 수 있는 복사본을 쓰는 편이 더 값이 싸다고 판단했습니다.",
-      "section": "3.2 캐릭터 편성",
+      "section": "4.2 편성은 복사본을 끌고 다닌다",
       "image": {
         "src": "images/party.jpg",
         "w": 760,
@@ -126,6 +131,12 @@
       "w": 760,
       "h": 430,
       "caption": "시작 화면"
+    },
+    {
+      "src": "images/stage1_waves.png",
+      "w": 430,
+      "h": 618,
+      "caption": "Stage 1 SO 인스펙터 — 반복 구간인 2번·3번 웨이브(Next Wave Index가 서로를 가리킴, Is Random Time으로 6~10초 랜덤 대기)"
     }
   ],
   "retro": {
@@ -164,17 +175,17 @@
         ]
       },
       {
-        "key": "features",
-        "title": "핵심 기능",
-        "sectionPath": [
-          "3. 핵심 기능"
-        ]
-      },
-      {
         "key": "spawn",
         "title": "적 스폰 구조",
         "sectionPath": [
-          "4. 적 스폰 구조"
+          "3. 적 스폰 구조"
+        ]
+      },
+      {
+        "key": "features",
+        "title": "유닛과 편성에서 고른 방법",
+        "sectionPath": [
+          "4. 유닛과 편성에서 고른 방법"
         ]
       },
       {
@@ -348,71 +359,399 @@
         ]
       },
       {
-        "key": "attack-range",
-        "chapter": "features",
-        "layout": "code",
-        "tab": "구현",
+        "key": "spawn-story",
+        "chapter": "spawn",
+        "layout": "overview",
+        "tab": "개요",
         "title": {
-          "text": "3.1 유닛 자동 공격 — 사거리 판정",
-          "verbatim": false
+          "text": "적 스폰 구조",
+          "verbatim": true
         },
         "lead": {
-          "text": "유닛은 플레이어가 조작하지 않아도 적이 사거리에 들어오면 스스로 공격합니다.",
+          "text": "이 프로젝트의 목표였던 \"적을 언제·어떻게 스폰하는지\"를 만든 과정입니다.",
           "verbatim": true
         },
         "sectionPath": [
-          "3. 핵심 기능",
-          "3.1 유닛 자동 공격"
+          "3. 적 스폰 구조"
         ],
         "points": [
           {
-            "label": "구현",
-            "text": "먼저 대기 상태(Idle.cs)에서 앞쪽으로 사거리만큼 레이를 쏴서 적이 있는지 보고, 공격 상태로 넘어갈지 정합니다. 레이는 아군이면 왼쪽, 적이면 오른쪽으로 쏘고, 길이는 유닛 데이터의 사거리(Range)에 배율을 곱한 값입니다. 적이 사거리에 들어오고 대기 시간(stateTimer)이 끝나면 Idle이 Attack 상태로 전환되고, 사거리 안에 적이 없으면 바로 Walk로 돌아갑니다.",
-            "verbatim": false
+            "label": "",
+            "text": "스포너보다 웨이브 데이터의 구조를 먼저 정하고, 스포너는 그 데이터가 가리키는 대로 소환하게 만들었습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "",
+            "text": "적이 계속 나오게 되면서 겹쳐 보이는 문제와 너무 많이 나오는 문제를 소환 단계에서 정리했고, 마지막으로 여러 스테이지와 보스까지 스테이지 데이터에 넣어 코드 수정 없이 데이터만으로 스폰을 고칠 수 있는 구조로 만들었습니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": []
+      },
+      {
+        "key": "wave-data",
+        "chapter": "spawn",
+        "layout": "code",
+        "tab": "구현",
+        "title": {
+          "text": "3.1 스포너보다 데이터를 먼저 정했다",
+          "verbatim": true
+        },
+        "lead": {
+          "text": "스포너를 만들기 전에 웨이브 데이터의 구조부터 정했습니다.",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "3. 적 스폰 구조",
+          "3.1 스포너보다 데이터를 먼저 정했다"
+        ],
+        "points": [
+          {
+            "label": "이유",
+            "text": "구체적으로 필요한 데이터의 구조를 먼저 세워야, 머릿속에 추상적으로만 있던 스포너의 구조가 확정될 것 같았기 때문입니다.",
+            "verbatim": true
+          },
+          {
+            "label": "NextWaveIndex",
+            "text": "적이 끝없이 반복해서 나오는 흐름을 스포너가 아니라 데이터에서부터 조작할 수 있으면 편하겠다고 생각해 넣었습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "MaxLoopCount",
+            "text": "MaxLoopCount는 같은 형태의 스폰을 정해진 횟수만큼 반복한 뒤 다음 웨이브로 넘어가게 하려고 넣은 값입니다.",
+            "verbatim": true
           }
         ],
         "visuals": [
           {
             "kind": "code",
             "n": 1,
-            "fp": "public override void Update()"
+            "fp": "[Serializable]"
           }
         ]
       },
       {
-        "key": "attack-hit",
-        "chapter": "features",
-        "layout": "code",
-        "tab": "구현",
+        "key": "wave-erd",
+        "chapter": "spawn",
+        "layout": "visual",
+        "tab": "구조",
         "title": {
-          "text": "3.1 유닛 자동 공격 — 애니메이션 이벤트 타격",
+          "text": "3.1 스테이지와 웨이브 데이터의 관계",
           "verbatim": false
         },
         "lead": {
-          "text": "Attack()은 유닛마다 다른 방식(단일 대상 / 범위)으로 공격하고, 공격 애니메이션의 이벤트가 부릅니다.",
-          "verbatim": false
+          "text": "스테이지 SO 하나가 웨이브 목록을 갖고, 각 웨이브는 다음에 갈 웨이브를 같은 목록 안에서 가리킵니다.",
+          "verbatim": true
         },
         "sectionPath": [
-          "3. 핵심 기능",
-          "3.1 유닛 자동 공격"
+          "3. 적 스폰 구조",
+          "3.1 스포너보다 데이터를 먼저 정했다"
+        ],
+        "points": [
+          {
+            "label": "대안",
+            "text": "웨이브 데이터를 정할 때 코드에 직접 적는 하드코딩이나, 인스펙터에서 값을 고치는 방법도 떠올렸습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "선택",
+            "text": "하지만 모든 스테이지가 같은 형식의 데이터를 쓰고 초기값을 공유하면서 디테일만 바뀌므로, 스크립터블 오브젝트가 가장 알맞다고 판단했습니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "mermaid",
+            "n": 1,
+            "fp": "erDiagram"
+          }
+        ]
+      },
+      {
+        "key": "wave-co",
+        "chapter": "spawn",
+        "layout": "code",
+        "tab": "구현",
+        "title": {
+          "text": "3.2 스포너는 데이터가 가리키는 대로 소환한다",
+          "verbatim": true
+        },
+        "lead": {
+          "text": "데이터가 정해진 뒤, 스포너(EnemySpawner)는 스테이지의 웨이브 목록을 받아 0번 웨이브부터 차례로 소환하게 만들었습니다.",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "3. 적 스폰 구조",
+          "3.2 스포너는 데이터가 가리키는 대로 소환한다"
         ],
         "points": [
           {
             "label": "구현",
-            "text": "실제 데미지는 애니메이션 이벤트가 OnAttackTrigger()를 부르는 시점에 들어갑니다.",
-            "verbatim": false
+            "text": "한 웨이브의 소환이 끝나면 순서대로 다음 칸으로 가는 것이 아니라, NextWaveIndex가 가리키는 칸으로 갑니다.",
+            "verbatim": true
           },
           {
+            "label": "",
+            "text": "여러 마리를 한 번에 소환할 때는 한 마리마다 SpawnFrameDelay(0.2초)를 두어, 같은 자리에 완전히 겹쳐 나오지 않게 했습니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 1,
+            "fp": "for (int i = 0; i < waveList[currentWaveIndex].SpawnCount; i"
+          }
+        ]
+      },
+      {
+        "key": "wave-loop",
+        "chapter": "spawn",
+        "layout": "visual",
+        "tab": "흐름",
+        "title": {
+          "text": "3.2 스테이지 1의 웨이브",
+          "verbatim": false
+        },
+        "lead": {
+          "text": "2번과 3번이 서로를 가리키게 해 두면 그 구간이 스테이지가 끝날 때까지 반복됩니다.",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "3. 적 스폰 구조",
+          "3.2 스포너는 데이터가 가리키는 대로 소환한다"
+        ],
+        "points": [
+          {
+            "label": "Next Wave Index = 3",
+            "text": "2번 웨이브가 끝나면 3번으로 갑니다",
+            "verbatim": true
+          },
+          {
+            "label": "Next Wave Index = 2",
+            "text": "3번 웨이브가 끝나면 다시 2번으로 가서, 2·3번이 반복됩니다",
+            "verbatim": true
+          },
+          {
+            "label": "Is Random Time",
+            "text": "켜져 있어 Min과 Max(6초와 10초) 사이에서 대기 시간을 뽑습니다",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "table",
+            "n": 1,
+            "fp": "번호|적|대기 시간|소환 수|다음 웨이브"
+          },
+          {
+            "kind": "image",
+            "src": "images/stage1_waves.png",
+            "w": 430,
+            "h": 618,
+            "caption": {
+              "text": "Stage 1 SO 인스펙터 — 반복 구간인 2번·3번 웨이브(Next Wave Index가 서로를 가리킴, Is Random Time으로 6~10초 랜덤 대기)",
+              "verbatim": true
+            }
+          }
+        ]
+      },
+      {
+        "key": "spawn-cap",
+        "chapter": "spawn",
+        "layout": "code",
+        "tab": "구현",
+        "title": {
+          "text": "3.3 끝없이 나오는 적을 정리했다 — 겹침",
+          "verbatim": false
+        },
+        "lead": {
+          "text": "반복 구간으로 적이 스테이지가 끝날 때까지 계속 나오게 되면서, 소환하는 순간에 두 가지를 더 정했습니다.",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "3. 적 스폰 구조",
+          "3.3 끝없이 나오는 적을 정리했다"
+        ],
+        "points": [
+          {
+            "label": "문제",
+            "text": "횡스크롤에서 같은 적이 같은 높이로 나오면 한 마리처럼 겹쳐 보입니다.",
+            "verbatim": true
+          },
+          {
+            "label": "구현",
+            "text": "그래서 소환할 때마다 빈 자리 번호를 하나 받아, 그 번호만큼 y값을 조금씩 내리고 sortingOrder를 올려 여러 마리가 나란히 보이게 했습니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 1,
+            "fp": "private void SetPositionY(GameObject enemy)"
+          }
+        ]
+      },
+      {
+        "key": "spawn-limit",
+        "chapter": "spawn",
+        "layout": "code",
+        "tab": "선택",
+        "title": {
+          "text": "3.3 끝없이 나오는 적을 정리했다 — 동시 출현 수",
+          "verbatim": false
+        },
+        "lead": null,
+        "sectionPath": [
+          "3. 적 스폰 구조",
+          "3.3 끝없이 나오는 적을 정리했다"
+        ],
+        "points": [
+          {
             "label": "이유",
-            "text": "타격 프레임과 실제 판정 프레임이 어긋나지 않게 맞추기 위해서입니다.",
-            "verbatim": false
+            "text": "적이 너무 많이 쌓여 어려워지는 것을 막아 난이도를 조정하려고, 필드에 살아 있는 적이 MaxSpawnCount(50) 이상이면 소환을 잠시 멈추게 했습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "처음",
+            "text": "처음에는 풀 부모 오브젝트의 자식 수로 셌는데, 이 수에는 죽어서 꺼진 채 풀에 남은 적도 들어갑니다.",
+            "verbatim": true
+          },
+          {
+            "label": "바꾼 뒤",
+            "text": "플레이어 입장에서 이유 없이 제한받는 것은 좋지 않다고 생각해, 소환할 때 기록해 둔 적 가운데 켜져 있는 적만 세도록 바꿨습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "",
+            "text": "프로토타입인 이 게임에서는 적이 50마리까지 쌓인 적이 없어서, 자식 수로 셀 때의 문제를 실제로 겪지는 않았습니다.",
+            "verbatim": true
           }
         ],
         "visuals": [
           {
             "kind": "code",
             "n": 2,
-            "fp": "protected virtual void Attack()"
+            "fp": "int activeCount = 0;"
+          }
+        ]
+      },
+      {
+        "key": "boss",
+        "chapter": "spawn",
+        "layout": "code",
+        "tab": "구현",
+        "title": {
+          "text": "3.4 스테이지와 보스를 데이터에 넣었다",
+          "verbatim": true
+        },
+        "lead": null,
+        "sectionPath": [
+          "3. 적 스폰 구조",
+          "3.4 스테이지와 보스를 데이터에 넣었다"
+        ],
+        "points": [
+          {
+            "label": "스테이지",
+            "text": "스테이지를 늘리면서, 지금 스테이지의 이름(StageManager의 CurrentStageName)으로 StageDataManager에서 그 스테이지의 데이터를 가져오게 바꿨습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "보스",
+            "text": "스테이지 SO에 BossTriggerHealthPercentage와 BossName을 적으면, 적 기지 체력이 그 비율 아래로 떨어질 때 보스가 등장합니다.",
+            "verbatim": true
+          },
+          {
+            "label": "이유",
+            "text": "보스는 소환 방식만 일반 적과 다르게 하면, 보스 자체는 일반 적과 같은 구조를 써도 된다고 생각했습니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 2,
+            "fp": "if (BossTriggerHealthPercentage > 0 && isBossSpawned == fals"
+          }
+        ]
+      },
+      {
+        "key": "enemy-index",
+        "chapter": "spawn",
+        "layout": "code",
+        "tab": "선택",
+        "title": {
+          "text": "3.4 스테이지와 보스를 데이터에 넣었다 — 적 이름과 풀",
+          "verbatim": false
+        },
+        "lead": {
+          "text": "적 이름으로 풀을 고르는 부분도 이때 바꿨습니다.",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "3. 적 스폰 구조",
+          "3.4 스테이지와 보스를 데이터에 넣었다"
+        ],
+        "points": [
+          {
+            "label": "이유",
+            "text": "처음에는 switch로 적마다 풀 번호를 하나씩 적었는데, 새 적을 추가할 때 고칠 곳이 덜 생기도록 enum 값을 풀 번호로 바로 쓰게 했습니다.",
+            "verbatim": true
+          },
+          {
+            "label": "남은 점",
+            "text": "다만 이 방식은 enum 순서와 인스펙터의 풀 목록 순서가 어긋나면 엉뚱한 적이 나옵니다.",
+            "verbatim": true
+          },
+          {
+            "label": "",
+            "text": "웨이브 데이터가 스테이지 SO마다 흩어지는 이 방식은 개선할 여지가 있다고 생각했지만, 일단 먼저 코드 수정 없이 데이터만으로 수정할 수 있도록 하고 싶어서 이런 구조로 작성했습니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "code",
+            "n": 3,
+            "fp": "// 바꾸기 전 — 적마다 case 하나"
+          }
+        ]
+      },
+      {
+        "key": "attack-flow",
+        "chapter": "features",
+        "layout": "visual",
+        "tab": "흐름",
+        "title": {
+          "text": "4.1 데미지는 애니메이션 이벤트에서 넣는다",
+          "verbatim": true
+        },
+        "lead": {
+          "text": "유닛은 플레이어가 조작하지 않아도 적이 사거리에 들어오면 스스로 공격합니다.",
+          "verbatim": true
+        },
+        "sectionPath": [
+          "4. 유닛과 편성에서 고른 방법",
+          "4.1 데미지는 애니메이션 이벤트에서 넣는다"
+        ],
+        "points": [
+          {
+            "label": "구현",
+            "text": "실제 데미지는 Update가 아니라, 공격 애니메이션 클립에 심어 둔 애니메이션 이벤트가 OnAttackTrigger()를 호출하는 시점에 들어갑니다.",
+            "verbatim": true
+          },
+          {
+            "label": "이유",
+            "text": "판정 시점을 코드가 아닌 애니메이션에 맡긴 이유는, 타격 프레임과 실제 판정 프레임이 어긋나지 않게 맞추기 위해서입니다.",
+            "verbatim": true
+          }
+        ],
+        "visuals": [
+          {
+            "kind": "mermaid",
+            "n": 1,
+            "fp": "sequenceDiagram"
           }
         ]
       },
@@ -422,7 +761,7 @@
         "layout": "visual",
         "tab": "구현",
         "title": {
-          "text": "3.2 캐릭터 편성",
+          "text": "4.2 편성은 복사본을 끌고 다닌다",
           "verbatim": true
         },
         "lead": {
@@ -430,8 +769,8 @@
           "verbatim": true
         },
         "sectionPath": [
-          "3. 핵심 기능",
-          "3.2 캐릭터 편성"
+          "4. 유닛과 편성에서 고른 방법",
+          "4.2 편성은 복사본을 끌고 다닌다"
         ],
         "points": [
           {
@@ -469,13 +808,13 @@
         "layout": "full",
         "tab": "흐름",
         "title": {
-          "text": "3.2 캐릭터 편성 — 손을 뗀 위치에 따라",
+          "text": "4.2 편성은 복사본을 끌고 다닌다 — 손을 뗀 위치에 따라",
           "verbatim": false
         },
         "lead": null,
         "sectionPath": [
-          "3. 핵심 기능",
-          "3.2 캐릭터 편성"
+          "4. 유닛과 편성에서 고른 방법",
+          "4.2 편성은 복사본을 끌고 다닌다"
         ],
         "points": [],
         "visuals": [
@@ -483,196 +822,6 @@
             "kind": "mermaid",
             "n": 1,
             "fp": "flowchart LR"
-          }
-        ]
-      },
-      {
-        "key": "wave-data",
-        "chapter": "spawn",
-        "layout": "code",
-        "tab": "구현",
-        "title": {
-          "text": "4.1 웨이브 데이터 내용",
-          "verbatim": true
-        },
-        "lead": {
-          "text": "각 웨이브에는 어떤 적을, 몇 초 뒤에, 몇 마리 소환할지와 다음에 갈 웨이브 번호(NextWaveIndex)를 적습니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "4. 적 스폰 구조",
-          "4.1 웨이브 데이터 내용"
-        ],
-        "points": [
-          {
-            "label": "구현",
-            "text": "스테이지 SO의 인스펙터에서 웨이브가 배열로 입력되어 있습니다.",
-            "verbatim": true
-          },
-          {
-            "label": "이유",
-            "text": "웨이브 데이터가 스테이지 SO마다 흩어지는 이 방식은 개선할 여지가 있다고 생각했지만, 일단 먼저 코드 수정 없이 데이터만으로 수정할 수 있도록 하고 싶어서 이런 구조로 작성했습니다.",
-            "verbatim": true
-          }
-        ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 1,
-            "fp": "[Serializable]"
-          }
-        ]
-      },
-      {
-        "key": "wave-erd",
-        "chapter": "spawn",
-        "layout": "visual",
-        "tab": "구조",
-        "title": {
-          "text": "4.1 스테이지와 웨이브 데이터의 관계",
-          "verbatim": false
-        },
-        "lead": {
-          "text": "스테이지 SO 하나가 웨이브 목록을 갖고, 각 웨이브는 다음에 갈 웨이브를 같은 목록 안에서 가리킵니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "4. 적 스폰 구조",
-          "4.1 웨이브 데이터 내용"
-        ],
-        "points": [
-          {
-            "label": "선택",
-            "text": "코드에 직접 적는 하드코딩이나 인스펙터에서 값을 고치는 방법도 떠올렸지만, 모든 스테이지가 같은 형식의 데이터를 쓰고 초기값을 공유하면서 디테일만 바뀌므로 스크립터블 오브젝트가 가장 알맞다고 판단했습니다.",
-            "verbatim": false
-          }
-        ],
-        "visuals": [
-          {
-            "kind": "mermaid",
-            "n": 1,
-            "fp": "erDiagram"
-          }
-        ]
-      },
-      {
-        "key": "wave-loop",
-        "chapter": "spawn",
-        "layout": "visual",
-        "tab": "흐름",
-        "title": {
-          "text": "4.1 스테이지 1의 웨이브",
-          "verbatim": false
-        },
-        "lead": {
-          "text": "웨이브가 끝나면 순서대로 다음 칸으로 가는 것이 아니라, NextWaveIndex가 가리키는 칸으로 갑니다. 그래서 2번과 3번이 서로를 가리키게 해 두면 그 구간이 스테이지가 끝날 때까지 반복됩니다.",
-          "verbatim": false
-        },
-        "sectionPath": [
-          "4. 적 스폰 구조",
-          "4.1 웨이브 데이터 내용"
-        ],
-        "points": [
-          {
-            "label": "Next Wave Index = 3",
-            "text": "2번 웨이브가 끝나면 3번으로 갑니다",
-            "verbatim": true
-          },
-          {
-            "label": "Next Wave Index = 2",
-            "text": "3번 웨이브가 끝나면 다시 2번으로 가서, 2·3번이 반복됩니다",
-            "verbatim": true
-          },
-          {
-            "label": "Is Random Time",
-            "text": "켜져 있어 Min과 Max(6초와 10초) 사이에서 대기 시간을 뽑습니다",
-            "verbatim": true
-          }
-        ],
-        "visuals": [
-          {
-            "kind": "image",
-            "src": "images/stage1_waves.png",
-            "w": 430,
-            "h": 618,
-            "caption": {
-              "text": "Stage 1 SO 인스펙터 — 반복 구간인 2번·3번 웨이브(Next Wave Index가 서로를 가리킴, Is Random Time으로 6~10초 랜덤 대기)",
-              "verbatim": true
-            }
-          }
-        ]
-      },
-      {
-        "key": "boss",
-        "chapter": "spawn",
-        "layout": "code",
-        "tab": "구현",
-        "title": {
-          "text": "4.2 보스 등장 트리거",
-          "verbatim": true
-        },
-        "lead": {
-          "text": "스테이지 SO에 BossTriggerHealthPercentage와 BossName을 적으면, 적 기지 체력이 그 비율 아래로 떨어질 때 보스가 등장합니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "4. 적 스폰 구조",
-          "4.2 보스 등장 트리거"
-        ],
-        "points": [
-          {
-            "label": "구현",
-            "text": "보스가 나오는 순간 필드의 아군과 플레이어블 냥코를 모두 뒤로 밀쳐 내고(HitBack), 효과음과 배경음을 바꿔 분위기가 달라졌다는 것을 알립니다.",
-            "verbatim": true
-          },
-          {
-            "label": "이유",
-            "text": "보스는 소환 방식만 일반 적과 다르게 하면, 보스 자체는 일반 적과 같은 구조를 써도 된다고 생각했습니다. 그래서 소환 데이터 구조에 보스를 소환하는 특수 트리거(기지 체력)를 넣고, 소환 방식과 연출에는 변주를 주되 능력치는 수치만 다르게 했습니다.",
-            "verbatim": true
-          }
-        ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 1,
-            "fp": "if (BossTriggerHealthPercentage > 0 && isBossSpawned == fals"
-          }
-        ]
-      },
-      {
-        "key": "spawn-cap",
-        "chapter": "spawn",
-        "layout": "code",
-        "tab": "구현",
-        "title": {
-          "text": "4.3 동시 출현 수 제한과 겹침 정리",
-          "verbatim": true
-        },
-        "lead": {
-          "text": "필드에 살아 있는 적이 MaxSpawnCount(50) 이상이면 소환을 잠시 멈춥니다.",
-          "verbatim": true
-        },
-        "sectionPath": [
-          "4. 적 스폰 구조",
-          "4.3 동시 출현 수 제한과 겹침 정리"
-        ],
-        "points": [
-          {
-            "label": "구현",
-            "text": "소환할 때마다 빈 자리 번호를 하나 받아, 그 번호만큼 y값을 조금씩 내리고 sortingOrder를 올립니다.",
-            "verbatim": false
-          },
-          {
-            "label": "이유",
-            "text": "횡스크롤에서 같은 적이 같은 높이로 나오면 한 마리처럼 겹쳐 보이기 때문에, 높이를 아주 조금씩 다르게 하고 그리는 순서도 함께 정해 여러 마리가 나란히 보이게 했습니다.",
-            "verbatim": true
-          }
-        ],
-        "visuals": [
-          {
-            "kind": "code",
-            "n": 2,
-            "fp": "private void SetPositionY(GameObject enemy)"
           }
         ]
       },
@@ -781,5 +930,5 @@
       }
     ]
   },
-  "generatedAt": "2026-11-24"
+  "generatedAt": "2026-11-25"
 }
